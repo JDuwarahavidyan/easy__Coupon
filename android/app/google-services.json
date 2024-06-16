@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1096357836745",
+    "project_id": "easy-coupon-5ce03",
+    "storage_bucket": "easy-coupon-5ce03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096357836745:android:e43f45572630a7cd099a18",
+        "android_client_info": {
+          "package_name": "com.example.easy_coupon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYYUcrxlXnnD2AkpNOOczxjrXlbOLOp5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

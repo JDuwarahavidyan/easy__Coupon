@@ -1,0 +1,17 @@
+part of 'auth_bloc.dart';
+
+abstract class AuthState {}
+
+class AuthStateInitial extends AuthState {}
+
+class AuthStateLogin extends AuthState {}
+
+class AuthStateLoading extends AuthState {}
+
+class AuthStateLogout extends AuthState {}
+
+class AuthStateError extends AuthState {
+  AuthStateError(this.message);
+
+  final String message;
+}
