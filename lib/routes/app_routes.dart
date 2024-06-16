@@ -15,6 +15,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => PasswordResetPage());
       case RouteNames.student:
         return MaterialPageRoute(builder: (_) => const StudentPage());
+      
       // case RouteNames.reset:
       //   return MaterialPageRoute(builder: (_) => const CanteenPage());
       default:

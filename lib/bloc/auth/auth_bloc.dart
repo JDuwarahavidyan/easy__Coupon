@@ -11,32 +11,47 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventLogin>((event, emit) async {
       try {
         emit(AuthStateLoading());
-        //  login
+        // login
         await auth.signInWithEmailAndPassword(
           email: event.email,
           password: event.pass,
         );
         emit(AuthStateLogin());
       } on FirebaseAuthException catch (e) {
-        // Error  Firebase Auth
+        // Error Firebase Auth
         emit(AuthStateError(e.message.toString()));
       } catch (e) {
-        // Error general
+        // General Error
         emit(AuthStateError(e.toString()));
       }
     });
+
     on<AuthEventLogout>((event, emit) async {
       // logout
       try {
         emit(AuthStateLoading());
-        
         await auth.signOut();
         emit(AuthStateLogout());
       } on FirebaseAuthException catch (e) {
         // Firebase Auth
         emit(AuthStateError(e.message.toString()));
       } catch (e) {
-        // Error general
+        // General Error
+        emit(AuthStateError(e.toString()));
+      }
+    });
+
+    on<AuthEventResetPassword>((event, emit) async {
+      // reset password
+      try {
+        emit(AuthStateLoading());
+        await auth.sendPasswordResetEmail(email: event.email);
+        emit(AuthStatePasswordReset());
+      } on FirebaseAuthException catch (e) {
+        // Firebase Auth
+        emit(AuthStateError(e.message.toString()));
+      } catch (e) {
+        // General Error
         emit(AuthStateError(e.toString()));
       }
     });

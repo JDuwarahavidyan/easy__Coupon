@@ -84,7 +84,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(left: 40, right: 40),
+                  padding: const EdgeInsets.only(left: 40, right: 40),  // button responsive
                   child: ElevatedButton(
                     onPressed: () {
                       // Handle login actio
@@ -93,7 +93,7 @@ class LoginPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50.0),
+                      minimumSize: const Size(double.infinity, 50.0),  //
                       backgroundColor: const Color(0xFFFFC129), // Yellow color
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),

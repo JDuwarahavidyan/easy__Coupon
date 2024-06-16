@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 // import 'qr_scanner_page.dart';
 // import '../../bloc/bloc.dart';
-import '../../widgets/common/app_drawer.dart';
+import '../../widgets/widgets.dart';
+
 
 class StudentPage extends StatefulWidget {
   const StudentPage({super.key});
@@ -39,11 +40,10 @@ class _StudentPageState extends State<StudentPage> {
       ),
       drawer: const AppDrawer(), // Use the new AppDrawer widget
       body: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(50),
         color: const Color(0xFFF9E6BD),
         child: Center(
           child: Container(
-            
             decoration: BoxDecoration(
               color: const Color(0xFFFCD170),
               borderRadius: BorderRadius.circular(30),
@@ -51,11 +51,11 @@ class _StudentPageState extends State<StudentPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavigationButton('Home'),
-                    _buildNavigationButton('Report'),
+                    NavigationButton(text: 'Home'), 
+                    NavigationButton(text: 'Report'), 
                   ],
                 ),
                 Container(
@@ -164,27 +164,6 @@ class _StudentPageState extends State<StudentPage> {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavigationButton(String text) {
-    return Container(
-      height: 20,
-      width: 70,
-      decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: Colors.black,
           ),
         ),
       ),
