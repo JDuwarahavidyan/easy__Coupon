@@ -1,30 +1,44 @@
-// navigation_button.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class NavigationButton extends StatelessWidget {
-  final String text;
+class BottomNavBar extends StatefulWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
 
-  const NavigationButton({super.key, required this.text});
+  const BottomNavBar({Key? key, required this.currentIndex, required this.onTap}) : super(key: key);
 
   @override
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 20,
-      width: 70,
-      decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: Colors.black,
-          ),
+    return BottomNavigationBar(
+      currentIndex: widget.currentIndex,
+      onTap: widget.onTap,
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.black.withOpacity(0.6),
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(CupertinoIcons.home),
+          label: 'Home',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(CupertinoIcons.doc_chart),
+          label: 'Report',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(CupertinoIcons.person),
+          label: 'Profile',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(CupertinoIcons.settings),
+          label: 'Settings',
+        ),
+      ],
     );
   }
 }
+
