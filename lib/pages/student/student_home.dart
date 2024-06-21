@@ -1,5 +1,6 @@
 import 'package:easy_coupon/bloc/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 // import 'qr_scanner_page.dart';
@@ -15,6 +16,7 @@ class StudentPage extends StatefulWidget {
 
 class _StudentPageState extends State<StudentPage> {
   int result = 30;
+  int _selectedIndex = 0;
   double spinBoxValue = 0; // Track the SpinBox value
 
   void handleQRScan(String qrData) {
@@ -22,6 +24,28 @@ class _StudentPageState extends State<StudentPage> {
       result -= spinBoxValue.toInt(); // Use the SpinBox value
     });
     Navigator.pop(context); // Close the QR scanner page
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    // Handle navigation based on the selected index
+    switch (index) {
+      case 0:
+        // Navigate to Home (Student Page)
+        // Currently, we're already on the StudentPage
+        break;
+      case 1:
+        // Navigate to Report Page
+        break;
+      case 2:
+        // Navigate to Profile Page
+        break;
+      case 3:
+        // Navigate to Settings Page
+        break;
+    }
   }
 
   @override
@@ -35,20 +59,20 @@ class _StudentPageState extends State<StudentPage> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Student Page'),
-            backgroundColor: const Color(0xFFFCD170),
-            leading: Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
+            title: const Text(
+              'Student Page',
+              textAlign: TextAlign.left,
             ),
+            backgroundColor: const Color(0xFFFCD170),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 25.0),
+                child: UserProfileAvatar(),
+              ),
+            ],
           ),
-          drawer: const AppDrawer(), // Use the new AppDrawer widget
           body: Container(
-            padding: const EdgeInsets.all(50),
+            padding: const EdgeInsets.all(20),
             color: const Color(0xFFF9E6BD),
             child: Center(
               child: Container(
@@ -61,10 +85,6 @@ class _StudentPageState extends State<StudentPage> {
                   children: [
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        NavigationButton(text: 'Home'),
-                        NavigationButton(text: 'Report'),
-                      ],
                     ),
                     Container(
                       height: 110,
@@ -97,20 +117,40 @@ class _StudentPageState extends State<StudentPage> {
                         ),
                       ),
                     ),
+// Text(
+//                   "Remaining Coupons as of $formattedDate",
+//                   style: const TextStyle(
+//                     fontSize: 18,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+
                     Container(
-                      height: 140,
-                      width: 140,
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFFF5C00), Color(0xFFFFFB100)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius:
+                            BorderRadius.circular(25), // Outer border radius
                       ),
-                      child: Center(
-                        child: Text(
-                          result.toString(),
-                          style: const TextStyle(
-                            fontSize: 60,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                      child: Container(
+                        height: 140,
+                        width: 140,
+                        margin: const EdgeInsets.all(13),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(
+                            result.toString(),
+                            style: const TextStyle(
+                              fontSize: 80,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -212,8 +252,38 @@ class _StudentPageState extends State<StudentPage> {
               ),
             ),
           ),
+          bottomNavigationBar: BottomNavBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+          ),
         );
       },
+    );
+  }
+}
+
+class UserProfileAvatar extends StatefulWidget {
+  const UserProfileAvatar({super.key});
+
+  @override
+  State<UserProfileAvatar> createState() => _UserProfileAvatarState();
+}
+
+class _UserProfileAvatarState extends State<UserProfileAvatar> {
+  @override
+  Widget build(BuildContext context) {
+    // Example: This data could be fetched from a user profile
+    const String profileImage =
+        'assets/profile_picture.jpeg'; // Example profile image path
+
+    return const CircleAvatar(
+      backgroundColor: Color(0xFFFF8900), // Frame color
+      radius: 23, // Outer radius including frame
+      child: CircleAvatar(
+        radius: 20, // Inner radius excluding frame
+        backgroundImage: AssetImage(profileImage),
+        child: Icon(Icons.person, size: 22), // Fallback icon
+      ),
     );
   }
 }
