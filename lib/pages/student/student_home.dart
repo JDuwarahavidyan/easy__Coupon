@@ -1,10 +1,7 @@
-import 'package:easy_coupon/bloc/home/bloc/home_bloc.dart';
+import '../../bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
+// import 'package:flutter_spinbox/flutter_spinbox.dart';
 // import 'qr_scanner_page.dart';
-// import '../../bloc/bloc.dart';
 import '../../widgets/widgets.dart';
 
 class StudentPage extends StatefulWidget {
@@ -128,7 +125,7 @@ class _StudentPageState extends State<StudentPage> {
                     Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFFF5C00), Color(0xFFFFFB100)],
+                          colors: [Color(0xFFFF5C00), Color(0xFFFFFB10)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -186,13 +183,13 @@ class _StudentPageState extends State<StudentPage> {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: Icon(Icons.remove),
+                            icon: const Icon(Icons.remove),
                             onPressed: () {
                               homeBloc.add(HomeClickMinusButtonEvent());
                               // Add your action here
                             },
                           ),
-                          Expanded(
+                          const Expanded(
                             child: TextField(
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
@@ -201,7 +198,7 @@ class _StudentPageState extends State<StudentPage> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.add),
+                            icon: const Icon(Icons.add),
                             onPressed: () {
                               homeBloc.add(HomeClickPlusButtonEvent());
                               // Add your action here
@@ -258,32 +255,6 @@ class _StudentPageState extends State<StudentPage> {
           ),
         );
       },
-    );
-  }
-}
-
-class UserProfileAvatar extends StatefulWidget {
-  const UserProfileAvatar({super.key});
-
-  @override
-  State<UserProfileAvatar> createState() => _UserProfileAvatarState();
-}
-
-class _UserProfileAvatarState extends State<UserProfileAvatar> {
-  @override
-  Widget build(BuildContext context) {
-    // Example: This data could be fetched from a user profile
-    const String profileImage =
-        'assets/profile_picture.jpeg'; // Example profile image path
-
-    return const CircleAvatar(
-      backgroundColor: Color(0xFFFF8900), // Frame color
-      radius: 23, // Outer radius including frame
-      child: CircleAvatar(
-        radius: 20, // Inner radius excluding frame
-        backgroundImage: AssetImage(profileImage),
-        child: Icon(Icons.person, size: 22), // Fallback icon
-      ),
     );
   }
 }

@@ -5,11 +5,13 @@ class BottomNavBar extends StatefulWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
+  // ignore: use_super_parameters
   const BottomNavBar(
       {Key? key, required this.currentIndex, required this.onTap})
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
