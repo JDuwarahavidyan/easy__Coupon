@@ -1,7 +1,6 @@
 import 'package:easy_coupon/bloc/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
 // import 'qr_scanner_page.dart';
 // import '../../bloc/bloc.dart';
 import '../../widgets/widgets.dart';
@@ -29,8 +28,11 @@ class _StudentPageState extends State<StudentPage> {
     final HomeBloc homeBloc = HomeBloc();
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
+      listenWhen: (previous, current) => current is HomeActionClass,
+      buildWhen: (previous, current) => current is! HomeActionClass,
       listener: (context, state) {
         // TODO: implement listener
+        if (state is HomeNavigateToScannerActionState) {}
       },
       builder: (context, state) {
         return Scaffold(

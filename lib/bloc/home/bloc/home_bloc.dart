@@ -1,6 +1,7 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
+import 'package:easy_coupon/models/students/functions.dart';
+import 'package:easy_coupon/models/students/student.dart';
 import 'package:meta/meta.dart';
 
 part 'home_event.dart';
@@ -8,13 +9,22 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
+    on<HomeInitialEvent>(homeInitialEvent);
     on<HomeClickPlusButtonEvent>(homeClickPlusButtonEvent);
     on<HomeClickMinusButtonEvent>(homeClickMinusButtonEvent);
     on<HomeScannerButtonNavigatorEvent>(homeScannerButtonNavigatorEvent);
   }
 
+  FutureOr<void> homeInitialEvent(
+      HomeInitialEvent event, Emitter<HomeState> emit) async {
+    //emit(HomeLoadingState());
+    //await Future.delayed(Duration(seconds: 3));
+    //emit(HomeLoadedSuccessState(student: FirebaseDatabase.instance.ref()))
+  }
+
   FutureOr<void> homeClickPlusButtonEvent(
       HomeClickPlusButtonEvent event, Emitter<HomeState> emit) {
+    update("students", "st1@ruhuna.com", "count", 3);
     print("Plus Button Clicked");
   }
 
@@ -26,5 +36,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homeScannerButtonNavigatorEvent(
       HomeScannerButtonNavigatorEvent event, Emitter<HomeState> emit) {
     print("Navigate to QR Scanner");
+    emit(HomeNavigateToScannerActionState());
   }
 }
