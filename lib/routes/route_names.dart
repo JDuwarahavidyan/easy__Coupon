@@ -6,5 +6,4 @@ class RouteNames {
   static const String student = '/student';
 
   static const String canteen = '/canteen';
-  
 }

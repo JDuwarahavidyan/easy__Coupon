@@ -1,4 +1,9 @@
 import 'dart:async';
+<<<<<<< HEAD:lib/bloc/home/bloc/home_bloc.dart
+=======
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+>>>>>>> 299648cd8e4ea6011b77020870de57894fcfe0bc:lib/bloc/home/home_bloc.dart
 import 'package:bloc/bloc.dart';
 import 'package:easy_coupon/models/students/functions.dart';
 import 'package:easy_coupon/models/students/student.dart';

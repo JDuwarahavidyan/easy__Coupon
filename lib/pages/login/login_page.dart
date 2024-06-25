@@ -2,6 +2,7 @@ import '../../bloc/bloc.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
+
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
