@@ -15,7 +15,7 @@ class ThemeProvider with ChangeNotifier {
       );
     } else {
       _themeData = ThemeData.light().copyWith(
-        scaffoldBackgroundColor: Color(0xFFF9E6BD),
+        scaffoldBackgroundColor: const Color(0xFFF9E6BD),
         // Define other light theme properties
       );
     }
@@ -24,6 +24,7 @@ class ThemeProvider with ChangeNotifier {
 }
 
 class ThemeSwitch extends StatelessWidget {
+  // const ThemeSwitch({super.key});
   @override
   Widget build(BuildContext context) {
     return Switch(
@@ -37,4 +38,3 @@ class ThemeSwitch extends StatelessWidget {
     );
   }
 }
-

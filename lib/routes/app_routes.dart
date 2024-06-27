@@ -16,7 +16,7 @@ class AppRoutes {
       case RouteNames.student:
         return MaterialPageRoute(builder: (_) => const StudentPage());
       case RouteNames.settings:
-        return MaterialPageRoute(builder: (_) =>  ResponsiveSettingsPage());
+        return MaterialPageRoute(builder: (_) => const SettingsPage());
 
       // case RouteNames.reset:
       //   return MaterialPageRoute(builder: (_) => const CanteenPage());
@@ -29,4 +29,3 @@ class AppRoutes {
     }
   }
 }
-

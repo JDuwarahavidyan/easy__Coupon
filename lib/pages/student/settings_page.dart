@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../../widgets/widgets.dart'; 
+import '../../widgets/widgets.dart';
 
-class ResponsiveSettingsPage extends StatefulWidget {
-  const ResponsiveSettingsPage({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  _ResponsiveSettingsPageState createState() => _ResponsiveSettingsPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
+class _SettingsPageState extends State<SettingsPage> {
   double getResponsiveFontSize(double baseFontSize) {
     final screenWidth = MediaQuery.of(context).size.width;
     // Adjust the scaling factor as needed
-    return baseFontSize * (screenWidth / 390); // 390 is roughly the width of iPhone 12 Pro in logical pixels
+    return baseFontSize *
+        (screenWidth /
+            390); // 390 is roughly the width of iPhone 12 Pro in logical pixels
   }
 
   void _showLogoutDialog() {
@@ -139,7 +141,9 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
                       children: [
-                        SizedBox(height: imageSize / 2), // Space for the overlapping image
+                        SizedBox(
+                            height: imageSize /
+                                2), // Space for the overlapping image
                         Container(
                           margin: EdgeInsets.only(top: imageSize / 4),
                           padding: const EdgeInsets.all(16.0),
@@ -148,7 +152,6 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
                           ),
                           child: Column(
                             children: [
-                              
                               ListTile(
                                 title: Text(
                                   'About App',
@@ -178,7 +181,8 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
                                     fontSize: getResponsiveFontSize(18),
                                   ),
                                 ),
-                                trailing: ThemeSwitch(), // Add the theme switch here
+                                trailing:
+                                    ThemeSwitch(), // Add the theme switch here
                               ),
                               ListTile(
                                 title: Text(
@@ -209,14 +213,19 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
                   backgroundColor: const Color.fromARGB(255, 2, 1, 0),
                   child: CircleAvatar(
                     radius: imageSize / 2.05,
-                    backgroundImage: const AssetImage('assets/profile_picture.jpeg'),
+                    backgroundImage:
+                        const AssetImage('assets/profile_picture.jpeg'),
                   ),
                 ),
-                const SizedBox(width: 10.0,),
+                const SizedBox(
+                  width: 10.0,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: imageSize / 2), // Adjust this value to move the text further down
+                    SizedBox(
+                        height: imageSize /
+                            2), // Adjust this value to move the text further down
                     Text(
                       'Nikila Fernando',
                       style: TextStyle(
@@ -224,7 +233,7 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                         shadows: const [
-                          // 
+                          //
                         ],
                       ),
                     ),
@@ -234,9 +243,7 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
                         fontSize: getResponsiveFontSize(14),
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
-                        shadows: const [
-                          
-                        ],
+                        shadows: const [],
                       ),
                     ),
                   ],
@@ -255,8 +262,3 @@ class _ResponsiveSettingsPageState extends State<ResponsiveSettingsPage> {
     );
   }
 }
-
-
-
-
-
