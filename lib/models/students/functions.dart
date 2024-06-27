@@ -18,3 +18,11 @@ update(String colName, docName, field, var newField) async {
 
   print('field updated');
 }
+
+updateCount(int val) async {
+  await FirebaseFirestore.instance
+      .collection('students')
+      .doc('student@ruhuna.com')
+      .update({'count': FieldValue.increment(val)});
+  print('Document updated');
+}

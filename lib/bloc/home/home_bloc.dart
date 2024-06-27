@@ -1,14 +1,8 @@
 import 'dart:async';
-<<<<<<< HEAD:lib/bloc/home/bloc/home_bloc.dart
-=======
 import 'package:flutter_bloc/flutter_bloc.dart';
-
->>>>>>> 299648cd8e4ea6011b77020870de57894fcfe0bc:lib/bloc/home/home_bloc.dart
 import 'package:bloc/bloc.dart';
-import 'package:easy_coupon/models/students/functions.dart';
 import 'package:easy_coupon/models/students/student.dart';
 import 'package:meta/meta.dart';
-
 part 'home_event.dart';
 part 'home_state.dart';
 
@@ -29,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> homeClickPlusButtonEvent(
       HomeClickPlusButtonEvent event, Emitter<HomeState> emit) {
-    update("students", "st1@ruhuna.com", "count", 3);
+    //update("students", "st1@ruhuna.com", "count", 3);
     print("Plus Button Clicked");
   }
 
@@ -41,6 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> homeScannerButtonNavigatorEvent(
       HomeScannerButtonNavigatorEvent event, Emitter<HomeState> emit) {
     print("Navigate to QR Scanner");
-    emit(HomeNavigateToScannerActionState());
+
+    //emit(HomeNavigateToScannerActionState());
   }
 }

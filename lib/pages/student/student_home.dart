@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_coupon/models/students/functions.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
+
 import '../../bloc/bloc.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:flutter_bloc/flutter_bloc.dart';
-=======
-// import 'package:flutter_spinbox/flutter_spinbox.dart';
->>>>>>> 299648cd8e4ea6011b77020870de57894fcfe0bc
+
+//import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_spinbox/flutter_spinbox.dart';/
 // import 'qr_scanner_page.dart';
 import '../../widgets/widgets.dart';
 
@@ -16,9 +18,11 @@ class StudentPage extends StatefulWidget {
 }
 
 class _StudentPageState extends State<StudentPage> {
+  String count = '';
   int result = 30;
   int _selectedIndex = 0;
   double spinBoxValue = 0; // Track the SpinBox value
+  int val = 1;
 
   void handleQRScan(String qrData) {
     setState(() {
@@ -52,6 +56,7 @@ class _StudentPageState extends State<StudentPage> {
   @override
   Widget build(BuildContext context) {
     final HomeBloc homeBloc = HomeBloc();
+
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
       listenWhen: (previous, current) => current is HomeActionClass,
@@ -128,7 +133,6 @@ class _StudentPageState extends State<StudentPage> {
 //                     fontWeight: FontWeight.bold,
 //                   ),
 //                 ),
-
                     Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -148,19 +152,42 @@ class _StudentPageState extends State<StudentPage> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
-                          child: Text(
-                            result.toString(),
-                            style: const TextStyle(
-                              fontSize: 80,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('students')
+                                    .where('email',
+                                        isEqualTo: 'student@ruhuna.com')
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  return ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          child: ListTile(
+                                            title: Center(
+                                              child: Text(
+                                                (30 -
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['count'])
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 80,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                })),
                       ),
                     ),
+
                     const SizedBox(height: 60),
-                    /*Container(
+                    Container(
                       height: 50,
                       width: 260,
                       decoration: BoxDecoration(
@@ -171,14 +198,15 @@ class _StudentPageState extends State<StudentPage> {
                         min: 1,
                         max: 3,
                         value: 1,
-                        
                         onChanged: (value) {
                           setState(() {
                             spinBoxValue = value;
+                            val = value.toInt();
                           });
                         },
                       ),
-                    ),*/
+                    ),
+                    /*
                     Container(
                       height: 50,
                       width: 260,
@@ -214,6 +242,7 @@ class _StudentPageState extends State<StudentPage> {
                         ],
                       ),
                     ),
+                    */
                     Container(
                       height: 50,
                       width: 260,
@@ -225,7 +254,9 @@ class _StudentPageState extends State<StudentPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            homeBloc.add(HomeScannerButtonNavigatorEvent());
+                            //homeBloc.add(HomeScannerButtonNavigatorEvent());
+                            updateCount(val);
+
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
