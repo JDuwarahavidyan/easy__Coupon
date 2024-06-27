@@ -24,7 +24,7 @@ class ThemeProvider with ChangeNotifier {
 }
 
 class ThemeSwitch extends StatelessWidget {
-  // const ThemeSwitch({super.key});
+  const ThemeSwitch({super.key});
   @override
   Widget build(BuildContext context) {
     return Switch(
