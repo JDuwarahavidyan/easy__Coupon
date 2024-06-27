@@ -1,3 +1,4 @@
+import 'package:easy_coupon/pages/student/student_report.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/pages/pages.dart';
@@ -15,9 +16,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => PasswordResetPage());
       case RouteNames.student:
         return MaterialPageRoute(builder: (_) => const StudentPage());
-      
-      // case RouteNames.reset:
-      //   return MaterialPageRoute(builder: (_) => const CanteenPage());
+      case RouteNames.studentReport: // Add the new route case
+        return MaterialPageRoute(builder: (_) => StudentReport());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
@@ -27,4 +27,3 @@ class AppRoutes {
     }
   }
 }
-
