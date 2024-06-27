@@ -1,10 +1,9 @@
 import 'package:easy_coupon/bloc/bloc.dart';
-import 'package:easy_coupon/routes/app_routes.dart';
-import 'package:easy_coupon/routes/route_names.dart';
+import 'package:easy_coupon/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import '../../widgets/widgets.dart'; 
+import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -27,26 +26,26 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(),
         ),
       ],
-       child: ChangeNotifierProvider(
+      child: ChangeNotifierProvider(
         create: (_) => ThemeProvider(
           ThemeData.light().copyWith(
             scaffoldBackgroundColor: const Color(0xFFF9E6BD),
           ),
         ),
-       child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: themeProvider.themeData.copyWith(
+        child: Consumer<ThemeProvider>(
+          builder: (context, themeProvider, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: themeProvider.themeData.copyWith(
                 scaffoldBackgroundColor: const Color(0xFFFF8A00),
+              ),
+              initialRoute: RouteNames.splash,
+              onGenerateRoute: AppRoutes.generateRoute,
+            );
+          },
         ),
-        initialRoute: RouteNames.splash,
-        onGenerateRoute: AppRoutes.generateRoute,
-      );
-        },
-       ),
-       ),
+      ),
     );
   }
 }
