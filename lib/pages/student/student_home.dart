@@ -40,6 +40,7 @@ class _StudentPageState extends State<StudentPage> {
         // Navigate to Profile Page
         break;
       case 3:
+        Navigator.pushNamed(context, '/settings');
         // Navigate to Settings Page
         break;
     }

@@ -4,6 +4,6 @@ class RouteNames {
   static const String login = '/login';
   static const String reset = '/reset';
   static const String student = '/student';
-
+  static const String settings = '/settings';
   static const String canteen = '/canteen';
 }
