@@ -174,7 +174,7 @@ class _StudentPageState extends State<StudentPage> {
                                                             ['count'])
                                                     .toString(),
                                                 style: const TextStyle(
-                                                  fontSize: 80,
+                                                  fontSize: 75,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black,
                                                 ),
