@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/models/students/functions.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-
 import '../../bloc/bloc.dart';
 import 'package:flutter/material.dart';
-
 //import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_spinbox/flutter_spinbox.dart';/
+// import 'package:flutter_spinbox/flutter_spinbox.dart';
 // import 'qr_scanner_page.dart';
 import '../../widgets/widgets.dart';
 
@@ -126,13 +124,7 @@ class _StudentPageState extends State<StudentPage> {
                         ),
                       ),
                     ),
-// Text(
-//                   "Remaining Coupons as of $formattedDate",
-//                   style: const TextStyle(
-//                     fontSize: 18,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
+
                     Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -206,43 +198,7 @@ class _StudentPageState extends State<StudentPage> {
                         },
                       ),
                     ),
-                    /*
-                    Container(
-                      height: 50,
-                      width: 260,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: () {
-                              homeBloc.add(HomeClickMinusButtonEvent());
-                              // Add your action here
-                            },
-                          ),
-                          const Expanded(
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () {
-                              homeBloc.add(HomeClickPlusButtonEvent());
-                              // Add your action here
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    */
+                  
                     Container(
                       height: 50,
                       width: 260,
@@ -255,14 +211,7 @@ class _StudentPageState extends State<StudentPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             //homeBloc.add(HomeScannerButtonNavigatorEvent());
-                            updateCount(val);
-
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => QRScannerPage(handleQRScan),
-                            //   ),
-                            // );
+                            updateCount(val);                        
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
