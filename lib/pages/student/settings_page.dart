@@ -35,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
               shadows: const [
                 Shadow(
                   offset: Offset(2.0, 2.0),
-                  blurRadius: 3.0,
+                  blurRadius: 1.0,
                   color: Colors.grey,
                 ),
               ],
@@ -46,11 +46,11 @@ class _SettingsPageState extends State<SettingsPage> {
             style: TextStyle(
               fontSize: getResponsiveFontSize(16),
               shadows: const [
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 3.0,
-                  color: Colors.grey,
-                ),
+                // Shadow(
+                //   offset: Offset(2.0, 2.0),
+                //   blurRadius: 3.0,
+                //   color: Colors.grey,
+                // ),
               ],
             ),
           ),
@@ -128,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
                   child: Image.asset(
-                    'assets/profile_picture.jpeg',
+                    'assets/profile_picture.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -214,7 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: CircleAvatar(
                     radius: imageSize / 2.05,
                     backgroundImage:
-                        const AssetImage('assets/profile_picture.jpeg'),
+                        const AssetImage('assets/profile_picture.jpg'),
                   ),
                 ),
                 const SizedBox(
@@ -227,7 +227,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         height: imageSize /
                             2), // Adjust this value to move the text further down
                     Text(
-                      'Nikila Fernando',
+                      'Derek Hale',
                       style: TextStyle(
                         fontSize: getResponsiveFontSize(16),
                         fontWeight: FontWeight.bold,
@@ -238,7 +238,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     Text(
-                      'Akkarapanaha, Negombo',
+                      'Kollupitiya, Colombo',
                       style: TextStyle(
                         fontSize: getResponsiveFontSize(14),
                         fontWeight: FontWeight.bold,

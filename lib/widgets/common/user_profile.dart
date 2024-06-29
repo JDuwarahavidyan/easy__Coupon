@@ -13,7 +13,7 @@ class _UserProfileAvatarState extends State<UserProfileAvatar> {
   Widget build(BuildContext context) {
     // Example: This data could be fetched from a user profile
     const String profileImage =
-        'assets/profile_picture.jpeg'; // Example profile image path
+        'assets/profile_picture.jpg'; // Example profile image path
 
     return const CircleAvatar(
       backgroundColor: Color(0xFFFF8900), // Frame color

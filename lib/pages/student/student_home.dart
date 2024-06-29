@@ -211,6 +211,7 @@ class _StudentPageState extends State<StudentPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/qr');
                             //homeBloc.add(HomeScannerButtonNavigatorEvent());
                             updateCount(val);                        
                           },
