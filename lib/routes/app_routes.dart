@@ -2,6 +2,7 @@ import 'package:easy_coupon/pages/student/qr_scanning.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/pages/pages.dart';
+import 'package:easy_coupon/pages/student/student_report.dart';
 
 class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,7 +21,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const SettingsPage());
       case RouteNames.qr:
         return MaterialPageRoute(builder: (_) => const QrPage());
-
+      case RouteNames.studentReport: // Added route for StudentReport
+        return MaterialPageRoute(builder: (_) => const StudentReport());
       // case RouteNames.reset:
       //   return MaterialPageRoute(builder: (_) => const CanteenPage());
       default:
