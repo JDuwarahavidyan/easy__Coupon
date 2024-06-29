@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 create(String email, name, picture, int count) async {
@@ -19,10 +21,31 @@ update(String colName, docName, field, var newField) async {
   print('field updated');
 }
 
-updateCount(int val) async {
-  await FirebaseFirestore.instance
+
+
+Future<void> updateCount(int val) async {
+  final docRef = FirebaseFirestore.instance
       .collection('students')
-      .doc('student@ruhuna.com')
-      .update({'count': FieldValue.increment(val)});
-  print('Document updated');
+      .doc('student@ruhuna.com');
+
+  // Get the document snapshot
+  final snapshot = await docRef.get();
+
+  if (snapshot.exists) {
+    final data = snapshot.data();
+    final currentCount = data?['count'];
+
+    // Check if currentCount is less than 30
+    if (currentCount != null &&
+        currentCount <= 30 &&
+        currentCount + val <= 30) {
+      // Update the count field
+      await docRef.update({'count': FieldValue.increment(val)});
+      print('Document updated');
+    } else {
+      print('Reached maximum token');
+    }
+  } else {
+    print('Document does not exist');
+  }
 }
