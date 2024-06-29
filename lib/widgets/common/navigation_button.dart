@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_coupon/routes/route_names.dart';
 
 class BottomNavBar extends StatefulWidget {
   final int currentIndex;
@@ -7,8 +8,7 @@ class BottomNavBar extends StatefulWidget {
 
   // ignore: use_super_parameters
   const BottomNavBar(
-      {Key? key, required this.currentIndex, required this.onTap})
-      : super(key: key);
+      {required this.currentIndex, required this.onTap, super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -20,7 +20,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: widget.currentIndex,
-      onTap: widget.onTap,
+      onTap: (index) {
+        widget.onTap(index);
+
+        switch (index) {
+          case 0:
+            Navigator.pushNamed(context, RouteNames.student);
+            break;
+          case 1:
+            // Navigator.pushNamed(context, RouteNames.report);
+            break;
+          case 2:
+            // Navigator.pushNamed(context,  RouteNames.profile);
+            break;
+          case 3:
+            Navigator.pushNamed(context, RouteNames.settings);
+            break;
+        }
+      },
       backgroundColor: Colors.white,
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.black.withOpacity(0.6),
