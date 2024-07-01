@@ -52,6 +52,8 @@ class _StudentPageState extends State<StudentPage> {
     }
   }
 
+  bool _isFirstLoad = true;
+
   @override
   Widget build(BuildContext context) {
     final HomeBloc homeBloc = HomeBloc();
@@ -125,7 +127,6 @@ class _StudentPageState extends State<StudentPage> {
                         ),
                       ),
                     ),
-
                     Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -145,40 +146,58 @@ class _StudentPageState extends State<StudentPage> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
-                            child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('students')
-                                    .where('email',
-                                        isEqualTo: 'student@ruhuna.com')
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  return ListView.builder(
-                                      itemCount: snapshot.data!.docs.length,
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          child: ListTile(
-                                            title: Center(
-                                              child: Text(
-                                                (30 -
-                                                        snapshot.data!
-                                                                .docs[index]
-                                                            ['count'])
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  fontSize: 75,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('students')
+                                  .where('email',
+                                      isEqualTo: 'student@ruhuna.com')
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (_isFirstLoad &&
+                                    snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  _isFirstLoad = false;
+                                  if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.docs.isEmpty) {
+                                    return const Center(
+                                        child: Text('No data available.'));
+                                  } else {
+                                    return ListView.builder(
+                                        itemCount: snapshot.data!.docs.length,
+                                        itemBuilder: (context, index) {
+                                          return Card(
+                                            child: ListTile(
+                                              title: Center(
+                                                child: Text(
+                                                  (30 -
+                                                          snapshot.data!
+                                                                  .docs[index]
+                                                              ['count'])
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 75,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      });
-                                })),
+                                          );
+                                        });
+                                  }
+                                }
+                              }),
+                        ),
                       ),
                     ),
-
                     const SizedBox(height: 60),
                     Container(
                       height: 50,
@@ -199,7 +218,6 @@ class _StudentPageState extends State<StudentPage> {
                         },
                       ),
                     ),
-                  
                     Container(
                       height: 50,
                       width: 260,
@@ -213,7 +231,7 @@ class _StudentPageState extends State<StudentPage> {
                           onPressed: () {
                             Navigator.pushReplacementNamed(context, '/qr');
                             //homeBloc.add(HomeScannerButtonNavigatorEvent());
-                            updateCount(val);                        
+                            updateCount(val);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
