@@ -5,7 +5,7 @@ class RouteNames {
   static const String reset = '/reset';
   static const String student = '/student';
   static const String settings = '/settings';
-  static const String canteen = '/canteen';
+  static const String canteen = '/';
   static const String qr = '/qr';
-  static const String studentReport = '/';
+  static const String studentReport = '/studentReport';
 }

@@ -42,11 +42,11 @@ class MyApp extends StatelessWidget {
           builder: (context, themeProvider, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: 'Easy Coupon ',
               theme: themeProvider.themeData.copyWith(
                 scaffoldBackgroundColor: const Color(0xFFFF8A00),
               ),
-              initialRoute: RouteNames.studentReport,
+              initialRoute: RouteNames.canteen,
               onGenerateRoute: AppRoutes.generateRoute,
             );
           },
