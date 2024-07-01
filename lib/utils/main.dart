@@ -1,10 +1,12 @@
 import 'package:easy_coupon/bloc/bloc.dart';
+import 'package:easy_coupon/pages/student/report_repo.dart';
 import 'package:easy_coupon/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_coupon/bloc/report/bloc/report_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(),
         ),
+        BlocProvider<ReportBloc>(
+          // <-- Adding the ReportBloc provider
+          create: (context) => ReportBloc(reportRepository: ReportRepository()),
+        ),
       ],
       child: ChangeNotifierProvider(
         create: (_) => ThemeProvider(
@@ -36,11 +42,11 @@ class MyApp extends StatelessWidget {
           builder: (context, themeProvider, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: 'Easy Coupon ',
               theme: themeProvider.themeData.copyWith(
                 scaffoldBackgroundColor: const Color(0xFFFF8A00),
               ),
-              initialRoute: RouteNames.splash,
+              initialRoute: RouteNames.canteen,
               onGenerateRoute: AppRoutes.generateRoute,
             );
           },

@@ -10,3 +10,14 @@ class StudentDataModel {
       required this.count,
       required this.picture});
 }
+
+class ReportDataModel {
+  final String Number;
+  final String Time;
+
+  ReportDataModel({required this.Number, required this.Time});
+
+  factory ReportDataModel.fromJson(Map<String, dynamic> json) {
+    return ReportDataModel(Number: json['Number'], Time: json['Time']);
+  }
+}
