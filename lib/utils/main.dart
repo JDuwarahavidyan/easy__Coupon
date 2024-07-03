@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
               theme: themeProvider.themeData.copyWith(
                 scaffoldBackgroundColor: const Color(0xFFFF8A00),
               ),
-              initialRoute: RouteNames.canteen,
+              initialRoute: RouteNames.splash,
               onGenerateRoute: AppRoutes.generateRoute,
             );
           },
