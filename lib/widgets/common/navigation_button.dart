@@ -28,7 +28,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             Navigator.pushNamed(context, RouteNames.student);
             break;
           case 1:
-            // Navigator.pushNamed(context, RouteNames.report);
+            Navigator.pushNamed(context, RouteNames.report);
             break;
           case 2:
             // Navigator.pushNamed(context,  RouteNames.profile);

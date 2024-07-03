@@ -43,7 +43,7 @@ dependencies:
 
   firebase_database: ^11.0.1 
   firebase_storage:
-  cloud_firestore:
+  cloud_firestore: ^5.0.2
   intl: ^0.17.0
   flutter_lints: ^4.0.0
   bloc: ^8.0.0
