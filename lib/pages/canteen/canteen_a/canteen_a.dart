@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:easy_coupon/bloc/canteen/bloc/canteen_bloc.dart';
+import 'package:easy_coupon/bloc/canteen/bloc/canteen_event.dart';
+import 'package:easy_coupon/bloc/canteen/bloc/canteen_state.dart';
 
 class CanteenPage extends StatefulWidget {
   const CanteenPage({super.key});
@@ -10,7 +14,14 @@ class CanteenPage extends StatefulWidget {
 
 class _CanteenPageState extends State<CanteenPage> {
   final GlobalKey globalKey = GlobalKey();
-  String qrData = "";
+  String qrData = "Default QR Data"; // Set a default value
+  bool isValid = true;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CanteenBloc>().add(FetchAuthorizedUsers());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,96 +30,67 @@ class _CanteenPageState extends State<CanteenPage> {
         title: const Text("QR Code Generator"),
         backgroundColor: const Color(0xFFFCD170),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            RepaintBoundary(
-              key: globalKey,
-              child: Container(
-                color: Colors.white,
-                child: Center(
-                  child: qrData.isEmpty
-                      ? const Text(
-                          "Enter Data To Generate QR Code",
-                          style: TextStyle(fontSize: 20, color: Colors.indigo),
-                        )
-                      : QrImageView(
+      body: BlocBuilder<CanteenBloc, CanteenState>(
+        builder: (context, state) {
+          if (state is CanteenLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is CanteenLoaded) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  RepaintBoundary(
+                    key: globalKey,
+                    child: Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: QrImageView(
                           data: qrData,
                           version: QrVersions.auto,
                           size: 200,
                         ),
-                ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: "Enter Username here",
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          if (state.authorizedUsernames.contains(value)) {
+                            qrData = value;
+                            isValid = true;
+                          } else {
+                            qrData = "Default QR Data";
+                            isValid = false;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  if (!isValid)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: Text(
+                        "Invalid Username Please Try Again",
+                        style: TextStyle(fontSize: 20, color: Colors.red),
+                      ),
+                    ),
+                ],
               ),
-            ),
-            const SizedBox(height: 50),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: "Enter Data",
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    qrData = value;
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
+            );
+          } else if (state is CanteenError) {
+            return Center(child: Text(state.message));
+          } else {
+            return Center(child: Text('Unknown state'));
+          }
+        },
       ),
     );
   }
 }
-
-
-/*class _CanteenState extends State<Canteen> {
-  String _qrData = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _generateQRData();
-  }
-
-  void _generateQRData() {
-    const characters =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = Random();
-    final qrString = List.generate(
-        10, (index) => characters[random.nextInt(characters.length)]).join();
-    setState(() {
-      _qrData = qrString;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Random QR Generator'),
-        backgroundColor: const Color(0xFFFCD170),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            QrImage(
-              data: _qrData,
-              size: 200.0,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _generateQRData,
-              child: const Text('Generate New QR Code'),
-            ),
-            const SizedBox(height: 20),
-            Text('QR Data: $_qrData'),
-          ],
-        ),
-      ),
-    );
-  }
-}*/
