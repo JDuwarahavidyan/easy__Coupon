@@ -5,9 +5,11 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:easy_coupon/bloc/canteen/bloc/canteen_bloc.dart';
 import 'package:easy_coupon/bloc/canteen/bloc/canteen_event.dart';
 import 'package:easy_coupon/bloc/canteen/bloc/canteen_state.dart';
+
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
+
 
 class CanteenPage extends StatefulWidget {
   const CanteenPage({super.key});
@@ -18,6 +20,7 @@ class CanteenPage extends StatefulWidget {
 
 class _CanteenPageState extends State<CanteenPage> {
   final GlobalKey globalKey = GlobalKey();
+
   final ScreenshotController screenshotController = ScreenshotController();
   String qrData = "Default QR Data"; // Set a default value
   bool isValid = true;
