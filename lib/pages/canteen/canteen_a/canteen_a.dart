@@ -1,9 +1,15 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:easy_coupon/bloc/canteen/bloc/canteen_bloc.dart';
 import 'package:easy_coupon/bloc/canteen/bloc/canteen_event.dart';
 import 'package:easy_coupon/bloc/canteen/bloc/canteen_state.dart';
+
+import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class CanteenPage extends StatefulWidget {
   const CanteenPage({super.key});
@@ -14,6 +20,8 @@ class CanteenPage extends StatefulWidget {
 
 class _CanteenPageState extends State<CanteenPage> {
   final GlobalKey globalKey = GlobalKey();
+
+  final ScreenshotController screenshotController = ScreenshotController();
   String qrData = "Default QR Data"; // Set a default value
   bool isValid = true;
 
@@ -21,6 +29,30 @@ class _CanteenPageState extends State<CanteenPage> {
   void initState() {
     super.initState();
     context.read<CanteenBloc>().add(FetchAuthorizedUsers());
+  }
+
+  Future<void> _shareQRCode() async {
+    final imageFile = await screenshotController.capture();
+    if (imageFile != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = File('${directory.path}/qr_code.png');
+      await imagePath.writeAsBytes(imageFile);
+
+      Share.shareFiles([imagePath.path], text: 'Here is my QR code');
+    }
+  }
+
+  Future<void> _saveQRCode() async {
+    final imageFile = await screenshotController.capture();
+    if (imageFile != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = File('${directory.path}/qr_code.png');
+      await imagePath.writeAsBytes(imageFile);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('QR code saved to ${imagePath.path}')),
+      );
+    }
   }
 
   @override
@@ -39,15 +71,18 @@ class _CanteenPageState extends State<CanteenPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 30),
-                  RepaintBoundary(
-                    key: globalKey,
-                    child: Container(
-                      color: Colors.white,
-                      child: Center(
-                        child: QrImageView(
-                          data: qrData,
-                          version: QrVersions.auto,
-                          size: 200,
+                  Screenshot(
+                    controller: screenshotController,
+                    child: RepaintBoundary(
+                      key: globalKey,
+                      child: Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: QrImageView(
+                            data: qrData,
+                            version: QrVersions.auto,
+                            size: 200,
+                          ),
                         ),
                       ),
                     ),
@@ -81,6 +116,23 @@ class _CanteenPageState extends State<CanteenPage> {
                         style: TextStyle(fontSize: 20, color: Colors.red),
                       ),
                     ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: _shareQRCode,
+                        icon: Icon(Icons.share),
+                        label: Text('Share QR Code'),
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton.icon(
+                        onPressed: _saveQRCode,
+                        icon: Icon(Icons.save),
+                        label: Text('Save QR Code'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             );
