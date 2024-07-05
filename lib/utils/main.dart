@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ReportBloc>(
           // <-- Adding the ReportBloc provider
-          create: (context) => ReportBloc(reportRepository: ReportRepository()),
+          create: (context) => ReportBloc(ReportRepository()),
         ),
         BlocProvider(
           create: (context) => CanteenBloc(FirebaseFirestore.instance),
@@ -47,13 +47,11 @@ class MyApp extends StatelessWidget {
           builder: (context, themeProvider, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Easy Coupon ',
+              title: 'Easy Coupon',
               theme: themeProvider.themeData.copyWith(
                 scaffoldBackgroundColor: const Color(0xFFFF8A00),
               ),
-
-              initialRoute: RouteNames.splash,
-
+              initialRoute: RouteNames.studentReport,
               onGenerateRoute: AppRoutes.generateRoute,
             );
           },

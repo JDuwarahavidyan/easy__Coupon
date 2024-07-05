@@ -1,5 +1,5 @@
-import 'package:easy_coupon/models/students/student.dart';
 import 'package:equatable/equatable.dart';
+import 'package:easy_coupon/models/students/student.dart';
 
 abstract class ReportState extends Equatable {
   const ReportState();
@@ -10,26 +10,22 @@ abstract class ReportState extends Equatable {
 
 class ReportInitial extends ReportState {}
 
-class ReportError extends ReportState {
-  final String error;
+class ReportLoading extends ReportState {}
 
-  ReportError(this.error);
-
-  @override
-  List<Object> get props => [error];
-}
-
-class ReportLoading extends ReportState {
-  @override
-  List<Object> get props => [];
-}
-
-// ignore: must_be_immutable
 class ReportLoaded extends ReportState {
-  List<ReportDataModel> reportData;
+  final List<ReportDataModel> reportData;
 
-  ReportLoaded(this.reportData);
+  const ReportLoaded({required this.reportData});
 
   @override
   List<Object> get props => [reportData];
+}
+
+class ReportError extends ReportState {
+  final String error;
+
+  const ReportError({required this.error});
+
+  @override
+  List<Object> get props => [error];
 }

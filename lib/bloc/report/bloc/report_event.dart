@@ -1,10 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 abstract class ReportEvent extends Equatable {
-  @override
-  List<Object> get props => [];
+  const ReportEvent();
 }
 
 class GetData extends ReportEvent {
-  GetData();
+  final String startDate;
+  final String endDate;
+
+  const GetData({required this.startDate, required this.endDate});
+
+  @override
+  List<Object> get props => [startDate, endDate];
 }
