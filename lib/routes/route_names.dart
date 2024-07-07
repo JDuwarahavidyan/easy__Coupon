@@ -8,8 +8,10 @@ class RouteNames {
   static const String canteen = '/canteen';
   static const String qr = '/qr';
 
+
   static const String report = '/';
 
   static const String studentReport = '/studentReport';
 
-}
+
+

@@ -21,8 +21,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const StudentPage());
       case RouteNames.settings:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
+     
       case RouteNames.qr:
-        return MaterialPageRoute(builder: (_) => const QrPage());
+
+        return MaterialPageRoute(builder: (_) =>  const QrPage());
 
       case RouteNames.report:
         return MaterialPageRoute(builder: (_) => const ReportPage());
