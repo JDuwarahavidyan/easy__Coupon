@@ -9,9 +9,7 @@ class RouteNames {
   static const String qr = '/qr';
 
 
-  static const String report = '/';
+  static const String report = '/report';
 
   static const String studentReport = '/studentReport';
-
-
 

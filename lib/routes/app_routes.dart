@@ -30,7 +30,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ReportPage());
 
       case RouteNames.studentReport: // Added route for StudentReport
-        return MaterialPageRoute(builder: (_) => const StudentReport());
+        return MaterialPageRoute(builder: (_) => StudentReportPage());
       case RouteNames.canteen: // Added route for Canteen
         return MaterialPageRoute(builder: (_) => const CanteenPage());
 
