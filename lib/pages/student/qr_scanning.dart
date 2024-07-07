@@ -1,19 +1,17 @@
 // import 'package:flutter/material.dart';
-// import 'package:flutter/cupertino.dart';
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
-// import '../../widgets/widgets.dart';
 
 // class QrPage extends StatefulWidget {
 //   const QrPage({super.key});
 
 //   @override
-//   State<QrPage> createState() => _QrPageState();
+//   _QrPageState createState() => _QrPageState();
 // }
 
 // class _QrPageState extends State<QrPage> {
 //   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-//   Barcode? result;
 //   QRViewController? controller;
+//   String qrText = '';
 
 //   @override
 //   void dispose() {
@@ -21,143 +19,119 @@
 //     super.dispose();
 //   }
 
-//   @override
-//   void reassemble() {
-//     super.reassemble();
-//     if (controller != null) {
-//       controller!.pauseCamera();
-//       controller!.resumeCamera();
-//     }
+//   void _onQRViewCreated(QRViewController qrViewController) {
+//     setState(() {
+//       this.controller = qrViewController;
+//     });
+//     controller!.scannedDataStream.listen((scanData) {
+//       setState(() {
+//         qrText = scanData.code ?? '';
+//       });
+//     });
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       appBar: AppBar(
-//         leading: IconButton(
-//           icon: Icon(CupertinoIcons.back, color: Colors.black),
-//           onPressed: () {
-//             Navigator.pushNamed(context, '/student');
-//           },
-//         ),
-//         title: const Text(
-//           'Student Page',
-//           textAlign: TextAlign.left,
-//         ),
-//         backgroundColor: const Color(0xFFFCD170),
-//         actions: const [
-//           Padding(
-//             padding: EdgeInsets.only(right: 25.0),
-//             child: UserProfileAvatar(),
+//       body: Stack(
+//         children: <Widget>[
+//           QRView(
+//             key: qrKey,
+//             onQRViewCreated: _onQRViewCreated,
+//             overlay: QrScannerOverlayShape(
+//               borderColor: Colors.transparent,
+//               cutOutSize: MediaQuery.of(context).size.width * 0.8,
+//             ),
+//           ),
+//           Positioned(
+//             top: 40,
+//             left: 20,
+//             child: IconButton(
+//               icon: const Icon(Icons.close, color: Colors.white, size: 30),
+//               onPressed: () {
+//                 Navigator.pushNamed(context, '/student');
+//               },
+//             ),
+//           ),
+//           Positioned(
+//             top: MediaQuery.of(context).size.height * 0.15,
+//             left: 0,
+//             right: 0,
+//             child: Column(
+//               children: [
+//                 Text(
+//                   'Place the QR Code inside the area',
+//                   style: TextStyle(fontSize: 18, color: Colors.white),
+//                   textAlign: TextAlign.center,
+//                 ),
+//                 SizedBox(height: 10),
+//                 Text(
+//                   'Scanning will start automatically',
+//                   style: TextStyle(fontSize: 14, color: Colors.white),
+//                   textAlign: TextAlign.center,
+//                 ),
+//               ],
+//             ),
+//           ),
+//           CustomPaint(
+//             painter: ScannerOverlayPainter(),
+//             child: Container(),
 //           ),
 //         ],
 //       ),
-//       body: LayoutBuilder(
-//         builder: (context, constraints) {
-//           // Define a base width for iPhone 12 Pro
-//           double baseWidth = 390.0;
-//           // Calculate the scale factor
-//           double scaleFactor = constraints.maxWidth / baseWidth;
-
-//           return Container(
-//             padding: const EdgeInsets.all(20),
-//             color: const Color(0xFFF9E6BD),
-//             child: Center(
-//               child: Container(
-//                 width: constraints.maxWidth * 0.9,
-//                 decoration: BoxDecoration(
-//                   color: const Color(0xFFFCD170),
-//                   borderRadius: BorderRadius.circular(30),
-//                 ),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.start,
-//                   children: [
-//                     const SizedBox(height: 40), // Spacer to push content down
-//                     ClipRRect(
-//                       borderRadius: BorderRadius.circular(20),
-//                       child: Stack(
-//                         children: [
-//                           Image.asset(
-//                             'assets/studentImage.jpg',
-//                             width: constraints.maxWidth * 0.8,
-//                             fit: BoxFit.cover,
-//                           ),
-//                           Positioned(
-//                             left: 20,
-//                             top: 10,
-//                             child: Text(
-//                               'The Reliable\nCoupon System',
-//                               style: TextStyle(
-//                                 fontSize: 18.0 * scaleFactor,
-//                                 fontWeight: FontWeight.w800,
-//                                 color: Colors.white,
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     SizedBox(height: 20 * scaleFactor), // Spacer below image
-//                     Text(
-//                       'Hold the phone to scan the QR code',
-//                       style: TextStyle(
-//                         fontSize: 16.0 * scaleFactor,
-//                         fontWeight: FontWeight.w600,
-//                       ),
-//                     ),
-//                     SizedBox(height: 20 * scaleFactor), // Spacer before QR scanner
-//                     Container(
-//                       height: 200 * scaleFactor,
-//                       width: 200 * scaleFactor,
-//                       child: QRView(
-//                         key: qrKey,
-//                         onQRViewCreated: _onQRViewCreated,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//       bottomNavigationBar: BottomNavBar(
-//         currentIndex: 0, // settings is the 4th item
-//         onTap: (index) {
-//           // Handle bottom navigation tap
-//         },
-//       ),
 //     );
 //   }
+// }
 
-//   void _onQRViewCreated(QRViewController controller) {
-//     this.controller = controller;
-//     controller.scannedDataStream.listen((scanData) {
-//       setState(() {
-//         result = scanData;
-//       });
-//     });
+// class ScannerOverlayPainter extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//       ..color = Colors.black.withOpacity(0.5)
+//       ..style = PaintingStyle.fill;
+
+//     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+//     final cutOutRect = RRect.fromRectAndRadius(
+//       Rect.fromCenter(
+//       center: Offset(size.width / 2, size.height / 2),
+//       width: size.width * 0.8,
+//       height: size.width * 0.8,
+//     ),
+//      Radius.circular(20),
+//     ); 
+
+//     final path = Path()
+//       ..addRect(rect)
+//       ..addRect(cutOutRect)
+//       ..fillType = PathFillType.evenOdd;
+
+//     canvas.drawPath(path, paint);
+//   }
+
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
 //   }
 // }
 
 
 
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import '../../widgets/widgets.dart';
 
 class QrPage extends StatefulWidget {
   const QrPage({super.key});
 
   @override
-  State<QrPage> createState() => _QrPageState();
+  _QrPageState createState() => _QrPageState();
 }
 
 class _QrPageState extends State<QrPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
   QRViewController? controller;
+  String qrText = '';
 
   @override
   void dispose() {
@@ -165,135 +139,101 @@ class _QrPageState extends State<QrPage> {
     super.dispose();
   }
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (controller != null) {
-      controller!.pauseCamera();
-      controller!.resumeCamera();
-    }
+  void _onQRViewCreated(QRViewController qrViewController) {
+    setState(() {
+      this.controller = qrViewController;
+    });
+    controller!.scannedDataStream.listen((scanData) {
+      setState(() {
+        qrText = scanData.code ?? '';
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(CupertinoIcons.back, color: Colors.black),
-          onPressed: () {
-            Navigator.pushNamed(context, '/student');
-          },
-        ),
-        title: const Text(
-          'Student Page',
-          textAlign: TextAlign.left,
-        ),
-        backgroundColor: const Color(0xFFFCD170),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 25.0),
-            child: UserProfileAvatar(),
+      body: Stack(
+        children: <Widget>[
+          QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
+            overlay: QrScannerOverlayShape(
+              borderColor: Colors.transparent,
+              cutOutSize: MediaQuery.of(context).size.width * 0.8,
+            ),
+          ),
+          Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.15,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                Text(
+                  'Place the QR Code inside the area',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Scanning will start automatically',
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          CustomPaint(
+            painter: ScannerOverlayPainter(),
+            child: Container(),
           ),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          // Define a base width for iPhone 12 Pro
-          double baseWidth = 390.0;
-          // Calculate the scale factor
-          double scaleFactor = constraints.maxWidth / baseWidth;
-
-          return Container(
-            padding: const EdgeInsets.all(20),
-            color: const Color(0xFFF9E6BD),
-            child: Center(
-              child: Container(
-                width: constraints.maxWidth * 0.9,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFCD170),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 40), // Spacer to push content down
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'assets/studentImage.jpg',
-                            width: constraints.maxWidth * 0.8,
-                            fit: BoxFit.cover,
-                          ),
-                          Positioned(
-                            left: 20,
-                            top: 10,
-                            child: Text(
-                              'The Reliable\nCoupon System',
-                              style: TextStyle(
-                                fontSize: 18.0 * scaleFactor,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20 * scaleFactor), // Spacer below image
-                    Text(
-                      'Hold the phone to scan the QR code',
-                      style: TextStyle(
-                        fontSize: 16.0 * scaleFactor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 20 * scaleFactor), // Spacer before QR scanner
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: 200 * scaleFactor,
-                          width: 200 * scaleFactor,
-                          child: QRView(
-                            key: qrKey,
-                            overlay: QrScannerOverlayShape(
-                              borderColor: Colors.red,
-                              borderRadius: 10,
-                              borderLength: 30,
-                              borderWidth: 10,
-                              cutOutSize: 200 * scaleFactor,
-                            ),
-                            onQRViewCreated: _onQRViewCreated,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 0, // settings is the 4th item
-        onTap: (index) {
-          // Handle bottom navigation tap
-        },
-      ),
     );
   }
+}
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
+class ScannerOverlayPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.withOpacity(0.5)
+      ..style = PaintingStyle.fill;
+
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final cutOutRect = RRect.fromRectAndRadius(
+      Rect.fromCenter(
+        center: Offset(size.width / 2, size.height / 2),
+        width: size.width * 0.8,
+        height: size.width * 0.8,
+      ),
+      Radius.circular(20),
+    );
+
+    final path = Path()
+      ..addRect(rect)
+      ..addRRect(cutOutRect)
+      ..fillType = PathFillType.evenOdd;
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
+
+
 
 
