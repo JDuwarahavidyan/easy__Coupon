@@ -98,7 +98,7 @@
 //       height: size.width * 0.8,
 //     ),
 //      Radius.circular(20),
-//     ); 
+//     );
 
 //     final path = Path()
 //       ..addRect(rect)
@@ -114,10 +114,7 @@
 //   }
 // }
 
-
-
-
-
+import 'package:easy_coupon/models/students/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -132,6 +129,7 @@ class _QrPageState extends State<QrPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   String qrText = '';
+  Barcode? result;
 
   @override
   void dispose() {
@@ -141,12 +139,16 @@ class _QrPageState extends State<QrPage> {
 
   void _onQRViewCreated(QRViewController qrViewController) {
     setState(() {
-      this.controller = qrViewController;
+      controller = qrViewController;
     });
-    controller!.scannedDataStream.listen((scanData) {
+    controller?.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = scanData.code ?? '';
+        result = scanData;
       });
+      // Handle the scanned data
+      if (result != null) {
+        scanned_data(result!);
+      }
     });
   }
 
@@ -169,7 +171,7 @@ class _QrPageState extends State<QrPage> {
             child: IconButton(
               icon: const Icon(Icons.close, color: Colors.white, size: 30),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/student');
               },
             ),
           ),
@@ -177,7 +179,7 @@ class _QrPageState extends State<QrPage> {
             top: MediaQuery.of(context).size.height * 0.15,
             left: 0,
             right: 0,
-            child: Column(
+            child: const Column(
               children: [
                 Text(
                   'Place the QR Code inside the area',
@@ -233,7 +235,3 @@ class ScannerOverlayPainter extends CustomPainter {
     return false;
   }
 }
-
-
-
-

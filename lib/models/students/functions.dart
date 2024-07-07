@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 create(String email, name, picture, int count) async {
   await FirebaseFirestore.instance.collection('students').doc(email).set({
@@ -48,4 +49,9 @@ Future<void> updateCount(int val) async {
   } else {
     print('Document does not exist');
   }
+}
+
+
+void scanned_data( Barcode result){  
+  print("data:${result.code}");
 }
