@@ -1,140 +1,113 @@
-// import 'package:easy_coupon/bloc/blocs.dart';
-// import 'package:easy_coupon/widgets/widgets.dart';
-// import 'package:flutter/material.dart';
+import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/widgets/widgets.dart';
+import 'package:flutter/material.dart';
 
-// class PwEmailResetPage extends StatelessWidget {
-//   PwEmailResetPage({super.key});
+class PasswordEmailResetPage extends StatelessWidget {
+  const PasswordEmailResetPage({super.key});
 
-//   final TextEditingController emailC = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       resizeToAvoidBottomInset: false,
-//       body: Stack(
-//         children: [
-//           BlocConsumer<AuthBloc, AuthState>(
-//             listener: (context, state) {
-//               if (state is AuthStatePasswordReset) {
-//                 ScaffoldMessenger.of(context).showSnackBar(
-//                   const SnackBar(
-//                     content: Text('Password reset email sent!'),
-//                     duration: Duration(seconds: 2),
-//                   ),
-//                 );
-//               }
-//               if (state is AuthStateError) {
-//                 ScaffoldMessenger.of(context).showSnackBar(
-//                   SnackBar(
-//                     content: Text(state.message),
-//                     duration: const Duration(seconds: 2),
-//                   ),
-//                 );
-//               }
-//             },
-//             builder: (context, state) {
-//               return Column(
-//                 children: <Widget>[
-//                   Expanded(
-//                     child: LoginWidget(
-//                       child: Container(
-//                         margin: const EdgeInsets.only(top: 25.0),
-//                         child: Column(
-//                           children: [
-//                             const Text(
-//                               'Enter your email to reset your password',
-//                               style: TextStyle(
-//                                 color: Colors.black,
-//                                 fontSize: 15.0,
-//                                 fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                             const SizedBox(height: 12.0),
-//                             Container(
-//                               padding: const EdgeInsets.only(
-//                                   left: 40, right: 40, top: 20, bottom: 30),
-//                               child: TextField(
-//                                 autocorrect: false,
-//                                 controller: emailC,
-//                                 decoration: InputDecoration(
-//                                   hintText: 'Enter the Email',
-//                                   hintStyle: const TextStyle(
-//                                     color: Color.fromARGB(255, 158, 154, 154),
-//                                   ),
-//                                   filled: true,
-//                                   fillColor: Colors.white,
-//                                   border: OutlineInputBorder(
-//                                     borderRadius: BorderRadius.circular(30.0),
-//                                     borderSide: BorderSide.none,
-//                                   ),
-//                                   prefixIcon: const Padding(
-//                                     padding: EdgeInsets.only(
-//                                         left: 20.0, right: 20.0),
-//                                     child: Icon(Icons.email),
-//                                   ),
-//                                   alignLabelWithHint:
-//                                       true, // Center the hint text
-//                                 ),
-//                               ),
-//                             ),
-//                             Container(
-//                               padding:
-//                                   const EdgeInsets.only(left: 40, right: 40),
-//                               child: ElevatedButton(
-//                                 onPressed: () {
-//                                   // Handle password reset
-                                 
-//                                 },
-//                                 style: ElevatedButton.styleFrom(
-//                                   minimumSize:
-//                                       const Size(double.infinity, 50.0),
-//                                   backgroundColor: const Color(0xFFFFC129),
-//                                   shape: RoundedRectangleBorder(
-//                                     borderRadius: BorderRadius.circular(30.0),
-//                                   ),
-//                                   elevation: 10,
-//                                   shadowColor: Colors.black,
-//                                 ),
-//                                 child: state is AuthStateLoading
-//                                     ? const SizedBox(
-//                                         width: 100, // Set a fixed width
-//                                         child: Center(
-//                                           child: CircularProgressIndicator(
-//                                             color: Colors.black,
-//                                           ),
-//                                         ),
-//                                       )
-//                                     : const Text(
-//                                         'SEND EMAIL',
-//                                         style: TextStyle(
-//                                           color: Colors.black,
-//                                           fontWeight: FontWeight.bold,
-//                                           fontSize: 14.0,
-//                                         ),
-//                                       ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               );
-//             },
-//           ),
-//           Positioned(
-//             top: 20,
-//             left: 20,
-//             child: IconButton(
-//               icon: const Icon(Icons.arrow_back, color: Colors.black),
-//               onPressed: () {
-//                 Navigator.pushNamed(context, '/login');
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: LoginWidget(
+                child: BlocConsumer<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is ResetEmailSent) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Reset email sent. Check your inbox.'),
+                        ),
+                      );
+                      Navigator.pushReplacementNamed(context, '/login');
+                    } else if (state is AuthStateError) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(state.error)));
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is AuthStateLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Enter the email to reset your password',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12.0),
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 40, right: 40, top: 1, bottom: 20),
+                          child: TextField(
+                            autocorrect: false,
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: const TextStyle(
+                                color: Color.fromARGB(255, 158, 154, 154),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon: const Padding(
+                                padding:
+                                    EdgeInsets.only(left: 20.0, right: 20.0),
+                                child: Icon(Icons.person_outline_rounded),
+                              ),
+                              alignLabelWithHint: true,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 40, right: 40),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final email = emailController.text;
+                              if (email.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Please enter your email'),
+                                  ),
+                                );
+                                return;
+                              }
+                              context.read<AuthBloc>().add(
+                                    ForgotPasswordEvent(email: email),
+                                  );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50.0), //
+                              backgroundColor:
+                                  const Color(0xFFFFC129), // Yellow color
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              elevation: 10,
+                              shadowColor: Colors.black, // Shadow color
+                            ),
+                            child: const Text('Send Reset Email'),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+}
