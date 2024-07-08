@@ -192,12 +192,7 @@ class _QrPageState extends State<QrPage> {
           ),
           Positioned(
             top: 40,
-            left: 20,
-            /*child: ElevatedButton(
-              onPressed: () =>
-                  {Navigator.pushReplacementNamed(context, '/student')},
-              child: const Text("Go to 1st page"),
-            ),*/
+            left: 20,          
             child: IconButton(
               icon: const Icon(Icons.backspace_sharp,
                   color: Colors.white, size: 30),
