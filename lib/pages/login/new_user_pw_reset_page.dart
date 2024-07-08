@@ -172,9 +172,9 @@ class _NewUserPwResetPageState extends State<NewUserPwResetPage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 50.0), //
+                              minimumSize: const Size(double.infinity, 50.0),
                               backgroundColor:
-                                  const Color(0xFFFFC129), // Yellow color
+                                  const Color(0xFFFFC129), 
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
