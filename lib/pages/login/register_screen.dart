@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           SignUpEvent(
                             email: emailController.text,
                             password: passwordController.text,
-                            username: usernameController.text,
+                            username: usernameController.text.toLowerCase(),
                             role: selectedRole.toLowerCase(),
                           ),
                         );

@@ -7,57 +7,58 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-    State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-   User? user;
+  User? user;
   @override
-   void initState() {
+  void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        _checkUserRole(user!.uid);
-      } else {
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, '/get-started');
-        }
-      }
+      Navigator.pushReplacementNamed(context, '/get-started');
+      // user = FirebaseAuth.instance.currentUser;
+      // if (user != null) {
+      //   _checkUserRole(user!.uid);
+      // } else {
+      //   if (mounted) {
+      //     Navigator.pushReplacementNamed(context, '/get-started');
+      //   }
+      // }
     });
   }
 
-   Future<void> _checkUserRole(String uid) async {
-    try {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+  //  Future<void> _checkUserRole(String uid) async {
+  //   try {
+  //     DocumentSnapshot userDoc = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(uid)
+  //         .get();
 
-      if (userDoc.exists) {
-        String role = userDoc.get('role');
-        if (mounted) {
-          if (role == 'student') {
-            Navigator.pushReplacementNamed(context, '/student');
-          } else if (role == 'canteena') {
-            Navigator.pushReplacementNamed(context, '/canteenA');
-          } else if (role == 'canteenb') {
-            Navigator.pushReplacementNamed(context, '/canteenB');
-          }else {
-            Navigator.pushReplacementNamed(context, '/get-started');
-          }
-        }
-      } else {
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, '/get-started');
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/get-started');
-      }
-    }
-  }
+  //     if (userDoc.exists) {
+  //       String role = userDoc.get('role');
+  //       if (mounted) {
+  //         if (role == 'student') {
+  //           Navigator.pushReplacementNamed(context, '/student');
+  //         } else if (role == 'canteena') {
+  //           Navigator.pushReplacementNamed(context, '/canteenA');
+  //         } else if (role == 'canteenb') {
+  //           Navigator.pushReplacementNamed(context, '/canteenB');
+  //         }else {
+  //           Navigator.pushReplacementNamed(context, '/get-started');
+  //         }
+  //       }
+  //     } else {
+  //       if (mounted) {
+  //         Navigator.pushReplacementNamed(context, '/get-started');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     if (mounted) {
+  //       Navigator.pushReplacementNamed(context, '/get-started');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -106,10 +106,10 @@ class LoginPage extends StatelessWidget {
                               left: 40, right: 40), 
                           child: ElevatedButton(
                             onPressed: () {
-                              final email = userNameController.text;
+                              final userName = userNameController.text.toLowerCase();
                               final password = passwordController.text;
 
-                              if (email.isEmpty || password.isEmpty) {
+                              if (userName.isEmpty || password.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text('All fields are required')),
@@ -119,7 +119,7 @@ class LoginPage extends StatelessWidget {
 
                               context.read<AuthBloc>().add(
                                     LoggedInEvent(
-                                      username: email,
+                                      username: userName,
                                       password: password,
                                     ),
                                   );

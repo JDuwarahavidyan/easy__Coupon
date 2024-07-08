@@ -1,6 +1,7 @@
+import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../../widgets/widgets.dart';
+import 'package:easy_coupon/widgets/widgets.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -77,7 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
@@ -102,7 +103,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
+                context.read<AuthBloc>().add(LoggedOutEvent()); // Close the dialog
                 // Add logout logic here
               },
             ),
