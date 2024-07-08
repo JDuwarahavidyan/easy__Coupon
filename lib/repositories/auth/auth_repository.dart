@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:easy_coupon/models/user/user_model.dart';
-import 'package:easy_coupon/services/auth_service.dart';
+import 'package:easy_coupon/models/models.dart';
+import 'package:easy_coupon/services/services.dart';
 
 class AuthRepository {
   final FirebaseAuthService _firebaseAuthService;

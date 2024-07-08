@@ -1,3 +1,5 @@
+import 'package:easy_coupon/repositories/repositories.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -5,54 +7,91 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthStateLogout()) {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  final AuthRepository authRepository;
 
-    on<AuthEventLogin>((event, emit) async {
+  AuthBloc({required this.authRepository}) : super(AuthStateInitial()) {
+    on<AppStartedEvent>((event, emit) async {
+      emit(AuthStateLoading());
       try {
-        emit(AuthStateLoading());
-        // login
-        await auth.signInWithEmailAndPassword(
-          email: event.email,
-          password: event.pass,
-        );
-        emit(AuthStateLogin());
-      } on FirebaseAuthException catch (e) {
-        // Error Firebase Auth
-        emit(AuthStateError(e.message.toString()));
+        final isSignedIn = await authRepository.isSignedIn();
+        if (isSignedIn) {
+          final user = authRepository.getCurrentUser();
+          if (user != null) {
+            final isFirstTime = await authRepository.isFirstTimeLogin(user);
+            if (isFirstTime) {
+              emit(FirstTimeLogin(user));
+            } else {
+              emit(Authenticated(user));
+            }
+          }
+        } else {
+          emit(Unauthenticated());
+        }
       } catch (e) {
-        // General Error
-        emit(AuthStateError(e.toString()));
+        emit(AuthStateError('Failed to load user: $e'));
       }
     });
 
-    on<AuthEventLogout>((event, emit) async {
-      // logout
+    on<LoggedInEvent>((event, emit) async {
+      emit(AuthStateLoading());
       try {
-        emit(AuthStateLoading());
-        await auth.signOut();
-        emit(AuthStateLogout());
-      } on FirebaseAuthException catch (e) {
-        // Firebase Auth
-        emit(AuthStateError(e.message.toString()));
+        final user = await authRepository.signInWithUsernameAndPassword(
+            event.username, event.password);
+        final isFirstTime = await authRepository.isFirstTimeLogin(user);
+        if (isFirstTime) {
+          emit(FirstTimeLogin(user));
+        } else {
+          final userModel = await authRepository.getUserDetails(user.uid);
+      if (userModel.role == 'student') {
+        emit(StudentAuthenticated(user));
+      } else if (userModel.role == 'canteen') {
+        emit(CanteenAuthenticated(user));
+      }
+        }
       } catch (e) {
-        // General Error
-        emit(AuthStateError(e.toString()));
+        emit(AuthStateError('Failed to login: $e'));
       }
     });
 
-    on<AuthEventResetPassword>((event, emit) async {
-      // reset password
+    on<SignUpEvent>((event, emit) async {
+      emit(AuthStateLoading());
       try {
-        emit(AuthStateLoading());
-        await auth.sendPasswordResetEmail(email: event.email);
-        emit(AuthStatePasswordReset());
-      } on FirebaseAuthException catch (e) {
-        // Firebase Auth
-        emit(AuthStateError(e.message.toString()));
+        await authRepository.registerNewUser(
+            event.email, event.password, event.username, event.role);
+        emit(RegistrationSuccessful ());
       } catch (e) {
-        // General Error
-        emit(AuthStateError(e.toString()));
+        emit(AuthStateError('Failed to sign up: $e'));
+      }
+    });
+
+    on<LoggedOutEvent>((event, emit) async {
+      emit(AuthStateLoading());
+      try {
+        await authRepository.signOut();
+        emit(Unauthenticated());
+      } catch (e) {
+        emit(AuthStateError('Failed to sign out: $e'));
+      }
+    });
+
+    on<UpdatePasswordEvent>((event, emit) async {
+      emit(AuthStateLoading());
+      try {
+        await authRepository.updatePassword(
+            event.currentPassword, event.newPassword);
+        emit(PasswordUpdated());
+      } catch (e) {
+        emit(AuthStateError('Failed to update password: $e'));
+      }
+    });
+
+    on<ForgotPasswordEvent>((event, emit) async {
+      emit(AuthStateLoading());
+      try {
+        await authRepository.sendPasswordResetEmail(event.email);
+        emit(ResetEmailSent());
+      } catch (e) {
+        emit(AuthStateError('$e'));
       }
     });
   }
