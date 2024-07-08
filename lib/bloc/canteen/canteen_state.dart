@@ -1,5 +1,4 @@
-// states.dart
-import 'package:equatable/equatable.dart';
+part  of 'canteen_bloc.dart';
 
 abstract class CanteenState extends Equatable {
   @override

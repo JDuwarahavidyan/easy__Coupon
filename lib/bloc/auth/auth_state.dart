@@ -66,10 +66,19 @@ final class StudentAuthenticated extends AuthState {
   List<Object> get props => [user];
 }
 
-final class CanteenAuthenticated extends AuthState {
+final class CanteenAAuthenticated extends AuthState {
   final User user;
 
-  const CanteenAuthenticated(this.user);
+  const CanteenAAuthenticated(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
+class CanteenBAuthenticated extends AuthState {
+  final User user;
+
+  const CanteenBAuthenticated(this.user);
 
   @override
   List<Object> get props => [user];

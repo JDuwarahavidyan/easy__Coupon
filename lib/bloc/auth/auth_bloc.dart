@@ -42,11 +42,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(FirstTimeLogin(user));
         } else {
           final userModel = await authRepository.getUserDetails(user.uid);
-      if (userModel.role == 'student') {
-        emit(StudentAuthenticated(user));
-      } else if (userModel.role == 'canteen') {
-        emit(CanteenAuthenticated(user));
-      }
+          if (userModel.role == 'student') {
+            emit(StudentAuthenticated(user));
+          } else if (userModel.role == 'canteenA') {
+            emit(CanteenAAuthenticated(user));
+          } else if((userModel.role == 'canteenB') ){
+            emit(CanteenBAuthenticated(user));
+          }
         }
       } catch (e) {
         emit(AuthStateError('Failed to login: $e'));
@@ -58,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         await authRepository.registerNewUser(
             event.email, event.password, event.username, event.role);
-        emit(RegistrationSuccessful ());
+        emit(RegistrationSuccessful());
       } catch (e) {
         emit(AuthStateError('Failed to sign up: $e'));
       }

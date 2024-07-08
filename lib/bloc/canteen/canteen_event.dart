@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'canteen_bloc.dart';
 
 abstract class CanteenEvent extends Equatable {
   @override

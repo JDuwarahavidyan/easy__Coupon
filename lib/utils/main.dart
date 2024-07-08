@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_coupon/bloc/bloc.dart';
+import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:easy_coupon/pages/student/report_repo.dart';
+import 'package:easy_coupon/repositories/repositories.dart';
 import 'package:easy_coupon/routes/routes.dart';
+import 'package:easy_coupon/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -16,18 +18,24 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+    final AuthRepository authRepository = AuthRepository(
+    firebaseAuthService: FirebaseAuthService(),
+  );
+
+    runApp(MyApp(authRepository: authRepository));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthRepository authRepository;
+
+  const MyApp({super.key, required this.authRepository});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc(),
+          create: (context) => AuthBloc(authRepository: authRepository),
         ),
         BlocProvider<ReportBloc>(
           create: (context) => ReportBloc(ReportRepository()),
@@ -50,7 +58,7 @@ class MyApp extends StatelessWidget {
               theme: themeProvider.themeData.copyWith(
                 scaffoldBackgroundColor: const Color(0xFFFF8A00),
               ),
-              initialRoute: RouteNames.studentReport,
+              initialRoute: RouteNames.splash,
               onGenerateRoute: AppRoutes.generateRoute,
             );
           },

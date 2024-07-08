@@ -1,24 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:easy_coupon/bloc/canteen/canteen_bloc.dart';
-import 'package:easy_coupon/bloc/canteen/canteen_event.dart';
-import 'package:easy_coupon/bloc/canteen/canteen_state.dart';
-
+import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
 
 
-class CanteenPage extends StatefulWidget {
-  const CanteenPage({super.key});
+class CanteenAPage extends StatefulWidget {
+  const CanteenAPage({super.key});
 
   @override
-  State<CanteenPage> createState() => _CanteenPageState();
+  State<CanteenAPage> createState() => _CanteenAPageState();
 }
 
-class _CanteenPageState extends State<CanteenPage> {
+class _CanteenAPageState extends State<CanteenAPage> {
   final GlobalKey globalKey = GlobalKey();
 
   final ScreenshotController screenshotController = ScreenshotController();

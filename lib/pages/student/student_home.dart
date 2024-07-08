@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/models/functions.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-import '../../bloc/bloc.dart';
+import '../../bloc/blocs.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:flutter_spinbox/flutter_spinbox.dart';

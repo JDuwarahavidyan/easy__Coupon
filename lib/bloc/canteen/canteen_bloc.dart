@@ -1,7 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'canteen_event.dart';
-import 'canteen_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
+
+part 'canteen_event.dart';
+part 'canteen_state.dart';
 
 class CanteenBloc extends Bloc<CanteenEvent, CanteenState> {
   final FirebaseFirestore firestore;
