@@ -142,12 +142,17 @@ class LoginPage extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushReplacementNamed(context, '/reset-email');
                           },
-                          child: const Text(
-                            'Forget Password',
-                            style: TextStyle(
-                              color: Colors.black,
+                          child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Login',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(width: 10.0),
+                                Icon(Icons.send_rounded, color: Colors.black, size: 20,),
+                              ],
                             ),
-                          ),
                         ),
                       ],
                     );

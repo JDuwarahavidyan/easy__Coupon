@@ -1,9 +1,9 @@
 class RouteNames {
-  static const String splash = '/';
+  static const String splash = '/splash';
   static const String getStarted = '/get-started';
   static const String login = '/login';
   static const String resetPW = '/reset-password';
-  static const String resetPWEmail = '/reset-email';
+  static const String resetPWEmail = '/';
   static const String student = '/student';
   static const String settings = '/settings';
   static const String canteenA = '/canteenA';

@@ -181,7 +181,17 @@ class _NewUserPwResetPageState extends State<NewUserPwResetPage> {
                               elevation: 10,
                               shadowColor: Colors.black, // Shadow color
                             ),
-                            child: const Text('Reset Password'),
+                           child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Reset Password',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(width: 10.0),
+                                Icon(Icons.send_rounded, color: Colors.black, size: 20,),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16.0),

@@ -15,7 +15,7 @@ class AppRoutes {
       case RouteNames.resetPW:
         return MaterialPageRoute(builder: (_) => const NewUserPwResetPage());
       case RouteNames.resetPWEmail:
-        return MaterialPageRoute(builder: (_) => PasswordEmailResetPage());
+        return MaterialPageRoute(builder: (_) => const PasswordEmailResetPage());
       case RouteNames.student:
         return MaterialPageRoute(builder: (_) => const StudentPage());
       case RouteNames.settings:

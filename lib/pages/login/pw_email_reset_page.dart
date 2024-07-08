@@ -44,7 +44,7 @@ class PasswordEmailResetPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 12.0),
+                        const SizedBox(height: 16.0),
                         Container(
                           padding: const EdgeInsets.only(
                               left: 40, right: 40, top: 1, bottom: 20),
@@ -65,7 +65,7 @@ class PasswordEmailResetPage extends StatelessWidget {
                               prefixIcon: const Padding(
                                 padding:
                                     EdgeInsets.only(left: 20.0, right: 20.0),
-                                child: Icon(Icons.person_outline_rounded),
+                                child: Icon(Icons.email_outlined),
                               ),
                               alignLabelWithHint: true,
                             ),
@@ -89,7 +89,8 @@ class PasswordEmailResetPage extends StatelessWidget {
                                   );
                             },
                             style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 50.0), //
+                              minimumSize: const Size(double.infinity, 50.0),
+                              textStyle: const TextStyle(color: Colors.black),
                               backgroundColor:
                                   const Color(0xFFFFC129), // Yellow color
                               shape: RoundedRectangleBorder(
@@ -98,7 +99,17 @@ class PasswordEmailResetPage extends StatelessWidget {
                               elevation: 10,
                               shadowColor: Colors.black, // Shadow color
                             ),
-                            child: const Text('Send Reset Email'),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Send Reset Email',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                SizedBox(width: 10.0),
+                                Icon(Icons.send_rounded, color: Colors.black, size: 20,),
+                              ],
+                            ),
                           ),
                         ),
                       ],
