@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:easy_coupon/bloc/canteen/bloc/canteen_bloc.dart';
-import 'package:easy_coupon/bloc/canteen/bloc/canteen_event.dart';
-import 'package:easy_coupon/bloc/canteen/bloc/canteen_state.dart';
+import 'package:easy_coupon/bloc/canteen/canteen_bloc.dart';
+import 'package:easy_coupon/bloc/canteen/canteen_event.dart';
+import 'package:easy_coupon/bloc/canteen/canteen_state.dart';
 
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';

@@ -1,7 +1,6 @@
 // report_bloc.dart
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:easy_coupon/models/students/student.dart';
+import 'package:easy_coupon/models/student.dart';
 import 'package:easy_coupon/pages/student/report_repo.dart';
 
 import 'report_event.dart';

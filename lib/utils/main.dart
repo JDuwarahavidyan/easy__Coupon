@@ -7,8 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_coupon/bloc/report/bloc/report_bloc.dart';
-import 'package:easy_coupon/bloc/canteen/bloc/canteen_bloc.dart';
+import 'package:easy_coupon/bloc/report/report_bloc.dart';
+import 'package:easy_coupon/bloc/canteen/canteen_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

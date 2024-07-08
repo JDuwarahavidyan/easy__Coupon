@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_coupon/models/students/functions.dart';
+import 'package:easy_coupon/models/functions.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import '../../bloc/bloc.dart';
 import 'package:flutter/material.dart';

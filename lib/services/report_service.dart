@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_coupon/models/students/student.dart';
+import 'package:easy_coupon/models/student.dart';
 
 class ReportService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
