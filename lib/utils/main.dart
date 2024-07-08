@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(),
         ),
         BlocProvider<ReportBloc>(
-          // <-- Adding the ReportBloc provider
           create: (context) => ReportBloc(ReportRepository()),
         ),
         BlocProvider(
