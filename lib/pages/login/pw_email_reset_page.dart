@@ -1,9 +1,9 @@
-// import '../../bloc/bloc.dart';
+// import 'package:easy_coupon/bloc/blocs.dart';
 // import 'package:easy_coupon/widgets/widgets.dart';
 // import 'package:flutter/material.dart';
 
-// class PasswordResetPage extends StatelessWidget {
-//   PasswordResetPage({super.key});
+// class PwEmailResetPage extends StatelessWidget {
+//   PwEmailResetPage({super.key});
 
 //   final TextEditingController emailC = TextEditingController();
 
@@ -83,9 +83,7 @@
 //                               child: ElevatedButton(
 //                                 onPressed: () {
 //                                   // Handle password reset
-//                                   context.read<AuthBloc>().add(
-//                                         AuthEventResetPassword(emailC.text),
-//                                       );
+                                 
 //                                 },
 //                                 style: ElevatedButton.styleFrom(
 //                                   minimumSize:

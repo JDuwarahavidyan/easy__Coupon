@@ -43,6 +43,7 @@ class FirebaseAuthService {
         role: role,
         studentCount: 30,
         canteenCount: 0,
+        profilePic: 'assets/nouser.png',
       );
       await _firebaseFirestore.collection('users').doc(user.uid).set(
             userModel.toJson(),
@@ -65,7 +66,7 @@ class FirebaseAuthService {
    Future<String> getEmailFromUsername(String username) async {
     final QuerySnapshot query = await _firebaseFirestore
         .collection('users')
-        .where('name', isEqualTo: username)
+        .where('userName', isEqualTo: username)
         .get();
     if (query.docs.isEmpty) {
       throw Exception('No user found with this username.');

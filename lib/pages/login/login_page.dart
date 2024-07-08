@@ -68,7 +68,7 @@ class LoginPage extends StatelessWidget {
                               prefixIcon: const Padding(
                                 padding:
                                     EdgeInsets.only(left: 20.0, right: 20.0),
-                                child: Icon(Icons.email),
+                                child: Icon(Icons.person_outline_rounded),
                               ),
                               alignLabelWithHint: true,
                             ),
@@ -95,7 +95,7 @@ class LoginPage extends StatelessWidget {
                               prefixIcon: const Padding(
                                 padding:
                                     EdgeInsets.only(left: 20.0, right: 20.0),
-                                child: Icon(Icons.lock),
+                                child: Icon(Icons.lock_outline_rounded),
                               ),
                               alignLabelWithHint: true,
                             ),
@@ -140,7 +140,7 @@ class LoginPage extends StatelessWidget {
                         const SizedBox(height: 16.0),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/reset-pw');
+                            Navigator.pushReplacementNamed(context, '/reset-email');
                           },
                           child: const Text(
                             'Forget Password',

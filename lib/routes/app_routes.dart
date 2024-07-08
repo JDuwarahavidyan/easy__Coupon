@@ -13,12 +13,13 @@ class AppRoutes {
       case RouteNames.login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
       case RouteNames.resetPW:
-        // return MaterialPageRoute(builder: (_) => PasswordResetPage());
+        return MaterialPageRoute(builder: (_) => const NewUserPwResetPage());
+      case RouteNames.resetPWEmail:
+        return MaterialPageRoute(builder: (_) => PwEmailResetPage());
       case RouteNames.student:
         return MaterialPageRoute(builder: (_) => const StudentPage());
       case RouteNames.settings:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
-     
       case RouteNames.qr:
         return MaterialPageRoute(builder: (_) =>  const QrPage());
 
@@ -29,6 +30,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const StudentReportPage());
       case RouteNames.canteenA: // Added route for Canteen
         return MaterialPageRoute(builder: (_) => const CanteenAPage());
+      case RouteNames.canteenB: // Added route for Canteen
+        return MaterialPageRoute(builder: (_) => const CanteenBPage());
+      case RouteNames.register: // Added route for Register
+        return MaterialPageRoute(builder: (_) => const RegisterScreen());
 
       default:
         return MaterialPageRoute(

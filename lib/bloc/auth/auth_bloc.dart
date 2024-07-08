@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(Unauthenticated());
         }
       } catch (e) {
-        emit(AuthStateError('Failed to load user: $e'));
+        emit(AuthStateError('$e'));
       }
     });
 
@@ -51,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
         }
       } catch (e) {
-        emit(AuthStateError('Failed to login: $e'));
+        emit(AuthStateError('$e'));
       }
     });
 

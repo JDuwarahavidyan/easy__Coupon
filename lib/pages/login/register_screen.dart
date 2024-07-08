@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 DropdownButtonFormField<String>(
                   value: selectedRole,
                   decoration: const InputDecoration(labelText: 'Role'),
-                  items: <String>['Student', 'Canteen'].map((String value) {
+                  items: <String>['Student', 'CanteenA', 'CanteenB'].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
