@@ -167,20 +167,6 @@ class _QrPageState extends State<QrPage> {
             ),
           ),
           Positioned(
-            top: 40,
-            left: 20,
-            child: IconButton(
-              icon: const Icon(Icons.backspace_sharp,
-                  color: Colors.white, size: 30),
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const StudentPage()));
-              },
-            ),
-          ),
-          Positioned(
             top: MediaQuery.of(context).size.height * 0.15,
             left: 0,
             right: 0,
@@ -203,6 +189,22 @@ class _QrPageState extends State<QrPage> {
           CustomPaint(
             painter: ScannerOverlayPainter(),
             child: Container(),
+          ),
+          Positioned(
+            top: 40,
+            left: 20,
+            /*child: ElevatedButton(
+              onPressed: () =>
+                  {Navigator.pushReplacementNamed(context, '/student')},
+              child: const Text("Go to 1st page"),
+            ),*/
+            child: IconButton(
+              icon: const Icon(Icons.backspace_sharp,
+                  color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/student');
+              },
+            ),
           ),
         ],
       ),
