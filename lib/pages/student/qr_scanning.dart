@@ -115,6 +115,7 @@
 // }
 
 import 'package:easy_coupon/models/students/functions.dart';
+import 'package:easy_coupon/pages/student/student_home.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -169,9 +170,13 @@ class _QrPageState extends State<QrPage> {
             top: 40,
             left: 20,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              icon: const Icon(Icons.backspace_sharp,
+                  color: Colors.white, size: 30),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/student');
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StudentPage()));
               },
             ),
           ),
