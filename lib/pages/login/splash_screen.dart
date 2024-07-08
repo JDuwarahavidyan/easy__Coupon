@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,13 +11,54 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  User? user;
   @override
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, '/get-started');
+      // user = FirebaseAuth.instance.currentUser;
+      // if (user != null) {
+      //   _checkUserRole(user!.uid);
+      // } else {
+      //   if (mounted) {
+      //     Navigator.pushReplacementNamed(context, '/get-started');
+      //   }
+      // }
     });
   }
+
+  //  Future<void> _checkUserRole(String uid) async {
+  //   try {
+  //     DocumentSnapshot userDoc = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(uid)
+  //         .get();
+
+  //     if (userDoc.exists) {
+  //       String role = userDoc.get('role');
+  //       if (mounted) {
+  //         if (role == 'student') {
+  //           Navigator.pushReplacementNamed(context, '/student');
+  //         } else if (role == 'canteena') {
+  //           Navigator.pushReplacementNamed(context, '/canteenA');
+  //         } else if (role == 'canteenb') {
+  //           Navigator.pushReplacementNamed(context, '/canteenB');
+  //         }else {
+  //           Navigator.pushReplacementNamed(context, '/get-started');
+  //         }
+  //       }
+  //     } else {
+  //       if (mounted) {
+  //         Navigator.pushReplacementNamed(context, '/get-started');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     if (mounted) {
+  //       Navigator.pushReplacementNamed(context, '/get-started');
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

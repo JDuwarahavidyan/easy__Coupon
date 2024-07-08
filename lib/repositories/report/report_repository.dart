@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:easy_coupon/models/students/student.dart';
+import 'package:easy_coupon/models/student.dart';
 import 'package:intl/intl.dart';
 
 class ReportRepository {
