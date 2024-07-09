@@ -44,9 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           final userModel = await authRepository.getUserDetails(user.uid);
           if (userModel.role == 'student') {
             emit(StudentAuthenticated(user));
-          } else if (userModel.role == 'canteenA') {
+          } else if (userModel.role == 'canteena') {
             emit(CanteenAAuthenticated(user));
-          } else if((userModel.role == 'canteenB') ){
+          } else if((userModel.role == 'canteenb') ){
             emit(CanteenBAuthenticated(user));
           }
         }
