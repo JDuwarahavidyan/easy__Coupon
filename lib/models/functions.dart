@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -21,8 +19,6 @@ update(String colName, docName, field, var newField) async {
 
   print('field updated');
 }
-
-
 
 Future<void> updateCount(int val) async {
   final docRef = FirebaseFirestore.instance
@@ -51,7 +47,7 @@ Future<void> updateCount(int val) async {
   }
 }
 
-
-void scanned_data( Barcode result){  
+void scanned_data(Barcode result, int val) {
   print("data:${result.code}");
+  updateCount(val);
 }

@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_coupon/models/functions.dart';
+import 'package:easy_coupon/pages/student/qr_scanning.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import '../../bloc/blocs.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_spinbox/flutter_spinbox.dart';
-// import 'qr_scanner_page.dart';
 import '../../widgets/widgets.dart';
 
 class StudentPage extends StatefulWidget {
@@ -229,9 +226,12 @@ class _StudentPageState extends State<StudentPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/qr');
-                            //homeBloc.add(HomeScannerButtonNavigatorEvent());
-                            updateCount(val);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QrPage(val: val),
+                              ),
+                            );                           
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
