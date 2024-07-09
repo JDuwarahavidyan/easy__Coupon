@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import 'package:flutter/material.dart';
 // import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -116,6 +117,8 @@
 
 import 'package:easy_coupon/models/students/functions.dart';
 import 'package:easy_coupon/pages/student/student_home.dart';
+=======
+>>>>>>> master
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -123,7 +126,7 @@ class QrPage extends StatefulWidget {
   const QrPage({super.key});
 
   @override
-  _QrPageState createState() => _QrPageState();
+  State<QrPage> createState() => _QrPageState();
 }
 
 class _QrPageState extends State<QrPage> {
@@ -166,12 +169,40 @@ class _QrPageState extends State<QrPage> {
               cutOutSize: MediaQuery.of(context).size.width * 0.8,
             ),
           ),
+<<<<<<< HEAD
+=======
+         
+          
+          
+          CustomPaint(
+            painter: ScannerOverlayPainter(),
+            child: Container(),
+          ),
+           Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white, size: 30),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/student',
+                  (route) => false,
+                );
+              },
+            ),
+          ),
+>>>>>>> master
           Positioned(
             top: MediaQuery.of(context).size.height * 0.15,
             left: 0,
             right: 0,
             child: const Column(
+<<<<<<< HEAD
               children: [
+=======
+              children:  [
+>>>>>>> master
                 Text(
                   'Place the QR Code inside the area',
                   style: TextStyle(fontSize: 18, color: Colors.white),
@@ -186,6 +217,7 @@ class _QrPageState extends State<QrPage> {
               ],
             ),
           ),
+<<<<<<< HEAD
           CustomPaint(
             painter: ScannerOverlayPainter(),
             child: Container(),
@@ -201,6 +233,8 @@ class _QrPageState extends State<QrPage> {
               },
             ),
           ),
+=======
+>>>>>>> master
         ],
       ),
     );
@@ -221,7 +255,7 @@ class ScannerOverlayPainter extends CustomPainter {
         width: size.width * 0.8,
         height: size.width * 0.8,
       ),
-      Radius.circular(20),
+      const Radius.circular(20),
     );
 
     final path = Path()

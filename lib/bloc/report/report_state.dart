@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:easy_coupon/models/students/student.dart';
+import 'package:easy_coupon/models/student.dart';
 
 abstract class ReportState extends Equatable {
   const ReportState();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_coupon/bloc/report/bloc/report_bloc.dart';
-import 'package:easy_coupon/bloc/report/bloc/report_state.dart';
-import 'package:easy_coupon/bloc/report/bloc/report_event.dart';
+import 'package:easy_coupon/bloc/report/report_bloc.dart';
+import 'package:easy_coupon/bloc/report/report_state.dart';
+import 'package:easy_coupon/bloc/report/report_event.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 
 class StudentReportPage extends StatefulWidget {
