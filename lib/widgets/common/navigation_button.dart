@@ -32,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
             break;
           case 2:
-            Navigator.pushNamed(context, RouteNames.canteen);
+            Navigator.pushNamed(context, RouteNames.canteenA);
             break;
           case 3:
             Navigator.pushNamed(context, RouteNames.settings);

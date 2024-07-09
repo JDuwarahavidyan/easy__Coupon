@@ -7,14 +7,14 @@ import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
 
 
-class CanteenAPage extends StatefulWidget {
-  const CanteenAPage({super.key});
+class CanteenBPage extends StatefulWidget {
+  const CanteenBPage({super.key});
 
   @override
-  State<CanteenAPage> createState() => _CanteenAPageState();
+  State<CanteenBPage> createState() => _CanteenBPageState();
 }
 
-class _CanteenAPageState extends State<CanteenAPage> {
+class _CanteenBPageState extends State<CanteenBPage> {
   final GlobalKey globalKey = GlobalKey();
 
   final ScreenshotController screenshotController = ScreenshotController();
