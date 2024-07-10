@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/pages/pages.dart';
 
-
 class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -21,7 +20,10 @@ class AppRoutes {
       case RouteNames.settings:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
       case RouteNames.qr:
-        return MaterialPageRoute(builder: (_) =>  const QrPage());
+        return MaterialPageRoute(
+            builder: (_) => const QrPage(
+                  val: 0,
+                ));
 
       case RouteNames.report:
         return MaterialPageRoute(builder: (_) => const ReportPage());
