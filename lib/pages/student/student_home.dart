@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/pages/student/qr_scanning.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import '../../bloc/blocs.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,14 @@ class _StudentPageState extends State<StudentPage> {
   int _selectedIndex = 0;
   double spinBoxValue = 0; // Track the SpinBox value
   int val = 1;
+  bool _isFirstLoad = true;
+  User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+  }
 
   void handleQRScan(String qrData) {
     setState(() {
@@ -68,8 +77,6 @@ class _StudentPageState extends State<StudentPage> {
       },
     );
   }
-
-  bool _isFirstLoad = true;
 
   @override
   Widget build(BuildContext context) {
@@ -165,9 +172,8 @@ class _StudentPageState extends State<StudentPage> {
                         child: Center(
                           child: StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
-                                  .collection('students')
-                                  .where('email',
-                                      isEqualTo: 'student@ruhuna.com')
+                                  .collection('users')
+                                  .where('id', isEqualTo: currentUser?.uid)
                                   .snapshots(),
                               builder: (context,
                                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -197,7 +203,7 @@ class _StudentPageState extends State<StudentPage> {
                                                   (30 -
                                                           snapshot.data!
                                                                   .docs[index]
-                                                              ['count'])
+                                                              ['studentCount'])
                                                       .toString(),
                                                   style: const TextStyle(
                                                     fontSize: 75,
@@ -247,13 +253,14 @@ class _StudentPageState extends State<StudentPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             FirebaseFirestore.instance
-                                .collection('students')
-                                .where('email', isEqualTo: 'student@ruhuna.com')
+                                .collection('users')
+                                .where('id', isEqualTo: currentUser?.uid)
                                 .get()
                                 .then((querySnapshot) {
                               if (querySnapshot.docs.isNotEmpty) {
                                 var doc = querySnapshot.docs.first;
-                                if (doc['count'] + val <= 30) {
+                                if (doc['studentCount'] + val <= 30 &&
+                                    doc['studentCount'] <= 30) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
