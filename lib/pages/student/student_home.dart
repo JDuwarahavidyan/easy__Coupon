@@ -49,6 +49,26 @@ class _StudentPageState extends State<StudentPage> {
     }
   }
 
+  void _showCouponOverDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Coupons Over'),
+          content: const Text('Your coupons are over.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   bool _isFirstLoad = true;
 
   @override
@@ -226,12 +246,25 @@ class _StudentPageState extends State<StudentPage> {
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => QrPage(val: val),
-                              ),
-                            );                           
+                            FirebaseFirestore.instance
+                                .collection('students')
+                                .where('email', isEqualTo: 'student@ruhuna.com')
+                                .get()
+                                .then((querySnapshot) {
+                              if (querySnapshot.docs.isNotEmpty) {
+                                var doc = querySnapshot.docs.first;
+                                if (doc['count'] + val <= 30) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QrPage(val: val),
+                                    ),
+                                  );
+                                } else {
+                                  _showCouponOverDialog();
+                                }
+                              }
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
