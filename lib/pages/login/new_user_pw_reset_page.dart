@@ -1,4 +1,5 @@
 import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/routes/routes.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class _NewUserPwResetPageState extends State<NewUserPwResetPage> {
                 child: BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, state) {
                     if (state is PasswordUpdated) {
-                      Navigator.pushReplacementNamed(context, '/login');
+                      Navigator.pushReplacementNamed(context, RouteNames.login);
                     } else if (state is AuthStateError) {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(state.error)));

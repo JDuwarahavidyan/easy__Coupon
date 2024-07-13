@@ -26,8 +26,8 @@ class _StudentReportPageState extends State<StudentReportPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: const Color(0xFFFF8A00), // header background color
+            colorScheme: const ColorScheme.light(
+              primary:  Color(0xFFFF8A00), // header background color
               onPrimary: Colors.white, // header text color
               onSurface: Colors.black, // body text color
             ),
@@ -75,9 +75,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           // Define a base width for iPhone 12 Pro
-          double baseWidth = 390.0;
           // Calculate the scale factor
-          double scaleFactor = constraints.maxWidth / baseWidth;
 
           return Container(
             padding: const EdgeInsets.all(20),
@@ -183,12 +181,6 @@ class _StudentReportPageState extends State<StudentReportPage> {
               ),
             ),
           );
-        },
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 1, // settings is the 1st item
-        onTap: (index) {
-          // Handle bottom navigation tap
         },
       ),
     );

@@ -60,6 +60,7 @@ dependencies:
   path_provider: ^2.0.11
   share: ^2.0.4
   screenshot: ^3.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:

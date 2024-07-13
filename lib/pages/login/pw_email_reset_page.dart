@@ -1,4 +1,5 @@
 import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/routes/routes.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -130,7 +131,7 @@ class PasswordEmailResetPage extends StatelessWidget {
             left: 16,
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                Navigator.pushNamedAndRemoveUntil(context, RouteNames.login, (route) => false);
               },
               mini: true,
               backgroundColor: Colors.white,

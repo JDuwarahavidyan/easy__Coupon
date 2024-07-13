@@ -30,9 +30,7 @@ class _ReportPageState extends State<ReportPage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           // Define a base width for iPhone 12 Pro
-          double baseWidth = 390.0;
-          // Calculate the scale factor
-          double scaleFactor = constraints.maxWidth / baseWidth;
+
 
           return Container(
             padding: const EdgeInsets.all(20),
