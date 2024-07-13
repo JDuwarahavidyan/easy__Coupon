@@ -1,4 +1,5 @@
 import 'package:easy_coupon/models/functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -33,18 +34,48 @@ class _QrPageState extends State<QrPage> {
         result = scanData;
       });
       // Handle the scanned data
-      if (result != null) {
-        if ((result?.code == "canteenA" || result?.code == "canteenB") &&
-            loops <= 0) {
-          scanned_data(result!, widget.val,widget.userId);
-          Navigator.pushReplacementNamed(
-            context,
-            '/student',
-          );
+      if (result != null && loops <= 0) {
+        if (result?.code == "canteenA" || result?.code == "canteenB") {
+          _showConfirmationDialog(result!, widget.val, widget.userId);
           loops++;
         }
       }
     });
+  }
+
+  void _showConfirmationDialog(Barcode result, int val, String userId) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Do you want to continue with $val ${val == 1 ? 'coupon': 'coupons'}?'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/student',
+                  (route) => false,
+                );
+              },
+            ),
+            CupertinoDialogAction(
+              child: const Text('Confirm'),
+              onPressed: () {
+                scanned_data(result, val, userId);
+                Navigator.of(context).pop();
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/student',
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

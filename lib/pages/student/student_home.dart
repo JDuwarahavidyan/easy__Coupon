@@ -185,7 +185,7 @@ class _StudentPageState extends State<StudentPage> {
                                                   child: ListTile(
                                                     title: Center(
                                                       child: Text(
-                                                        (30 -
+                                                        (
                                                                 snapshot.data!
                                                                             .docs[
                                                                         index][
@@ -239,7 +239,7 @@ class _StudentPageState extends State<StudentPage> {
                               padding: const EdgeInsets.all(10.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                      if (user.studentCount <= 30) {
+                                      if (user.studentCount > 0 && user.studentCount <= 30) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
