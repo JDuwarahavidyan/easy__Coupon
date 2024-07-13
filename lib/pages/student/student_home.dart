@@ -19,12 +19,41 @@ class _StudentPageState extends State<StudentPage> {
   int result = 30;
   double spinBoxValue = 0; // Track the SpinBox value
   int val = 1;
+  bool _isFirstLoad = true;
+  User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+  }
 
   void handleQRScan(String qrData) {
     setState(() {
       result -= spinBoxValue.toInt(); // Use the SpinBox value
     });
     Navigator.pop(context); // Close the QR scanner page
+  }
+
+
+  void _showCouponOverDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Coupons Over'),
+          content: const Text('Your coupons are over.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool _isFirstLoad = true;
@@ -109,126 +138,117 @@ class _StudentPageState extends State<StudentPage> {
                             ),
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFF5C00), Color(0xFFFFFB10)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                25), // Outer border radius
-                          ),
-                          child: Container(
-                            height: 140,
-                            width: 140,
-                            margin: const EdgeInsets.all(13),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: StreamBuilder<QuerySnapshot>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection('users')
-                                      .where('id',
-                                          isEqualTo: user.id)
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (_isFirstLoad &&
-                                        snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    } else {
-                                      _isFirstLoad = false;
-                                      if (snapshot.hasError) {
-                                        return Center(
-                                            child: Text(
-                                                'Error: ${snapshot.error}'));
-                                      } else if (!snapshot.hasData ||
-                                          snapshot.data!.docs.isEmpty) {
-                                        return const Center(
-                                            child: Text('No data available.'));
-                                      } else {
-                                        return ListView.builder(
-                                            itemCount:
-                                                snapshot.data!.docs.length,
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                child: ListTile(
-                                                  title: Center(
-                                                    child: Text(
-                                                      (30-
-                                                              snapshot.data!
-                                                                          .docs[
-                                                                      index]
-                                                                  ['studentCount'])
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                        fontSize: 75,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
+
+                        child: Center(
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('users')
+                                  .where('id', isEqualTo: currentUser?.uid)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (_isFirstLoad &&
+                                    snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  _isFirstLoad = false;
+                                  if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.docs.isEmpty) {
+                                    return const Center(
+                                        child: Text('No data available.'));
+                                  } else {
+                                    return ListView.builder(
+                                        itemCount: snapshot.data!.docs.length,
+                                        itemBuilder: (context, index) {
+                                          return Card(
+                                            child: ListTile(
+                                              title: Center(
+                                                child: Text(
+                                                  (30 -
+                                                          snapshot.data!
+                                                                  .docs[index]
+                                                              ['studentCount'])
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 75,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
                                                   ),
                                                 ),
-                                              );
-                                            });
-                                      }
-                                    }
-                                  }),
-                            ),
-                          ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  }
+                                }
+                              }),
                         ),
-                        const SizedBox(height: 60),
-                        Container(
-                          height: 50,
-                          width: 260,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: SpinBox(
-                            min: 1,
-                            max: 3,
-                            value: 1,
-                            onChanged: (value) {
-                              setState(() {
-                                spinBoxValue = value;
-                                val = value.toInt();
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 260,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => QrPage(val: val),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black,
-                                minimumSize: const Size(290, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 60),
+                    Container(
+                      height: 50,
+                      width: 260,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: SpinBox(
+                        min: 1,
+                        max: 3,
+                        value: 1,
+                        onChanged: (value) {
+                          setState(() {
+                            spinBoxValue = value;
+                            val = value.toInt();
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      width: 260,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .where('id', isEqualTo: currentUser?.uid)
+                                .get()
+                                .then((querySnapshot) {
+                              if (querySnapshot.docs.isNotEmpty) {
+                                var doc = querySnapshot.docs.first;
+                                if (doc['studentCount'] + val <= 30 &&
+                                    doc['studentCount'] <= 30) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => QrPage(val: val, userId: currentUser!.uid),
+                                    ),
+                                  );
+                                } else {
+                                  _showCouponOverDialog();
+                                }
+                              }
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            minimumSize: const Size(290, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                               child: const Text(
                                 "Scan the QR Code",
                                 style: TextStyle(

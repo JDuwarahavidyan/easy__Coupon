@@ -4,7 +4,8 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrPage extends StatefulWidget {
   final int val;
-  const QrPage({super.key, required this.val});
+  final String userId;
+  const QrPage({super.key, required this.val, required this.userId});
 
   @override
   State<QrPage> createState() => _QrPageState();
@@ -35,7 +36,7 @@ class _QrPageState extends State<QrPage> {
       if (result != null) {
         if ((result?.code == "canteenA" || result?.code == "canteenB") &&
             loops <= 0) {
-          scanned_data(result!, widget.val);
+          scanned_data(result!, widget.val,widget.userId);
           Navigator.pushReplacementNamed(
             context,
             '/student',
