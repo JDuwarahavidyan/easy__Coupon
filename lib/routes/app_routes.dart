@@ -1,3 +1,4 @@
+import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/pages/pages.dart';
@@ -16,7 +17,7 @@ class AppRoutes {
       case RouteNames.resetPWEmail:
         return MaterialPageRoute(builder: (_) => const PasswordEmailResetPage());
       case RouteNames.student:
-        return MaterialPageRoute(builder: (_) => const StudentPage());
+        return MaterialPageRoute(builder: (_) => const StudentHomeScreen());
       case RouteNames.settings:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
       case RouteNames.qr:
@@ -24,9 +25,6 @@ class AppRoutes {
             builder: (_) => const QrPage(
                   val: 0, userId: "", 
                 ));
-
-      case RouteNames.report:
-        return MaterialPageRoute(builder: (_) => const ReportPage());
 
       case RouteNames.studentReport: // Added route for StudentReport
         return MaterialPageRoute(builder: (_) => const StudentReportPage());

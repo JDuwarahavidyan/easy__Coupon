@@ -9,7 +9,6 @@ class RouteNames {
   static const String canteenA = '/canteenA';
   static const String canteenB = '/canteenB';
   static const String qr = '/qr';
-  static const String report = '/report';
   static const String studentReport = '/studentReport';
   static const String register = '/register';
 }

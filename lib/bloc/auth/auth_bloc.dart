@@ -10,7 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 
   AuthBloc({required this.authRepository}) : super(AuthStateInitial()) {
-    on<AppStartedEvent>((event, emit) async {
+  on<AppStartedEvent>((event, emit) async {
       emit(AuthStateLoading());
       try {
         final isSignedIn = await authRepository.isSignedIn();
@@ -21,7 +21,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             if (isFirstTime) {
               emit(FirstTimeLogin(user));
             } else {
-              emit(Authenticated(user));
+              final isSessionExpired =
+                  await authRepository.checkSessionExpiry();
+              if (isSessionExpired) {
+                add(LoggedOutEvent());
+              } else {
+                final userModel = await authRepository.getUserDetails(user.uid);
+                if (userModel.role == 'student') {
+                  emit(StudentAuthenticated(user));
+                } else if (userModel.role == 'canteena') {
+                  emit(CanteenAAuthenticated(user));
+                }  else if (userModel.role == 'canteenb') {
+                  emit(CanteenBAuthenticated(user));
+                }else {
+                  emit(Authenticated(user));
+                }
+              }
             }
           }
         } else {
@@ -62,7 +77,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.email, event.password, event.username, event.role);
         emit(RegistrationSuccessful());
       } catch (e) {
-        emit(AuthStateError('Failed to sign up: $e'));
+        emit(AuthStateError('$e'));
       }
     });
 
@@ -72,7 +87,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await authRepository.signOut();
         emit(Unauthenticated());
       } catch (e) {
-        emit(AuthStateError('Failed to sign out: $e'));
+        emit(AuthStateError('$e'));
       }
     });
 
@@ -83,7 +98,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.currentPassword, event.newPassword);
         emit(PasswordUpdated());
       } catch (e) {
-        emit(AuthStateError('Failed to update password: $e'));
+        emit(AuthStateError('$e'));
       }
     });
 
