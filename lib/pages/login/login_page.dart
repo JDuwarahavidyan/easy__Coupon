@@ -1,4 +1,5 @@
 import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/routes/routes.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -20,13 +21,13 @@ class LoginPage extends StatelessWidget {
                   listener: (context, state) {
                     if (state is FirstTimeLogin) {
                       Navigator.pushReplacementNamed(
-                          context, '/reset-password');
+                          context, RouteNames.resetPW);
                     } else if (state is StudentAuthenticated) {
-                      Navigator.pushReplacementNamed(context, '/student');
+                      Navigator.pushReplacementNamed(context, RouteNames.student);
                     } else if (state is CanteenAAuthenticated) {
-                      Navigator.pushReplacementNamed(context, '/canteenA');
+                      Navigator.pushReplacementNamed(context, RouteNames.canteenA);
                     } else if (state is CanteenBAuthenticated) {
-                      Navigator.pushReplacementNamed(context, '/canteenB');
+                      Navigator.pushReplacementNamed(context, RouteNames.canteenB);
                     } else if (state is AuthStateError) {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(state.error)));
@@ -154,7 +155,7 @@ class LoginPage extends StatelessWidget {
                         const SizedBox(height: 16.0),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/reset-email');
+                            Navigator.pushReplacementNamed(context, RouteNames.resetPWEmail);
                           },
                           child: const Text(
                             'Forget Password',

@@ -2,6 +2,8 @@ import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
+import '../../routes/route_names.dart';
+
 class GetStarted extends StatelessWidget {
   const GetStarted({super.key});
 
@@ -53,7 +55,7 @@ class GetStarted extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: SlideAction(
                       onSubmit: () {
-                        return Navigator.pushReplacementNamed(context, '/login');
+                        return Navigator.pushReplacementNamed(context, RouteNames.login);
                       },
                       text: 'Get Started',
                       textStyle: const TextStyle(

@@ -1,7 +1,10 @@
-import 'package:easy_coupon/bloc/blocs.dart';
-import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:easy_coupon/widgets/widgets.dart';
+import 'package:easy_coupon/bloc/auth/auth_bloc.dart';
+import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/widgets/common/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -13,10 +16,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   double getResponsiveFontSize(double baseFontSize) {
     final screenWidth = MediaQuery.of(context).size.width;
-    // Adjust the scaling factor as needed
     return baseFontSize *
         (screenWidth /
-            390); // 390 is roughly the width of iPhone 12 Pro in logical pixels
+            450); // 390 is roughly the width of iPhone 12 Pro in logical pixels
   }
 
   void _showLogoutDialog() {
@@ -46,13 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
             'Do you want to logout?',
             style: TextStyle(
               fontSize: getResponsiveFontSize(16),
-              shadows: const [
-                // Shadow(
-                //   offset: Offset(2.0, 2.0),
-                //   blurRadius: 3.0,
-                //   color: Colors.grey,
-                // ),
-              ],
+              shadows: const [],
             ),
           ),
           actions: [
@@ -78,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
@@ -104,8 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                context.read<AuthBloc>().add(LoggedOutEvent()); // Close the dialog
-                // Add logout logic here
+                context.read<AuthBloc>().add(LoggedOutEvent());
               },
             ),
           ],
@@ -120,145 +115,149 @@ class _SettingsPageState extends State<SettingsPage> {
     final imageSize = screenSize.width / 3;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                width: screenSize.width,
-                height: imageSize,
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                  child: Image.asset(
-                    'assets/profile_picture.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  height: double.infinity,
-                  color: const Color(0xFFF9E6BD),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                            height: imageSize /
-                                2), // Space for the overlapping image
-                        Container(
-                          margin: EdgeInsets.only(top: imageSize / 4),
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFF9E6BD),
-                          ),
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state is UserLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is UserLoaded) {
+            final user = state.users.firstWhere(
+              (user) => user.id == FirebaseAuth.instance.currentUser?.uid,
+            );
+
+            return Stack(
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      width: screenSize.width,
+                      height: imageSize,
+                      child: ImageFiltered(
+                        imageFilter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                        child: Image.network(
+                          user.profilePic ?? 'assets/profile_picture.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        height: double.infinity,
+                        color: const Color(0xFFF9E6BD),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Column(
                             children: [
-                              ListTile(
-                                title: Text(
-                                  'About App',
-                                  style: TextStyle(
-                                    fontSize: getResponsiveFontSize(18),
-                                  ),
+                              SizedBox(
+                                  height: imageSize /
+                                      2), // Space for the overlapping image
+                              Container(
+                                margin: EdgeInsets.only(top: imageSize / 4),
+                                padding: const EdgeInsets.all(16.0),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFF9E6BD),
                                 ),
-                                onTap: () {
-                                  // Navigate to about app page
-                                },
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Change Password',
-                                  style: TextStyle(
-                                    fontSize: getResponsiveFontSize(18),
-                                  ),
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      title: Text(
+                                        'About App',
+                                        style: TextStyle(
+                                          fontSize: getResponsiveFontSize(18),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        // Navigate to about app page
+                                      },
+                                    ),
+                                    ListTile(
+                                      title: Text(
+                                        'Change Password',
+                                        style: TextStyle(
+                                          fontSize: getResponsiveFontSize(18),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        // Navigate to change password page
+                                      },
+                                    ),
+                                    ListTile(
+                                      title: Text(
+                                        'Theme',
+                                        style: TextStyle(
+                                          fontSize: getResponsiveFontSize(18),
+                                        ),
+                                      ),
+                                      trailing: const ThemeSwitch(),
+                                    ),
+                                    ListTile(
+                                      title: Text(
+                                        'Logout',
+                                        style: TextStyle(
+                                          fontSize: getResponsiveFontSize(18),
+                                        ),
+                                      ),
+                                      onTap: _showLogoutDialog,
+                                    ),
+                                  ],
                                 ),
-                                onTap: () {
-                                  // Navigate to change password page
-                                },
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Theme',
-                                  style: TextStyle(
-                                    fontSize: getResponsiveFontSize(18),
-                                  ),
-                                ),
-                                trailing:
-                                    ThemeSwitch(), // Add the theme switch here
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Logout',
-                                  style: TextStyle(
-                                    fontSize: getResponsiveFontSize(18),
-                                  ),
-                                ),
-                                onTap: _showLogoutDialog,
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: imageSize / 1.5 - imageSize / 6,
-            left: 16.0,
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: imageSize / 2,
-                  backgroundColor: const Color.fromARGB(255, 2, 1, 0),
-                  child: CircleAvatar(
-                    radius: imageSize / 2.05,
-                    backgroundImage:
-                        const AssetImage('assets/profile_picture.jpg'),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: imageSize /
-                            2), // Adjust this value to move the text further down
-                    Text(
-                      'Derek Hale',
-                      style: TextStyle(
-                        fontSize: getResponsiveFontSize(16),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        shadows: const [
-                          //
-                        ],
-                      ),
-                    ),
-                    Text(
-                      'Kollupitiya, Colombo',
-                      style: TextStyle(
-                        fontSize: getResponsiveFontSize(14),
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        shadows: const [],
                       ),
                     ),
                   ],
                 ),
+                Positioned(
+                  top: imageSize / 1.5 - imageSize / 6,
+                  left: 16.0,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: imageSize / 2,
+                        backgroundColor: const Color.fromARGB(255, 2, 1, 0),
+                        child: CircleAvatar(
+                          radius: imageSize / 2.05,
+                          backgroundImage: NetworkImage(
+                              user.profilePic ?? 'assets/nouser.png'),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                              height: imageSize /
+                                  2), // Adjust this value to move the text further down
+                          Text(
+                            user.userName,
+                            style: TextStyle(
+                              fontSize: getResponsiveFontSize(16),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              shadows: const [],
+                            ),
+                          ),
+                          Text(
+                            user.email,
+                            style: TextStyle(
+                              fontSize: getResponsiveFontSize(14),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              shadows: const [],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 3, //settings is the 4th item
-        onTap: (index) {
-          // Handle bottom navigation tap
+            );
+          }
+          return const Center(child: Text('Failed to load user data'));
         },
       ),
     );

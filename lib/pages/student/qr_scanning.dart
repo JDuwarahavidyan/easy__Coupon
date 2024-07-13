@@ -1,8 +1,11 @@
+import 'package:easy_coupon/models/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrPage extends StatefulWidget {
-  const QrPage({super.key});
+  final int val;
+  final String userId;
+  const QrPage({super.key, required this.val, required this.userId});
 
   @override
   State<QrPage> createState() => _QrPageState();
@@ -12,6 +15,8 @@ class _QrPageState extends State<QrPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   String qrText = '';
+  Barcode? result;
+  int loops = 0;
 
   @override
   void dispose() {
@@ -23,10 +28,22 @@ class _QrPageState extends State<QrPage> {
     setState(() {
       controller = qrViewController;
     });
-    controller!.scannedDataStream.listen((scanData) {
+    controller?.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = scanData.code ?? '';
+        result = scanData;
       });
+      // Handle the scanned data
+      if (result != null) {
+        if ((result?.code == "canteenA" || result?.code == "canteenB") &&
+            loops <= 0) {
+          scanned_data(result!, widget.val,widget.userId);
+          Navigator.pushReplacementNamed(
+            context,
+            '/student',
+          );
+          loops++;
+        }
+      }
     });
   }
 
@@ -43,14 +60,11 @@ class _QrPageState extends State<QrPage> {
               cutOutSize: MediaQuery.of(context).size.width * 0.8,
             ),
           ),
-         
-          
-          
           CustomPaint(
             painter: ScannerOverlayPainter(),
             child: Container(),
           ),
-           Positioned(
+          Positioned(
             top: 40,
             left: 20,
             child: IconButton(
@@ -69,7 +83,7 @@ class _QrPageState extends State<QrPage> {
             left: 0,
             right: 0,
             child: const Column(
-              children:  [
+              children: [
                 Text(
                   'Place the QR Code inside the area',
                   style: TextStyle(fontSize: 18, color: Colors.white),

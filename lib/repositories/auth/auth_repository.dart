@@ -1,6 +1,7 @@
+import 'package:easy_coupon/models/user/user_model.dart';
+import 'package:easy_coupon/services/auth/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:easy_coupon/models/models.dart';
-import 'package:easy_coupon/services/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
   final FirebaseAuthService _firebaseAuthService;
@@ -9,65 +10,45 @@ class AuthRepository {
       : _firebaseAuthService = firebaseAuthService ?? FirebaseAuthService();
 
   Future<bool> isSignedIn() async {
-    try {
-      final currentUser = _firebaseAuthService.getCurrentUser();
-      return currentUser != null;
-    } catch (e) {
-      print('Error checking if user is signed in: $e');
+    final prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('userId');
+    final int? expiryTime = prefs.getInt('expiryTime');
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    if (userId != null && expiryTime != null && currentTime < expiryTime) {
+      return true;
+    } else {
       return false;
     }
   }
 
+  Future<String> getUserEmail() async {
+    final currentUser = _firebaseAuthService.getCurrentUser();
+    return currentUser!.email!;
+  }
+
   Future<User> signInWithEmailAndPassword(String email, String password) async {
-    try {
-      await _firebaseAuthService.signInWithEmailAndPassword(email, password);
-      return _firebaseAuthService.getCurrentUser()!;
-    } catch (e) {
-      print('Error signing in with email and password: $e');
-      rethrow; // Propagate the error to the caller
-    }
+    await _firebaseAuthService.signInWithEmailAndPassword(email, password);
+    final user = _firebaseAuthService.getCurrentUser();
+    await _saveSession(user!);
+    return user;
   }
 
   Future<User> registerNewUser(
       String email, String password, String username, String role) async {
-    try {
-      await _firebaseAuthService.registerNewUser(
-          email, password, username, role);
-      return _firebaseAuthService.getCurrentUser()!;
-    } catch (e) {
-      print('Error registering new user: $e');
-      rethrow;
-    }
-  }
-
-  Future<User> signInWithUsernameAndPassword(
-      String username, String password) async {
-    try {
-      final email = await _firebaseAuthService.getEmailFromUsername(username);
-      await _firebaseAuthService.signInWithEmailAndPassword(email, password);
-      return _firebaseAuthService.getCurrentUser()!;
-    } catch (e) {
-      print('Error signing in with username and password: $e');
-      rethrow;
-    }
+    await _firebaseAuthService.registerNewUser(email, password, username, role);
+    final user = _firebaseAuthService.getCurrentUser();
+    await _saveSession(user!);
+    return user;
   }
 
   Future<void> signOut() async {
-    try {
-      await _firebaseAuthService.signOut();
-    } catch (e) {
-      print('Error signing out: $e');
-      rethrow;
-    }
+    await _firebaseAuthService.signOut();
+    await _clearSession();
   }
 
   Future<UserModel> getUserDetails(String userId) async {
-    try {
-      return await _firebaseAuthService.getUserDetails(userId);
-    } catch (e) {
-      print('Error getting user details: $e');
-      rethrow;
-    }
+    return await _firebaseAuthService.getUserDetails(userId);
   }
 
   User? getCurrentUser() {
@@ -95,11 +76,36 @@ class AuthRepository {
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      await _firebaseAuthService.sendPasswordResetEmail(email);
-    } catch (e) {
-      print('Error sending password reset email: $e');
-      rethrow;
-    }
+    await _firebaseAuthService.sendPasswordResetEmail(email);
+  }
+
+  Future<User> signInWithUsernameAndPassword(
+      String username, String password) async {
+    final email = await _firebaseAuthService.getEmailFromUsername(username);
+    await _firebaseAuthService.signInWithEmailAndPassword(email, password);
+    final user = _firebaseAuthService.getCurrentUser();
+    await _saveSession(user!);
+    return user;
+  }
+
+  Future<void> _saveSession(User user) async {
+    final prefs = await SharedPreferences.getInstance();
+    final expiryTime =
+        DateTime.now().add(const Duration(days: 7)).millisecondsSinceEpoch;
+    await prefs.setString('userId', user.uid);
+    await prefs.setInt('expiryTime', expiryTime);
+  }
+
+  Future<void> _clearSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
+    await prefs.remove('expiryTime');
+  }
+
+  Future<bool> checkSessionExpiry() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? expiryTime = prefs.getInt('expiryTime');
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+    return expiryTime != null && currentTime > expiryTime;
   }
 }
