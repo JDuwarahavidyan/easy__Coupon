@@ -160,7 +160,7 @@ class _StudentPageState extends State<StudentPage> {
                                                 child: ListTile(
                                                   title: Center(
                                                     child: Text(
-                                                      (30-
+                                                      (
                                                               snapshot.data!
                                                                           .docs[
                                                                       index]

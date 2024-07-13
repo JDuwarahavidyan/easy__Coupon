@@ -6,9 +6,6 @@ class UserService {
   final CollectionReference _userCollection = FirebaseFirestore.instance.collection('users');
 
 
-
-
-
 //stream of users realtime updates
   Stream<List<UserModel>> getUsersStream() {
     return _userCollection.snapshots().map((snapshot) => snapshot.docs
@@ -24,7 +21,7 @@ class UserService {
       }
       return null;
     } catch (e) {
-     
+      print('Error getting user: $e');
       throw e;
     }
   }
