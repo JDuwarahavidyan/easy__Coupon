@@ -9,18 +9,17 @@ import 'firebase_options.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-    final AuthRepository authRepository = AuthRepository(
+  final AuthRepository authRepository = AuthRepository(
     firebaseAuthService: FirebaseAuthService(),
   );
 
-    runApp(MyApp(authRepository: authRepository));
+  runApp(MyApp(authRepository: authRepository));
 }
 
 class MyApp extends StatelessWidget {
