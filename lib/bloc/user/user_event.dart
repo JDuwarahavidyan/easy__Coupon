@@ -7,14 +7,6 @@ sealed class UserEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class UserCreateEvent extends UserEvent {
-  final UserModel user;
-
-  const UserCreateEvent(this.user);
-
-  @override
-  List<Object> get props => [user];
-}
 
 final class UserUpdateEvent extends UserEvent {
   final UserModel user;

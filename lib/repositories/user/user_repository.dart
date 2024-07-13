@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/models/user/user_model.dart';
 
 class UserService {
-  //firebase collection reference to users collection
   final CollectionReference _userCollection = FirebaseFirestore.instance.collection('users');
 
 

@@ -21,7 +21,6 @@ Future<void> updateCount(int val,String userId) async {
           currentCount + val > 0) {
         // Update the count field
         await docRef.update({'studentCount': FieldValue.increment(-val)});
-        print('Document updated');
       } else {
         print('Reached maximum token');
       }
