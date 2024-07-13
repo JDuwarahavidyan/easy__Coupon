@@ -160,7 +160,12 @@ class _StudentPageState extends State<StudentPage> {
                                                 child: ListTile(
                                                   title: Center(
                                                     child: Text(
-                                                      (user.studentCount.toString()),
+                                                      (30-
+                                                              snapshot.data!
+                                                                          .docs[
+                                                                      index]
+                                                                  ['studentCount'])
+                                                          .toString(),
                                                       style: const TextStyle(
                                                         fontSize: 75,
                                                         fontWeight:

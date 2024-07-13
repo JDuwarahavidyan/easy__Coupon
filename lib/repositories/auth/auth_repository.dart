@@ -76,7 +76,7 @@ class AuthRepository {
 
   Future<void> _saveSession(User user) async {
     final prefs = await SharedPreferences.getInstance();
-    final expiryTime = DateTime.now().add(const Duration(minutes: 10)).millisecondsSinceEpoch;
+    final expiryTime = DateTime.now().add(const Duration(days: 7)).millisecondsSinceEpoch;
     await prefs.setString('userId', user.uid);
     await prefs.setInt('expiryTime', expiryTime);
   }
