@@ -11,7 +11,4 @@ class RouteNames {
   static const String qr = '/qr';
   static const String studentReport = '/studentReport';
   static const String register = '/register';
-
-
 }
-
