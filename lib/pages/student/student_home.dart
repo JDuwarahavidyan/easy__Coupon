@@ -264,7 +264,7 @@ class _StudentPageState extends State<StudentPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => QrPage(val: val),
+                                      builder: (context) => QrPage(val: val, userId: currentUser!.uid),
                                     ),
                                   );
                                 } else {
