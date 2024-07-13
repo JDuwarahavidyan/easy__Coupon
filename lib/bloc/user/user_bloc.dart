@@ -1,12 +1,8 @@
 import 'dart:async';
-
-
 import 'package:bloc/bloc.dart';
 import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:equatable/equatable.dart';
-
 import '../../repositories/user/user_repository.dart';
-
 part 'user_event.dart';
 part 'user_state.dart';
 
@@ -14,9 +10,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   StreamSubscription <List<UserModel>>? _userStreamSubscription;
   
-
-  // close the stream when the bloc is closed
-  // to prevent memory leaks
   @override
   Future<void> close() {
     _userStreamSubscription!.cancel();

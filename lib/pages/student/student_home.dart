@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
 import 'package:easy_coupon/pages/student/qr_scanning.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import '../../bloc/blocs.dart';
 import 'package:flutter/material.dart';
@@ -15,44 +15,15 @@ class StudentPage extends StatefulWidget {
 }
 
 class _StudentPageState extends State<StudentPage> {
-  String count = '';
-  int result = 30;
   double spinBoxValue = 0; // Track the SpinBox value
   int val = 1;
-  bool _isFirstLoad = true;
-
 
   @override
   void initState() {
     super.initState();
+    context.read<UserBloc>().add(UserReadEvent());
   }
 
-  void handleQRScan(String qrData) {
-    setState(() {
-      result -= spinBoxValue.toInt(); // Use the SpinBox value
-    });
-    Navigator.pop(context); // Close the QR scanner page
-  }
-
-  void _showCouponOverDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Coupons Over'),
-          content: const Text('Your coupons are over.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,58 +124,20 @@ class _StudentPageState extends State<StudentPage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Center(
-                                child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance
-                                        .collection('users')
-                                        .where('id', isEqualTo: user.id)
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (_isFirstLoad &&
-                                          snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                        return const Center(
-                                            child: CircularProgressIndicator());
-                                      } else {
-                                        _isFirstLoad = false;
-                                        if (snapshot.hasError) {
-                                          return Center(
-                                              child: Text(
-                                                  'Error: ${snapshot.error}'));
-                                        } else if (!snapshot.hasData ||
-                                            snapshot.data!.docs.isEmpty) {
-                                          return const Center(
-                                              child:
-                                                  Text('No data available.'));
-                                        } else {
-                                          return ListView.builder(
-                                              itemCount:
-                                                  snapshot.data!.docs.length,
-                                              itemBuilder: (context, index) {
-                                                return Card(
-                                                  child: ListTile(
-                                                    title: Center(
-                                                      child: Text(
-                                                        (
-                                                                snapshot.data!
-                                                                            .docs[
-                                                                        index][
-                                                                    'studentCount'])
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontSize: 75,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              });
-                                        }
-                                      }
-                                    }),
+                                child: Card(
+                                  child: ListTile(
+                                    title: Center(
+                                      child: Text(
+                                        user.studentCount.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 75,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -239,17 +172,34 @@ class _StudentPageState extends State<StudentPage> {
                               padding: const EdgeInsets.all(10.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                      if (user.studentCount > 0 && user.studentCount <= 30) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => QrPage(
-                                                val: val, userId: user.id),
-                                          ),
+                                  if (user.studentCount - val >= 0) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            QrPage(val: val, userId: user.id),
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CupertinoAlertDialog(
+                                          title: const Text('No More Coupons'),
+                                          content: const Text(
+                                              'Your coupons are over. Please contact the admin to get more coupons.'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: const Text('OK'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
                                         );
-                                      } else {
-                                        _showCouponOverDialog();
-                                      }
+                                      },
+                                    );
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,

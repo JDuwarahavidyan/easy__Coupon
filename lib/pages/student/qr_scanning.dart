@@ -38,6 +38,9 @@ class _QrPageState extends State<QrPage> {
         if (result?.code == "canteenA" || result?.code == "canteenB") {
           _showConfirmationDialog(result!, widget.val, widget.userId);
           loops++;
+        } else {
+          _showInvalidQRDialog();
+          loops++;
         }
       }
     });
@@ -48,7 +51,8 @@ class _QrPageState extends State<QrPage> {
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: Text('Do you want to continue with $val ${val == 1 ? 'coupon': 'coupons'}?'),
+          title: const Text('Use Coupon?'),
+          content: Text('Do you want to continue with $val ${val == 1 ? 'coupon': 'coupons'}?'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: const Text('Cancel'),
@@ -64,12 +68,43 @@ class _QrPageState extends State<QrPage> {
             CupertinoDialogAction(
               child: const Text('Confirm'),
               onPressed: () {
-                scanned_data(result, val, userId);
+                scannedData(result, val, userId);
                 Navigator.of(context).pop();
                 Navigator.pushReplacementNamed(
                   context,
                   '/student',
                 );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showInvalidQRDialog() {
+    controller?.pauseCamera(); // Pause the camera to prevent multiple scans
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: const Text('Invalid QR Code'),
+          content: const Text('The scanned QR code is not valid. Please try again.'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () {
+                loops = 0;
+                Navigator.of(context).pop();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/student',
+                  (route) => false,
+                );
+                Future.delayed(const Duration(seconds: 1), () {
+                controller?.resumeCamera(); // Resume the camera after a short delay
+              }); // Resume the camera
+                 
               },
             ),
           ],

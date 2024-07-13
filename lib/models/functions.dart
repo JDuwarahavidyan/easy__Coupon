@@ -1,33 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 
-User? currentUser;
-
-void initState() {
-  //super.initState();
-  currentUser = FirebaseAuth.instance.currentUser;
-}
-
-create(String email, name, picture, int count) async {
-  await FirebaseFirestore.instance.collection('students').doc(email).set({
-    'name': name,
-    'count': count,
-    'picture': picture,
-  });
-
-  print('database Updated');
-}
-
-update(String colName, docName, field, var newField) async {
-  await FirebaseFirestore.instance
-      .collection(colName)
-      .doc(docName)
-      .update({field: newField});
-
-  print('field updated');
-}
 
 Future<void> updateCount(int val,String userId) async {
     final docRef = FirebaseFirestore.instance
@@ -56,7 +30,7 @@ Future<void> updateCount(int val,String userId) async {
   }
 }
 
-void scanned_data(Barcode result, int val,String userId) {
+void scannedData(Barcode result, int val,String userId) {
   print("data:${result.code}");
   //print(currentUser!.uid.toString());
   updateCount(val,userId);
