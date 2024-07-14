@@ -6,7 +6,6 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class CanteenAPage extends StatefulWidget {
   const CanteenAPage({super.key});
 
@@ -16,9 +15,8 @@ class CanteenAPage extends StatefulWidget {
 
 class _CanteenAPageState extends State<CanteenAPage> {
   final GlobalKey globalKey = GlobalKey();
-
   final ScreenshotController screenshotController = ScreenshotController();
-  String qrData = "Default QR Data"; // Set a default value
+  String qrData = "CanteenA_QR_Code";
   bool isValid = true;
 
   @override
@@ -33,7 +31,6 @@ class _CanteenAPageState extends State<CanteenAPage> {
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = File('${directory.path}/qr_code.png');
       await imagePath.writeAsBytes(imageFile);
-
       Share.shareFiles([imagePath.path], text: 'Here is my QR code');
     }
   }
@@ -44,7 +41,6 @@ class _CanteenAPageState extends State<CanteenAPage> {
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = File('${directory.path}/qr_code.png');
       await imagePath.writeAsBytes(imageFile);
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('QR code saved to ${imagePath.path}')),
       );
@@ -61,81 +57,78 @@ class _CanteenAPageState extends State<CanteenAPage> {
       body: BlocBuilder<CanteenBloc, CanteenState>(
         builder: (context, state) {
           if (state is CanteenLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is CanteenLoaded) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 30),
-                  Screenshot(
-                    controller: screenshotController,
-                    child: RepaintBoundary(
-                      key: globalKey,
-                      child: Container(
-                        color: Colors.white,
-                        child: Center(
-                          child: QrImageView(
-                            data: qrData,
-                            version: QrVersions.auto,
-                            size: 200,
+            return Container(
+              padding: const EdgeInsets.all(20),
+              color: const Color(0xFFF9E6BD),
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFCD170),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Here is your QR',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Screenshot(
+                        controller: screenshotController,
+                        child: RepaintBoundary(
+                          key: globalKey,
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            color: Colors.white,
+                            child: QrImageView(
+                              data: qrData,
+                              version: QrVersions.auto,
+                              size: 300,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: "Enter Username here",
-                        border: OutlineInputBorder(),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          if (state.authorizedUsernames.contains(value)) {
-                            qrData = value;
-                            isValid = true;
-                          } else {
-                            qrData = "Default QR Data";
-                            isValid = false;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  if (!isValid)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        "Invalid Username Please Try Again",
-                        style: TextStyle(fontSize: 20, color: Colors.red),
-                      ),
-                    ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: _shareQRCode,
-                        icon: Icon(Icons.share),
-                        label: Text('Share QR Code'),
-                      ),
-                      const SizedBox(width: 20),
-                      ElevatedButton.icon(
-                        onPressed: _saveQRCode,
-                        icon: Icon(Icons.save),
-                        label: Text('Save QR Code'),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: _shareQRCode,
+                            icon: const Icon(Icons.share),
+                            label: const Text('Share QR Code'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton.icon(
+                            onPressed: _saveQRCode,
+                            icon: const Icon(Icons.save),
+                            label: const Text('Save QR Code'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             );
           } else if (state is CanteenError) {
             return Center(child: Text(state.message));
           } else {
-            return Center(child: Text('Unknown state'));
+            return const Center(child: Text('Unknown state'));
           }
         },
       ),
