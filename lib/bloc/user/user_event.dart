@@ -47,5 +47,24 @@ final class UserReadAllEvent extends UserEvent {
   const UserReadAllEvent();
 }
 
+class UpdateCountEvent extends UserEvent {
+  final int val;
+  final String userId;
 
+  const UpdateCountEvent(this.val, this.userId);
+
+  @override
+  List<Object> get props => [val, userId];
+}
+
+class ScannedDataEvent extends UserEvent {
+  final Barcode result;
+  final int val;
+  final String userId;
+
+  const ScannedDataEvent(this.result, this.val, this.userId);
+
+  @override
+  List<Object> get props => [result, val, userId];
+}
 

@@ -1,6 +1,8 @@
-import 'package:easy_coupon/models/functions.dart';
+import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/pages/student/student_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrPage extends StatefulWidget {
@@ -52,28 +54,21 @@ class _QrPageState extends State<QrPage> {
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Use Coupon?'),
-          content: Text('Do you want to continue with $val ${val == 1 ? 'coupon': 'coupons'}?'),
+          content: Text('Do you want to use $val ${val == 1 ? 'coupon': 'coupons'} at ${result.code == 'canteenA'? 'Kalderama' : 'Hilton'}?'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/student',
-                  (route) => false,
-                );
+                _navigateBackToStudentPage(context);
               },
             ),
             CupertinoDialogAction(
               child: const Text('Confirm'),
               onPressed: () {
-                scannedData(result, val, userId);
+                context.read<UserBloc>().add(ScannedDataEvent(result, val, userId));
                 Navigator.of(context).pop();
-                Navigator.pushReplacementNamed(
-                  context,
-                  '/student',
-                );
+                _navigateBackToStudentPage(context);
               },
             ),
           ],
@@ -96,15 +91,10 @@ class _QrPageState extends State<QrPage> {
               onPressed: () {
                 loops = 0;
                 Navigator.of(context).pop();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/student',
-                  (route) => false,
-                );
+                _navigateBackToStudentPage(context);
                 Future.delayed(const Duration(seconds: 1), () {
-                controller?.resumeCamera(); // Resume the camera after a short delay
-              }); // Resume the camera
-                 
+                  controller?.resumeCamera(); // Resume the camera after a short delay
+                });
               },
             ),
           ],
@@ -112,6 +102,32 @@ class _QrPageState extends State<QrPage> {
       },
     );
   }
+
+  void _navigateBackToStudentPage(BuildContext context) {
+  Navigator.of(context).pushAndRemoveUntil(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const StudentPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(seconds: 1),
+    ),
+    (Route<dynamic> route) => false,
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -136,11 +152,7 @@ class _QrPageState extends State<QrPage> {
             child: IconButton(
               icon: const Icon(Icons.close, color: Colors.white, size: 30),
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/student',
-                  (route) => false,
-                );
+                _navigateBackToStudentPage(context);
               },
             ),
           ),

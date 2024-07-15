@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/bloc/user/user_bloc.dart';
 import 'package:easy_coupon/repositories/repositories.dart';
+import 'package:easy_coupon/repositories/user/user_repository.dart';
+import 'package:easy_coupon/services/user/user_service.dart';
 import 'package:easy_coupon/routes/routes.dart';
 import 'package:easy_coupon/services/services.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +44,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CanteenBloc(FirebaseFirestore.instance),
         ),
+
+         BlocProvider<UserBloc>(
+          create: (context) => UserBloc(UserRepository(UserService()))..add(UserReadEvent(),
+        )),
+
+         
       ],
       child: ChangeNotifierProvider(
         create: (_) => ThemeProvider(

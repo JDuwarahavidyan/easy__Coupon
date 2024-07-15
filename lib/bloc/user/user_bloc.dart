@@ -1,66 +1,91 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:easy_coupon/models/user/user_model.dart';
+import 'package:easy_coupon/repositories/user/user_repository.dart';
 import 'package:equatable/equatable.dart';
-import '../../repositories/user/user_repository.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import '../../models/user/user_model.dart';
+
+
 part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
+  final UserRepository _userRepository;
+  StreamSubscription<List<UserModel>>? _userStreamSubscription;
 
-  StreamSubscription <List<UserModel>>? _userStreamSubscription;
-  
-  @override
-  Future<void> close() {
-    _userStreamSubscription!.cancel();
-    return super.close();
+  UserBloc(this._userRepository) : super(UserInitial()) {
+    on<UserReadEvent>(_onUserReadEvent);
+    on<UserLoadEvent>(_onUserLoadEvent);
+    on<UserUpdateEvent>(_onUserUpdateEvent);
+    on<UserDeleteEvent>(_onUserDeleteEvent);
+    on<UpdateCountEvent>(_onUpdateCountEvent);
+    on<ScannedDataEvent>(_onScannedDataEvent);
+ // New event handler
   }
 
-  UserBloc() : super(UserInitial()) {
-    on<UserReadEvent>((event, emit) {
-      try {
-        emit(UserLoading());
-        final userStreamResponse = UserService().getUsersStream();
-         _userStreamSubscription?.cancel();
-        _userStreamSubscription = userStreamResponse.listen((users) {
-          add(UserLoadEvent(users));
-        });
-      } catch (e) {
-        emit(const UserFailure('Failed to load users'));
+  Future<void> _onUserReadEvent(UserReadEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading());
+      final userStreamResponse = _userRepository.getUsersStream();
+      await _userStreamSubscription?.cancel();
+      _userStreamSubscription = userStreamResponse.listen((users) {
+        add(UserLoadEvent(users));
+      });
+    } catch (e) {
+      emit(const UserFailure('Failed to load users'));
+    }
+  }
+
+  void _onUserLoadEvent(UserLoadEvent event, Emitter<UserState> emit) {
+    try {
+      emit(UserLoaded(event.users));
+    } catch (e) {
+      emit(const UserFailure('Failed to load users'));
+    }
+  }
+
+  Future<void> _onUserUpdateEvent(UserUpdateEvent event, Emitter<UserState> emit) async {
+    try {
+      if (state is UserLoaded) {
+        await _userRepository.updateUser(event.user);
       }
-    });
+    } catch (e) {
+      emit(const UserFailure('Failed to update user'));
+    }
+  }
 
-    on<UserLoadEvent>((event, emit) {
-      try {
-        emit(UserLoaded(event.users));
-        
-      } catch (e) {
-        emit(const UserFailure('Failed to load users'));
+  Future<void> _onUserDeleteEvent(UserDeleteEvent event, Emitter<UserState> emit) async {
+    try {
+      if (state is UserLoaded) {
+        await _userRepository.deleteUser(event.id);
       }
-    });
+    } catch (e) {
+      emit(const UserFailure('Failed to delete user'));
+    }
+  }
+
+  Future<void> _onUpdateCountEvent(UpdateCountEvent event, Emitter<UserState> emit) async {
+    try {
+      await _userRepository.updateCount(event.val, event.userId);
+    } catch (e) {
+      emit(const UserFailure('Failed to update count'));
+    }
+  }
+
+  void _onScannedDataEvent(ScannedDataEvent event, Emitter<UserState> emit) {
+    try {
+      _userRepository.updateCount(event.val, event.userId);
+    } catch (e) {
+      emit(const UserFailure('Failed to handle scanned data'));
+    }
+  }
+
+  
 
 
-
-    on<UserUpdateEvent>((event, emit) {
-       try {
-        if (state is UserLoaded) {
-          UserService().updateUser(event.user);
-        }
-    
-      } catch (e) {
-        emit(const UserFailure('Failed to create user'));
-      }
-    });
-
-    on<UserDeleteEvent>((event, emit) {
-       try {
-        if (state is UserLoaded) {
-          UserService().deleteUser(event.id);
-        }
-    
-      } catch (e) {
-        emit(const UserFailure('Failed to create user'));
-      }
-    });
+  @override
+  Future<void> close() {
+    _userStreamSubscription?.cancel();
+    return super.close();
   }
 }

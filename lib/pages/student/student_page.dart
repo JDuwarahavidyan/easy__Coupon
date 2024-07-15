@@ -1,6 +1,8 @@
 import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
 import 'package:easy_coupon/pages/pages.dart';
+import 'package:easy_coupon/repositories/user/user_repository.dart';
+import 'package:easy_coupon/services/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,7 +19,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserBloc()..add(UserReadEvent()),
+      create: (context) => UserBloc(UserRepository(UserService()))..add(UserReadEvent()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Unauthenticated) {

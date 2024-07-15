@@ -40,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.dispose();
     super.dispose();
   }
+  
 
   Future<void> _checkSession() async {
     final prefs = await SharedPreferences.getInstance();
