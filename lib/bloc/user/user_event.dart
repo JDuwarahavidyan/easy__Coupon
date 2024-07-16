@@ -68,3 +68,11 @@ class ScannedDataEvent extends UserEvent {
   List<Object> get props => [result, val, userId];
 }
 
+class UserGenerateQREvent extends UserEvent {
+  final String userId;
+
+  const UserGenerateQREvent(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}

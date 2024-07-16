@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../models/user/user_model.dart';
 
-
 part 'user_event.dart';
 part 'user_state.dart';
 
@@ -20,7 +19,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserDeleteEvent>(_onUserDeleteEvent);
     on<UpdateCountEvent>(_onUpdateCountEvent);
     on<ScannedDataEvent>(_onScannedDataEvent);
- // New event handler
+    on<UserGenerateQREvent>(_onUserGenerateQREvent);
   }
 
   Future<void> _onUserReadEvent(UserReadEvent event, Emitter<UserState> emit) async {
@@ -80,8 +79,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  
-
+Future<void> _onUserGenerateQREvent(UserGenerateQREvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading());
+      final qrData = await _userRepository.generateQRData(event.userId);
+      emit(UserQRGenerated(qrData));
+    } catch (e) {
+      emit(const UserFailure('Failed to generate QR code'));
+    }
+  }
 
   @override
   Future<void> close() {

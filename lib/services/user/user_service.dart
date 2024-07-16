@@ -78,4 +78,5 @@ class UserService {
       throw CustomException('Error processing scanned data: $e');
     }
   }
+  
 }

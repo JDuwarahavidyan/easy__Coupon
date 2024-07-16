@@ -37,7 +37,7 @@ class _QrPageState extends State<QrPage> {
       });
       // Handle the scanned data
       if (result != null && loops <= 0) {
-        if (result?.code == "canteenA" || result?.code == "canteenB") {
+        if (result?.code == "canteena" || result?.code == "canteenb") {
           _showConfirmationDialog(result!, widget.val, widget.userId);
           loops++;
         } else {
@@ -54,7 +54,7 @@ class _QrPageState extends State<QrPage> {
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Use Coupon?'),
-          content: Text('Do you want to use $val ${val == 1 ? 'coupon': 'coupons'} at ${result.code == 'canteenA'? 'Kalderama' : 'Hilton'}?'),
+          content: Text('Do you want to use $val ${val == 1 ? 'coupon' : 'coupons'} at ${result.code == 'canteena' ? 'Kalderama' : 'Hilton'}?'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: const Text('Cancel'),
@@ -104,30 +104,30 @@ class _QrPageState extends State<QrPage> {
   }
 
   void _navigateBackToStudentPage(BuildContext context) {
-  Navigator.of(context).pushAndRemoveUntil(
-    PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const StudentPage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeInOut;
+    Navigator.of(context).pushAndRemoveUntil(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const StudentPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          );
 
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
-      transitionDuration: const Duration(seconds: 1),
-    ),
-    (Route<dynamic> route) => false,
-  );
-}
+          return SlideTransition(
+            position: tween.animate(curvedAnimation),
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(seconds: 1),
+      ),
+      (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

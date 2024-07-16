@@ -2,7 +2,7 @@ part of 'user_bloc.dart';
 
 sealed class UserState extends Equatable {
   const UserState();
-  
+
   @override
   List<Object> get props => [];
 }
@@ -29,6 +29,11 @@ final class UserFailure extends UserState {
   List<Object> get props => [message];
 }
 
+class UserQRGenerated extends UserState {
+  final String qrData;
 
+  const UserQRGenerated(this.qrData);
 
-
+  @override
+  List<Object> get props => [qrData];
+}
