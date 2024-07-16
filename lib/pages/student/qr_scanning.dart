@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 class QrPage extends StatefulWidget {
   final int val;
@@ -21,6 +22,10 @@ class _QrPageState extends State<QrPage> {
   Barcode? result;
   int loops = 0;
 
+  // Define static key and IV
+  final key = encrypt.Key.fromUtf8('easycouponkey@ruhunaengfac22TDDS');
+  final iv = encrypt.IV.fromUtf8('8bytesiv');
+
   @override
   void dispose() {
     controller?.dispose();
@@ -36,9 +41,14 @@ class _QrPageState extends State<QrPage> {
         result = scanData;
       });
       if (result != null && loops <= 0) {
-        final scannedUserId = result?.code;
-        if (scannedUserId != null) {
-          context.read<UserBloc>().add(FetchUserRoleEvent(scannedUserId));
+        final scannedData = result?.code;
+        if (scannedData != null) {
+          final decryptedData = decryptData(scannedData);
+          if (decryptedData != null) {
+            context.read<UserBloc>().add(FetchUserRoleEvent(decryptedData));
+          } else {
+            _showInvalidQRDialog();
+          }
           loops++;
         } else {
           _showInvalidQRDialog();
@@ -46,6 +56,17 @@ class _QrPageState extends State<QrPage> {
         }
       }
     });
+  }
+
+  String? decryptData(String encryptedData) {
+    try {
+      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+      final decrypted = encrypter.decrypt64(encryptedData, iv: iv);
+      return decrypted;
+    } catch (e) {
+      print('Error decrypting data: $e');
+      return null;
+    }
   }
 
   void _showConfirmationDialog(String role, int val) {
@@ -68,6 +89,8 @@ class _QrPageState extends State<QrPage> {
               onPressed: () {
                 context.read<UserBloc>().add(ScannedDataEvent(result!, val, widget.userId));
                 Navigator.of(context).pop();
+
+               
                 _navigateBackToStudentPage(context);
               },
             ),
@@ -230,4 +253,3 @@ class ScannerOverlayPainter extends CustomPainter {
     return false;
   }
 }
-

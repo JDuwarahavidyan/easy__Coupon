@@ -7,6 +7,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 class CanteenBPage extends StatefulWidget {
   const CanteenBPage({super.key});
@@ -18,6 +19,11 @@ class CanteenBPage extends StatefulWidget {
 class _CanteenBPageState extends State<CanteenBPage> {
   final GlobalKey globalKey = GlobalKey();
   final ScreenshotController screenshotController = ScreenshotController();
+  String? qrData;
+
+  // Define static key and IV
+  final key = encrypt.Key.fromUtf8('easycouponkey@ruhunaengfac22TDDS');
+  final iv = encrypt.IV.fromUtf8('8bytesiv');
 
   @override
   void initState() {
@@ -28,17 +34,25 @@ class _CanteenBPageState extends State<CanteenBPage> {
     }
   }
 
-  Future<void> _shareQRCode(String qrData) async {
+  String encryptData(String data) {
+    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+    final encrypted = encrypter.encrypt(data, iv: iv);
+    return encrypted.base64;
+  }
+
+  Future<void> _shareQRCode() async {
     final imageFile = await screenshotController.capture();
     if (imageFile != null) {
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = File('${directory.path}/qr_code.png');
       await imagePath.writeAsBytes(imageFile);
-      Share.shareFiles([imagePath.path], text: 'Here is my QR code: $qrData');
+      if (qrData != null) {
+        Share.shareFiles([imagePath.path], text: 'Here is my QR code: $qrData');
+      }
     }
   }
 
-  Future<void> _saveQRCode(String qrData) async {
+  Future<void> _saveQRCode() async {
     final imageFile = await screenshotController.capture();
     if (imageFile != null) {
       final directory = await getApplicationDocumentsDirectory();
@@ -57,12 +71,20 @@ class _CanteenBPageState extends State<CanteenBPage> {
         title: const Text("QR Code Generator"),
         backgroundColor: const Color(0xFFFCD170),
       ),
-      body: BlocBuilder<UserBloc, UserState>(
+      body: BlocConsumer<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is UserQRGenerated) {
+            final encryptedData = encryptData(state.qrData);
+            setState(() {
+              qrData = encryptedData; // Store encrypted QR data in the state
+            });
+          }
+        },
         builder: (context, state) {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is UserQRGenerated) {
-            final qrData = state.qrData; // Updated to use the generated QR data
+          } else if (state is UserQRGenerated || qrData != null) {
+            final displayQRData = qrData;
             return Container(
               padding: const EdgeInsets.all(20),
               color: const Color(0xFFF9E6BD),
@@ -92,7 +114,7 @@ class _CanteenBPageState extends State<CanteenBPage> {
                             padding: const EdgeInsets.all(20),
                             color: Colors.white,
                             child: QrImageView(
-                              data: qrData,
+                              data: displayQRData!,
                               version: QrVersions.auto,
                               size: 300,
                             ),
@@ -100,11 +122,11 @@ class _CanteenBPageState extends State<CanteenBPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: () => _shareQRCode(qrData),
+                            onPressed: _shareQRCode,
                             icon: const Icon(Icons.share),
                             label: const Text('Share QR Code'),
                             style: ElevatedButton.styleFrom(
@@ -112,9 +134,9 @@ class _CanteenBPageState extends State<CanteenBPage> {
                               foregroundColor: Colors.black,
                             ),
                           ),
-                          const SizedBox(width: 20),
+                          const SizedBox(height: 20),
                           ElevatedButton.icon(
-                            onPressed: () => _saveQRCode(qrData),
+                            onPressed: _saveQRCode,
                             icon: const Icon(Icons.save),
                             label: const Text('Save QR Code'),
                             style: ElevatedButton.styleFrom(
