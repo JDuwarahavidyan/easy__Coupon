@@ -9,14 +9,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
-class CanteenAPage extends StatefulWidget {
-  const CanteenAPage({super.key});
+class QRGenerationPage extends StatefulWidget {
+  const QRGenerationPage({super.key});
 
   @override
-  State<CanteenAPage> createState() => _CanteenAPageState();
+  State<QRGenerationPage> createState() => _QRGenerationPageState();
 }
 
-class _CanteenAPageState extends State<CanteenAPage> {
+class _QRGenerationPageState extends State<QRGenerationPage> {
   final GlobalKey globalKey = GlobalKey();
   final ScreenshotController screenshotController = ScreenshotController();
   String? qrData;

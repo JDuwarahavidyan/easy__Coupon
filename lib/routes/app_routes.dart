@@ -1,3 +1,4 @@
+import 'package:easy_coupon/pages/canteen/canteen_a/canteen_a_page.dart';
 import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_coupon/routes/route_names.dart';
@@ -29,7 +30,7 @@ class AppRoutes {
       case RouteNames.studentReport: // Added route for StudentReport
         return MaterialPageRoute(builder: (_) => const StudentReportPage());
       case RouteNames.canteenA: // Added route for Canteen
-        return MaterialPageRoute(builder: (_) => const CanteenAPage());
+        return MaterialPageRoute(builder: (_) => const CanteenHomeScreen());
       case RouteNames.canteenB: // Added route for Canteen
         return MaterialPageRoute(builder: (_) => const CanteenBPage());
       case RouteNames.register: // Added route for Register
