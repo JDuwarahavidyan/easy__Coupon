@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
-import 'package:easy_coupon/models/student.dart';
 import 'package:meta/meta.dart';
 part 'home_event.dart';
 part 'home_state.dart';

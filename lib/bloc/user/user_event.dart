@@ -76,3 +76,13 @@ class UserGenerateQREvent extends UserEvent {
   @override
   List<Object> get props => [userId];
 }
+
+
+class FetchUserRoleEvent extends UserEvent {
+  final String userId;
+
+  const FetchUserRoleEvent(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}

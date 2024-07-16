@@ -20,6 +20,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UpdateCountEvent>(_onUpdateCountEvent);
     on<ScannedDataEvent>(_onScannedDataEvent);
     on<UserGenerateQREvent>(_onUserGenerateQREvent);
+    on<FetchUserRoleEvent>(_onFetchUserRoleEvent);
   }
 
   Future<void> _onUserReadEvent(UserReadEvent event, Emitter<UserState> emit) async {
@@ -86,6 +87,20 @@ Future<void> _onUserGenerateQREvent(UserGenerateQREvent event, Emitter<UserState
       emit(UserQRGenerated(qrData));
     } catch (e) {
       emit(const UserFailure('Failed to generate QR code'));
+    }
+  }
+
+  Future<void> _onFetchUserRoleEvent(FetchUserRoleEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading());
+      final role = await _userRepository.getUserRole(event.userId);
+      if (role != null) {
+        emit(UserRoleFetched(role));
+      } else {
+        emit(const UserFailure('User role not found'));
+      }
+    } catch (e) {
+      emit(UserFailure('Failed to fetch user role: $e'));
     }
   }
 

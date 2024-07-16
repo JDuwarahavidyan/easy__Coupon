@@ -1,5 +1,5 @@
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
-import 'package:easy_coupon/pages/student/student_home.dart';
+import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,10 +35,10 @@ class _QrPageState extends State<QrPage> {
       setState(() {
         result = scanData;
       });
-      // Handle the scanned data
       if (result != null && loops <= 0) {
-        if (result?.code == "canteena" || result?.code == "canteenb") {
-          _showConfirmationDialog(result!, widget.val, widget.userId);
+        final scannedUserId = result?.code;
+        if (scannedUserId != null) {
+          context.read<UserBloc>().add(FetchUserRoleEvent(scannedUserId));
           loops++;
         } else {
           _showInvalidQRDialog();
@@ -48,13 +48,13 @@ class _QrPageState extends State<QrPage> {
     });
   }
 
-  void _showConfirmationDialog(Barcode result, int val, String userId) {
+  void _showConfirmationDialog(String role, int val) {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Use Coupon?'),
-          content: Text('Do you want to use $val ${val == 1 ? 'coupon' : 'coupons'} at ${result.code == 'canteena' ? 'Kalderama' : 'Hilton'}?'),
+          content: Text('Do you want to use $val ${val == 1 ? 'coupon' : 'coupons'} at ${role == 'canteena' ? 'Kalderama' : 'Hilton'}?'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: const Text('Cancel'),
@@ -66,7 +66,7 @@ class _QrPageState extends State<QrPage> {
             CupertinoDialogAction(
               child: const Text('Confirm'),
               onPressed: () {
-                context.read<UserBloc>().add(ScannedDataEvent(result, val, userId));
+                context.read<UserBloc>().add(ScannedDataEvent(result!, val, widget.userId));
                 Navigator.of(context).pop();
                 _navigateBackToStudentPage(context);
               },
@@ -106,7 +106,7 @@ class _QrPageState extends State<QrPage> {
   void _navigateBackToStudentPage(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const StudentPage(),
+        pageBuilder: (context, animation, secondaryAnimation) => const StudentHomeScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
@@ -132,51 +132,69 @@ class _QrPageState extends State<QrPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          QRView(
-            key: qrKey,
-            onQRViewCreated: _onQRViewCreated,
-            overlay: QrScannerOverlayShape(
-              borderColor: Colors.transparent,
-              cutOutSize: MediaQuery.of(context).size.width * 0.8,
-            ),
-          ),
-          CustomPaint(
-            painter: ScannerOverlayPainter(),
-            child: Container(),
-          ),
-          Positioned(
-            top: 40,
-            left: 20,
-            child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white, size: 30),
-              onPressed: () {
-                _navigateBackToStudentPage(context);
-              },
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
-            left: 0,
-            right: 0,
-            child: const Column(
-              children: [
-                Text(
-                  'Place the QR Code inside the area',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                  textAlign: TextAlign.center,
+      body: BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is UserRoleFetched) {
+            _showConfirmationDialog(state.role, widget.val);
+          } else if (state is UserFailure) {
+            _showInvalidQRDialog();
+          }
+        },
+        child: BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            if (state is UserRoleLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Stack(
+              children: <Widget>[
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
+                    borderColor: Colors.transparent,
+                    cutOutSize: MediaQuery.of(context).size.width * 0.8,
+                  ),
                 ),
-                SizedBox(height: 10),
-                Text(
-                  'Scanning will start automatically',
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                  textAlign: TextAlign.center,
+                CustomPaint(
+                  painter: ScannerOverlayPainter(),
+                  child: Container(),
+                ),
+                Positioned(
+                  top: 40,
+                  left: 20,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                    onPressed: () {
+                      _navigateBackToStudentPage(context);
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.15,
+                  left: 0,
+                  right: 0,
+                  child: const Column(
+                    children: [
+                      Text(
+                        'Place the QR Code inside the area',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Scanning will start automatically',
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ],
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -212,3 +230,4 @@ class ScannerOverlayPainter extends CustomPainter {
     return false;
   }
 }
+

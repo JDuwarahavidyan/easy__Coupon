@@ -32,6 +32,12 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startTimer();
+    });
+  }
+
+  void _startTimer() {
     Timer(const Duration(seconds: 7), _checkSession);
   }
 
@@ -41,7 +47,6 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
   
-
   Future<void> _checkSession() async {
     final prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('userId');

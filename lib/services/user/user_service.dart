@@ -78,5 +78,33 @@ class UserService {
       throw CustomException('Error processing scanned data: $e');
     }
   }
+
+   Future<String> generateQRData(String userId) async {
+    try {
+      final userDoc = await _userCollection.doc(userId).get();
+      if (userDoc.exists) {
+        final userID = (userDoc.data() as Map<String, dynamic>)['id'] ?? 'unknown';
+        return userID;
+      } else {
+        throw CustomException('User not found');
+      }
+    } catch (e) {
+      throw CustomException('Failed to generate QR data: $e');
+    }
+  }
+
+  Future<String?> getUserRole(String userId) async {
+    try {
+      DocumentSnapshot doc = await _userCollection.doc(userId).get();
+      if (doc.exists) {
+        return (doc.data() as Map<String, dynamic>)['role'] as String?;
+      }
+      return null;
+    } catch (e) {
+      throw CustomException('Error getting user role: $e');
+    }
+  }
+
+
   
 }

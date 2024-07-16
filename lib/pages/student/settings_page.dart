@@ -133,8 +133,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       height: imageSize,
                       child: ImageFiltered(
                         imageFilter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                        child: Image.network(
-                          user.profilePic ?? 'assets/profile_picture.jpg',
+                        child: Image.asset(
+                          'assets/profile_picture.jpg',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -218,8 +218,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         backgroundColor: const Color.fromARGB(255, 2, 1, 0),
                         child: CircleAvatar(
                           radius: imageSize / 2.05,
-                          backgroundImage: NetworkImage(
-                              user.profilePic ?? 'assets/nouser.png'),
+                          backgroundImage: const AssetImage(
+                             'assets/nouser.png'),
                         ),
                       ),
                       const SizedBox(

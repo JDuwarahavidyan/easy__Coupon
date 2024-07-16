@@ -37,3 +37,14 @@ class UserQRGenerated extends UserState {
   @override
   List<Object> get props => [qrData];
 }
+
+
+class UserRoleFetched extends UserState {
+  final String role;
+
+  const UserRoleFetched(this.role);
+
+  @override
+  List<Object> get props => [role];
+}
+class UserRoleLoading extends UserState {}

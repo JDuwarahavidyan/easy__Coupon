@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share/share.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CanteenBPage extends StatefulWidget {
   const CanteenBPage({super.key});
@@ -16,26 +18,27 @@ class CanteenBPage extends StatefulWidget {
 class _CanteenBPageState extends State<CanteenBPage> {
   final GlobalKey globalKey = GlobalKey();
   final ScreenshotController screenshotController = ScreenshotController();
-  String qrData = "CanteenB_QR_Code";
-  bool isValid = true;
 
   @override
   void initState() {
     super.initState();
-    context.read<CanteenBloc>().add(FetchAuthorizedUsers());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      context.read<UserBloc>().add(UserGenerateQREvent(userId));
+    }
   }
 
-  Future<void> _shareQRCode() async {
+  Future<void> _shareQRCode(String qrData) async {
     final imageFile = await screenshotController.capture();
     if (imageFile != null) {
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = File('${directory.path}/qr_code.png');
       await imagePath.writeAsBytes(imageFile);
-      Share.shareFiles([imagePath.path], text: 'Here is my QR code');
+      Share.shareFiles([imagePath.path], text: 'Here is my QR code: $qrData');
     }
   }
 
-  Future<void> _saveQRCode() async {
+  Future<void> _saveQRCode(String qrData) async {
     final imageFile = await screenshotController.capture();
     if (imageFile != null) {
       final directory = await getApplicationDocumentsDirectory();
@@ -54,11 +57,12 @@ class _CanteenBPageState extends State<CanteenBPage> {
         title: const Text("QR Code Generator"),
         backgroundColor: const Color(0xFFFCD170),
       ),
-      body: BlocBuilder<CanteenBloc, CanteenState>(
+      body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
-          if (state is CanteenLoading) {
+          if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is CanteenLoaded) {
+          } else if (state is UserQRGenerated) {
+            final qrData = state.qrData; // Updated to use the generated QR data
             return Container(
               padding: const EdgeInsets.all(20),
               color: const Color(0xFFF9E6BD),
@@ -100,7 +104,7 @@ class _CanteenBPageState extends State<CanteenBPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton.icon(
-                            onPressed: _shareQRCode,
+                            onPressed: () => _shareQRCode(qrData),
                             icon: const Icon(Icons.share),
                             label: const Text('Share QR Code'),
                             style: ElevatedButton.styleFrom(
@@ -110,7 +114,7 @@ class _CanteenBPageState extends State<CanteenBPage> {
                           ),
                           const SizedBox(width: 20),
                           ElevatedButton.icon(
-                            onPressed: _saveQRCode,
+                            onPressed: () => _saveQRCode(qrData),
                             icon: const Icon(Icons.save),
                             label: const Text('Save QR Code'),
                             style: ElevatedButton.styleFrom(
@@ -125,11 +129,8 @@ class _CanteenBPageState extends State<CanteenBPage> {
                 ),
               ),
             );
-          } else if (state is CanteenError) {
-            return Center(child: Text(state.message));
-          } else {
-            return const Center(child: Text('Unknown state'));
           }
+          return const Center(child: Text('Failed to load user data'));
         },
       ),
     );

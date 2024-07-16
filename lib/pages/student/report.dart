@@ -21,8 +21,8 @@ class _ReportPageState extends State<ReportPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: const Color(0xFFFF8A00), // header background color
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFFFF8A00), // header background color
               onPrimary: Colors.white, // header text color
               onSurface: Colors.black, // body text color
             ),
@@ -62,9 +62,9 @@ class _ReportPageState extends State<ReportPage> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           // Define a base width for iPhone 12 Pro
-          double baseWidth = 390.0;
+       
           // Calculate the scale factor
-          double scaleFactor = constraints.maxWidth / baseWidth;
+      
 
           return Container(
             padding: const EdgeInsets.all(20),
