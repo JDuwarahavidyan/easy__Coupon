@@ -69,12 +69,12 @@ class ScannedDataEvent extends UserEvent {
 }
 
 class UserGenerateQREvent extends UserEvent {
-  final String userId;
+  final String canteenUserId;
 
-  const UserGenerateQREvent(this.userId);
+  const UserGenerateQREvent(this.canteenUserId);
 
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [canteenUserId];
 }
 
 
@@ -85,4 +85,14 @@ class FetchUserRoleEvent extends UserEvent {
 
   @override
   List<Object> get props => [userId];
+}
+
+class UpdateCanteenCountEvent extends UserEvent {
+  final int val;
+  final String canteenUserId;
+
+  const UpdateCanteenCountEvent(this.val, this.canteenUserId);
+
+  @override
+  List<Object> get props => [val, canteenUserId];
 }

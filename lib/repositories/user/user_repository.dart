@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:easy_coupon/services/user/user_service.dart';
 
@@ -34,6 +35,18 @@ class UserRepository {
 
    Future<String?> getUserRole(String userId) async {
     return _userService.getUserRole(userId);
+  }
+
+  Future<void> updateCanteenCount(int val, String canteenUserId) async {
+    try {
+      // Assume `users` is a collection in Firestore
+      final userDoc = FirebaseFirestore.instance.collection('users').doc(canteenUserId);
+      await userDoc.update({
+        'canteenCount': FieldValue.increment(val),
+      });
+    } catch (e) {
+      throw Exception('Failed to update canteen count: $e');
+    }
   }
   
 }

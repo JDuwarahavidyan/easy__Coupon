@@ -1,4 +1,5 @@
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/pages/student/confirmation_page.dart';
 import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,8 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 
 class QrPage extends StatefulWidget {
   final int val;
-  final String userId;
-  const QrPage({super.key, required this.val, required this.userId});
+  final String studentUserId;
+  const QrPage({super.key, required this.val, required this.studentUserId});
 
   @override
   State<QrPage> createState() => _QrPageState();
@@ -24,7 +25,7 @@ class _QrPageState extends State<QrPage> {
 
   // Define static key and IV
   final key = encrypt.Key.fromUtf8('easycouponkey@ruhunaengfac22TDDS');
-  final iv = encrypt.IV.fromUtf8('8bytesiv');
+  final iv = encrypt.IV.fromUtf8('easyduwa');
 
   @override
   void dispose() {
@@ -64,18 +65,18 @@ class _QrPageState extends State<QrPage> {
       final decrypted = encrypter.decrypt64(encryptedData, iv: iv);
       return decrypted;
     } catch (e) {
-      print('Error decrypting data: $e');
       return null;
     }
   }
 
-  void _showConfirmationDialog(String role, int val) {
+  void _showConfirmationDialog(String role, int val, String canteenUserId) {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Use Coupon?'),
-          content: Text('Do you want to use $val ${val == 1 ? 'coupon' : 'coupons'} at ${role == 'canteena' ? 'Kalderama' : 'Hilton'}?'),
+          content: Text(
+              'Do you want to use $val ${val == 1 ? 'coupon' : 'coupons'} at ${role == 'canteena' ? 'Kalderama' : 'Hilton'}?'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: const Text('Cancel'),
@@ -87,11 +88,24 @@ class _QrPageState extends State<QrPage> {
             CupertinoDialogAction(
               child: const Text('Confirm'),
               onPressed: () {
-                context.read<UserBloc>().add(ScannedDataEvent(result!, val, widget.userId));
+                final scannedTime = DateTime.now();
+                context
+                    .read<UserBloc>()
+                    .add(ScannedDataEvent(result!, val, widget.studentUserId));
+                context
+                    .read<UserBloc>()
+                    .add(UpdateCanteenCountEvent(val, canteenUserId));
                 Navigator.of(context).pop();
-
-               
-                _navigateBackToStudentPage(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ConfirmationPage(
+                      val: val,
+                      role: role,
+                      canteenUserId: canteenUserId,
+                      scannedTime: scannedTime,
+                    ),
+                  ),
+                );
               },
             ),
           ],
@@ -107,7 +121,8 @@ class _QrPageState extends State<QrPage> {
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: const Text('Invalid QR Code'),
-          content: const Text('The scanned QR code is not valid. Please try again.'),
+          content:
+              const Text('The scanned QR code is not valid. Please try again.'),
           actions: <Widget>[
             CupertinoDialogAction(
               child: const Text('OK'),
@@ -116,7 +131,8 @@ class _QrPageState extends State<QrPage> {
                 Navigator.of(context).pop();
                 _navigateBackToStudentPage(context);
                 Future.delayed(const Duration(seconds: 1), () {
-                  controller?.resumeCamera(); // Resume the camera after a short delay
+                  controller
+                      ?.resumeCamera(); // Resume the camera after a short delay
                 });
               },
             ),
@@ -129,13 +145,15 @@ class _QrPageState extends State<QrPage> {
   void _navigateBackToStudentPage(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const StudentHomeScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const StudentHomeScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
           const curve = Curves.easeInOut;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           var curvedAnimation = CurvedAnimation(
             parent: animation,
             curve: curve,
@@ -158,7 +176,12 @@ class _QrPageState extends State<QrPage> {
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state is UserRoleFetched) {
-            _showConfirmationDialog(state.role, widget.val);
+            final decryptedData = decryptData(result?.code ?? '');
+            if (decryptedData != null) {
+              _showConfirmationDialog(state.role, widget.val, decryptedData);
+            } else {
+              _showInvalidQRDialog();
+            }
           } else if (state is UserFailure) {
             _showInvalidQRDialog();
           }
@@ -188,7 +211,8 @@ class _QrPageState extends State<QrPage> {
                   top: 40,
                   left: 20,
                   child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                    icon:
+                        const Icon(Icons.close, color: Colors.white, size: 30),
                     onPressed: () {
                       _navigateBackToStudentPage(context);
                     },

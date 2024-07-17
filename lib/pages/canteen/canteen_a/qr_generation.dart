@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -10,7 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
 class QRGenerationPage extends StatefulWidget {
-  const QRGenerationPage({super.key});
+  final UserModel user;
+  const QRGenerationPage({super.key, required this.user});
+
 
   @override
   State<QRGenerationPage> createState() => _QRGenerationPageState();
@@ -23,14 +26,14 @@ class _QRGenerationPageState extends State<QRGenerationPage> {
 
   // Define static key and IV
   final key = encrypt.Key.fromUtf8('easycouponkey@ruhunaengfac22TDDS');
-  final iv = encrypt.IV.fromUtf8('8bytesiv');
+  final iv = encrypt.IV.fromUtf8('easyduwa');
 
   @override
   void initState() {
     super.initState();
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      context.read<UserBloc>().add(UserGenerateQREvent(userId));
+    final canteenUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (canteenUserId != null) {
+      context.read<UserBloc>().add(UserGenerateQREvent(canteenUserId));
     }
   }
 

@@ -21,6 +21,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<ScannedDataEvent>(_onScannedDataEvent);
     on<UserGenerateQREvent>(_onUserGenerateQREvent);
     on<FetchUserRoleEvent>(_onFetchUserRoleEvent);
+     on<UpdateCanteenCountEvent>(_onUpdateCanteenCountEvent);
   }
 
   Future<void> _onUserReadEvent(UserReadEvent event, Emitter<UserState> emit) async {
@@ -83,7 +84,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 Future<void> _onUserGenerateQREvent(UserGenerateQREvent event, Emitter<UserState> emit) async {
     try {
       emit(UserLoading());
-      final qrData = await _userRepository.generateQRData(event.userId);
+      final qrData = await _userRepository.generateQRData(event.canteenUserId);
       emit(UserQRGenerated(qrData));
     } catch (e) {
       emit(const UserFailure('Failed to generate QR code'));
@@ -101,6 +102,14 @@ Future<void> _onUserGenerateQREvent(UserGenerateQREvent event, Emitter<UserState
       }
     } catch (e) {
       emit(UserFailure('Failed to fetch user role: $e'));
+    }
+  }
+
+   Future<void> _onUpdateCanteenCountEvent(UpdateCanteenCountEvent event, Emitter<UserState> emit) async {
+    try {
+      await _userRepository.updateCanteenCount(event.val, event.canteenUserId);
+    } catch (e) {
+      emit(UserFailure('Failed to update canteen count: $e'));
     }
   }
 

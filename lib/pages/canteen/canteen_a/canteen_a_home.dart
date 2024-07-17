@@ -13,8 +13,6 @@ class CanteenAHomePage extends StatefulWidget {
 }
 
 class _CanteenAHomePageState extends State<CanteenAHomePage> {
-
-
   @override
   void initState() {
     super.initState();
@@ -102,7 +100,7 @@ class _CanteenAHomePageState extends State<CanteenAHomePage> {
                         ),
                         child: Container(
                           height: 140,
-                          width: 140,
+                          width: 180,
                           margin: const EdgeInsets.all(13),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -138,14 +136,12 @@ class _CanteenAHomePageState extends State<CanteenAHomePage> {
                           padding: const EdgeInsets.all(10.0),
                           child: ElevatedButton(
                             onPressed: () {
-                             
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const QRGenerationPage(),
-                                  ),
-                                );
-                              
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => QRGenerationPage(user: user),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -171,7 +167,6 @@ class _CanteenAHomePageState extends State<CanteenAHomePage> {
               ),
             );
           }
-          Future.delayed(const Duration(seconds: 1));
           return const Center(child: Text('Failed to load user data'));
         },
       ),
