@@ -105,6 +105,17 @@ class UserService {
     }
   }
 
+   Future<void> updateCanteenCount(int val, String canteenUserId) async {
+    try {
+      final userDoc = _userCollection.doc(canteenUserId);
+      await userDoc.update({
+        'canteenCount': FieldValue.increment(val),
+      });
+    } catch (e) {
+      throw CustomException('Failed to update canteen count: $e');
+    }
+  }
+}
+
 
   
-}

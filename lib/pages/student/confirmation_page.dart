@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date and time formatting
 
-class ConfirmationPage extends StatelessWidget {
+class ConfirmationPage extends StatefulWidget {
   final int val;
   final String role;
   final String canteenUserId;
@@ -17,13 +19,43 @@ class ConfirmationPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final formattedTime = DateFormat('yyyy-MM-dd – hh:mm a').format(scannedTime);
+  _ConfirmationPageState createState() => _ConfirmationPageState();
+}
 
-    // Schedule the automatic navigation after 1 minute
-    Future.delayed(const Duration(minutes: 1), () {
-      _navigateToStudentHomeScreen(context);
+class _ConfirmationPageState extends State<ConfirmationPage> {
+  late int _remainingTime;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingTime = 600; 
+
+    // Schedule the automatic navigation after 10 minutes
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _navigateToStudentHomeScreen(context);
+          _timer.cancel();
+        }
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final formattedTime = DateFormat('yyyy-MM-dd – hh:mm a').format(widget.scannedTime);
+
+    final minutes = _remainingTime ~/ 60;
+    final seconds = _remainingTime % 60;
 
     return Scaffold(
       body: Center(
@@ -31,7 +63,7 @@ class ConfirmationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '$val',
+              '${widget.val}',
               style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
@@ -41,8 +73,13 @@ class ConfirmationPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              role == 'canteena' ? 'Kalderama' : 'Hilton',
+              widget.role == 'canteena' ? 'Kalderama' : 'Hilton',
               style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'This page will automatically close in $minutes:${seconds.toString().padLeft(2, '0')}',
+              style: TextStyle(fontSize: 20, color: const Color.fromARGB(255, 22, 22, 22)),
             ),
             SizedBox(height: 40),
             ElevatedButton(

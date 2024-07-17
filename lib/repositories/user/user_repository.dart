@@ -38,15 +38,7 @@ class UserRepository {
   }
 
   Future<void> updateCanteenCount(int val, String canteenUserId) async {
-    try {
-      // Assume `users` is a collection in Firestore
-      final userDoc = FirebaseFirestore.instance.collection('users').doc(canteenUserId);
-      await userDoc.update({
-        'canteenCount': FieldValue.increment(val),
-      });
-    } catch (e) {
-      throw Exception('Failed to update canteen count: $e');
-    }
+    return _userService.updateCanteenCount(val, canteenUserId);
   }
   
 }
