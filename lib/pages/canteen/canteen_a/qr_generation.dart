@@ -84,7 +84,7 @@ class _QRGenerationPageState extends State<QRGenerationPage> {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserQRGenerated || qrData != null) {
-            final displayQRData = qrData;
+            final displayQRData = qrData ?? '';
             return Container(
               padding: const EdgeInsets.all(20),
               color: const Color(0xFFF9E6BD),
@@ -114,7 +114,7 @@ class _QRGenerationPageState extends State<QRGenerationPage> {
                             padding: const EdgeInsets.all(20),
                             color: Colors.white,
                             child: QrImageView(
-                              data: displayQRData!,
+                              data: displayQRData,
                               version: QrVersions.auto,
                               size: 300,
                             ),

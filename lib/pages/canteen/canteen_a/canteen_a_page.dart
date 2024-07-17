@@ -1,7 +1,7 @@
 import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
 import 'package:easy_coupon/pages/canteen/canteen_a/canteen_a_report.dart';
-import 'package:easy_coupon/pages/canteen/canteen_a/canteen_home.dart';
+import 'package:easy_coupon/pages/canteen/canteen_a/canteen_a_home.dart';
 import 'package:easy_coupon/pages/canteen/canteen_a/settings_page.dart';
 
 import 'package:easy_coupon/repositories/user/user_repository.dart';
