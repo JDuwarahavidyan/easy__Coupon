@@ -48,3 +48,15 @@ class UserRoleFetched extends UserState {
   List<Object> get props => [role];
 }
 class UserRoleLoading extends UserState {}
+
+class CanteenUserNameLoading extends UserState {}
+
+
+class CanteenUserNameFetched extends UserState {
+  final String canteenUserName;
+
+  const CanteenUserNameFetched (this.canteenUserName);
+
+  @override
+  List<Object> get props => [canteenUserName];
+}

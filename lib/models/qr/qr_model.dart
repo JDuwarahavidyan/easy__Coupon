@@ -1,44 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class QRModel extends Equatable {
+  final String? id;
   final String studentId;
   final String canteenId;
   final String canteenType;
   final String studentName;
   final String canteenName;
-  final String scanedAt;
+  final DateTime scannedAt;
   final int count;
 
   const QRModel({
+     this.id,
     required this.studentId,
     required this.canteenId,
     required this.canteenType,
     required this.studentName,
     required this.canteenName,
-    required this.scanedAt,
+    required this.scannedAt,
     required this.count,
   });
 
   factory QRModel.fromJson(Map<String, dynamic> json) {
     return QRModel(
+      id: json['id'] as String,
       studentId: json['studentId'] as String,
       canteenId: json['canteenId'] as String,
       canteenType: json['canteenType'] as String,
       studentName: json['studentName'] as String,
       canteenName: json['canteenName'] as String,
-      scanedAt: json['scanedAt'] as String,
+      scannedAt: (json['scannedAt'] as Timestamp).toDate(),
       count: json['count'] as int,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'studentId': studentId,
       'canteenId': canteenId,
       'canteenType': canteenType,
       'studentName': studentName,
       'canteenName': canteenName,
-      'scanedAt': scanedAt,
+      'scannedAt': Timestamp.fromDate(scannedAt),
       'count': count,
     };
   }
@@ -50,7 +55,7 @@ class QRModel extends Equatable {
         canteenType,
         studentName,
         canteenName,
-        scanedAt,
+        scannedAt,
         count,
       ];
 }

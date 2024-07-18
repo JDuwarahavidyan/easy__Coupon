@@ -21,7 +21,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<ScannedDataEvent>(_onScannedDataEvent);
     on<UserGenerateQREvent>(_onUserGenerateQREvent);
     on<FetchUserRoleEvent>(_onFetchUserRoleEvent);
-     on<UpdateCanteenCountEvent>(_onUpdateCanteenCountEvent);
+    on<UpdateCanteenCountEvent>(_onUpdateCanteenCountEvent);
+    on<FetchCanteenUserNameEvent>(_onFetchCanteenUserNameEvent);
   }
 
   Future<void> _onUserReadEvent(UserReadEvent event, Emitter<UserState> emit) async {
@@ -112,6 +113,21 @@ Future<void> _onUserGenerateQREvent(UserGenerateQREvent event, Emitter<UserState
       emit(UserFailure('Failed to update canteen count: $e'));
     }
   }
+
+  Future<void> _onFetchCanteenUserNameEvent(FetchCanteenUserNameEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading());
+      final userName = await _userRepository.fetchCanteenUserName(event.canteenUserId);
+      if (userName != null) {
+        emit(CanteenUserNameFetched(userName));
+      } else {
+        emit(const UserFailure('User role not found'));
+      }
+    } catch (e) {
+      emit(UserFailure('Failed to fetch user role: $e'));
+    }
+  }
+  
 
   @override
   Future<void> close() {

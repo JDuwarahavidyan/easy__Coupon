@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/bloc/qr/qr_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/repositories/qrcode/qr_repository.dart';
 import 'package:easy_coupon/repositories/repositories.dart';
 import 'package:easy_coupon/repositories/user/user_repository.dart';
+import 'package:easy_coupon/services/qrcode/qr_service.dart';
 import 'package:easy_coupon/services/user/user_service.dart';
 import 'package:easy_coupon/routes/routes.dart';
 import 'package:easy_coupon/services/services.dart';
@@ -48,6 +51,11 @@ class MyApp extends StatelessWidget {
          BlocProvider<UserBloc>(
           create: (context) => UserBloc(UserRepository(UserService()))..add(UserReadEvent(),
         )),
+
+        BlocProvider<QrCodeBloc>(
+          create: (context) => QrCodeBloc(QrCodeRepository(QrCodeService()))..add(QrCodeReadEvent(),
+        )),
+
 
          
       ],
