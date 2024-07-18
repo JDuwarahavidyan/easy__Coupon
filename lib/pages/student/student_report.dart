@@ -1,10 +1,11 @@
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/qr/qr_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_coupon/bloc/report/report_bloc.dart';
-import 'package:easy_coupon/bloc/report/report_state.dart';
-import 'package:easy_coupon/bloc/report/report_event.dart';
+import 'package:easy_coupon/bloc/qrr/qrr_bloc.dart';
+import 'package:easy_coupon/bloc/qrr/qrr_state.dart';
+import 'package:easy_coupon/bloc/qrr/qrr_event.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 
 class StudentReportPage extends StatefulWidget {
@@ -82,6 +83,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
             final user = state.users.firstWhere(
               (user) => user.id == FirebaseAuth.instance.currentUser?.uid,
             );
+
             return LayoutBuilder(
               builder: (context, constraints) {
                 return Container(
@@ -163,15 +165,24 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                       border: TableBorder
                                           .all(), // Add borders to the table
                                       columns: const [
-                                        DataColumn(label: Text('Number')),
-                                        DataColumn(label: Text('Time')),
-                                        DataColumn(label: Text('Date')),
+                                        DataColumn(label: Text('Student ID')),
+                                        DataColumn(label: Text('Canteen ID')),
+                                        DataColumn(label: Text('Canteen Type')),
+                                        DataColumn(label: Text('Student Name')),
+                                        DataColumn(label: Text('Canteen Name')),
+                                        DataColumn(label: Text('Scanned At')),
+                                        DataColumn(label: Text('Count')),
                                       ],
-                                      rows: state.reportData.map((data) {
+                                      rows:
+                                          state.reportData.map((QRModel data) {
                                         return DataRow(cells: [
-                                          DataCell(Text(data.Number)),
-                                          DataCell(Text(data.Time)),
-                                          DataCell(Text(data.Date)),
+                                          DataCell(Text(data.studentId)),
+                                          DataCell(Text(data.canteenId)),
+                                          DataCell(Text(data.canteenType)),
+                                          DataCell(Text(data.studentName)),
+                                          DataCell(Text(data.canteenName)),
+                                          DataCell(Text(data.scanedAt)),
+                                          DataCell(Text(data.count.toString())),
                                         ]);
                                       }).toList(),
                                     ),
@@ -196,7 +207,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
               },
             );
           }
-           return const Center(child: Text('Failed to load user data'));
+          return const Center(child: Text('Failed to load user data'));
         },
       ),
     );
