@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class QRModel extends Equatable {
+  final String? id;
   final String studentId;
   final String canteenId;
   final String canteenType;
@@ -10,6 +11,7 @@ class QRModel extends Equatable {
   final int count;
 
   const QRModel({
+     this.id,
     required this.studentId,
     required this.canteenId,
     required this.canteenType,
@@ -21,6 +23,7 @@ class QRModel extends Equatable {
 
   factory QRModel.fromJson(Map<String, dynamic> json) {
     return QRModel(
+      id: json['id'] as String,
       studentId: json['studentId'] as String,
       canteenId: json['canteenId'] as String,
       canteenType: json['canteenType'] as String,
@@ -33,6 +36,7 @@ class QRModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'studentId': studentId,
       'canteenId': canteenId,
       'canteenType': canteenType,

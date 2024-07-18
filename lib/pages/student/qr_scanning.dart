@@ -1,4 +1,6 @@
+import 'package:easy_coupon/bloc/qr/qr_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/qr/qr_model.dart';
 import 'package:easy_coupon/pages/student/confirmation_page.dart';
 import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +12,8 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 class QrPage extends StatefulWidget {
   final int val;
   final String studentUserId;
-  const QrPage({super.key, required this.val, required this.studentUserId});
+    final String studentUserName;
+  const QrPage({super.key, required this.val, required this.studentUserId, required this.studentUserName});
 
   @override
   State<QrPage> createState() => _QrPageState();
@@ -89,12 +92,23 @@ class _QrPageState extends State<QrPage> {
               child: const Text('Confirm'),
               onPressed: () {
                 final scannedTime = DateTime.now();
+
+                final qrCode = QRModel(
+                  studentId: widget.studentUserId,
+                  canteenId: canteenUserId,
+                  canteenType: role,
+                  studentName: widget.studentUserName, // Added studentName
+                  canteenName: "" ,
+                  scanedAt: scannedTime.toIso8601String(),
+                  count: val,
+                );
                 context
                     .read<UserBloc>()
                     .add(ScannedDataEvent(result!, val, widget.studentUserId));
                 context
                     .read<UserBloc>()
                     .add(UpdateCanteenCountEvent(val, canteenUserId));
+                context.read<QrCodeBloc>().add(CreateQrCodeEvent(qrCode));
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
                   MaterialPageRoute(

@@ -115,7 +115,21 @@ class UserService {
       throw CustomException('Failed to update canteen count: $e');
     }
   }
+
+   Future<String?> fetchCanteenUserName(String userId) async {
+    try {
+      DocumentSnapshot doc = await _userCollection.doc(userId).get();
+      if (doc.exists) {
+        return (doc.data() as Map<String, dynamic>)['userName'] as String;
+      }
+      return null;
+    } catch (e) {
+      throw CustomException('Error getting user name: $e');
+    }
+  }
 }
+
+
 
 
   

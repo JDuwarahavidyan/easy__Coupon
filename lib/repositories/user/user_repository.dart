@@ -41,4 +41,8 @@ class UserRepository {
     return _userService.updateCanteenCount(val, canteenUserId);
   }
   
+
+   Future<String?> fetchCanteenUserName(String userId) async {
+    return _userService.fetchCanteenUserName(userId);
+  }
 }
