@@ -16,7 +16,7 @@ class QrCodeService {
         canteenType: qrcode.canteenType,
         studentName: qrcode.studentName,
         canteenName: qrcode.canteenName,
-        scanedAt: qrcode.scanedAt,
+        scannedAt: qrcode.scannedAt,
         count: qrcode.count,
       );
       await _qrCodeCollection.doc(id).set(newQrCode.toJson());

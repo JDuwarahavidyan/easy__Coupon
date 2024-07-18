@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart'; 
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.dispose();
     super.dispose();
   }
-
+  
   Future<void> _checkSession() async {
     final prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('userId');
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
     final currentTime = DateTime.now().millisecondsSinceEpoch;
 
     if (userId != null && expiryTime != null && currentTime < expiryTime) {
-      await _checkUserRole(userId);
+      _checkUserRole(userId);
     } else {
       if (mounted) {
         Navigator.pushReplacementNamed(context, RouteNames.getStarted);
@@ -70,7 +70,6 @@ class _SplashScreenState extends State<SplashScreen>
       if (userDoc.exists) {
         String role = userDoc.get('role');
         if (mounted) {
-          await _updateCountsIfNewDay(userDoc, uid);
           if (role == 'student') {
             Navigator.pushReplacementNamed(context, RouteNames.student);
           } else if (role == 'canteena') {
@@ -90,22 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
       if (mounted) {
         Navigator.pushReplacementNamed(context, RouteNames.getStarted);
       }
-    }
-  }
-
-  Future<void> _updateCountsIfNewDay(
-      DocumentSnapshot userDoc, String uid) async {
-    final prefs = await SharedPreferences.getInstance();
-    final lastUpdateDate = prefs.getString('lastUpdateDate');
-    final currentDate = DateTime.now().toIso8601String().split('T').first;
-    print(lastUpdateDate);
-
-    if (lastUpdateDate != currentDate) {
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'canteenCount': 0,
-        'studentCount': 30,
-      });
-      await prefs.setString('lastUpdateDate', currentDate);
     }
   }
 

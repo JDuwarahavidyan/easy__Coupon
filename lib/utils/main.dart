@@ -11,7 +11,6 @@ import 'package:easy_coupon/routes/routes.dart';
 import 'package:easy_coupon/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'firebase_options.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:provider/provider.dart';
