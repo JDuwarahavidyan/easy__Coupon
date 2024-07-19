@@ -1,4 +1,6 @@
+import 'package:easy_coupon/bloc/qr/qr_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/qr/qr_model.dart';
 import 'package:easy_coupon/pages/student/confirmation_page.dart';
 import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +12,12 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 class QrPage extends StatefulWidget {
   final int val;
   final String studentUserId;
-  const QrPage({super.key, required this.val, required this.studentUserId});
+  final String studentUserName;
+  const QrPage(
+      {super.key,
+      required this.val,
+      required this.studentUserId,
+      required this.studentUserName});
 
   @override
   State<QrPage> createState() => _QrPageState();
@@ -47,6 +54,9 @@ class _QrPageState extends State<QrPage> {
           final decryptedData = decryptData(scannedData);
           if (decryptedData != null) {
             context.read<UserBloc>().add(FetchUserRoleEvent(decryptedData));
+            context
+                .read<UserBloc>()
+                .add(FetchCanteenUserNameEvent(decryptedData));
           } else {
             _showInvalidQRDialog();
           }
@@ -69,7 +79,7 @@ class _QrPageState extends State<QrPage> {
     }
   }
 
-  void _showConfirmationDialog(String role, int val, String canteenUserId) {
+  void _showConfirmationDialog(String role, int val, String canteenUserId, String canteenUsername) {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
@@ -89,12 +99,23 @@ class _QrPageState extends State<QrPage> {
               child: const Text('Confirm'),
               onPressed: () {
                 final scannedTime = DateTime.now();
+
+                final qrCode = QRModel(
+                  studentId: widget.studentUserId,
+                  canteenId: canteenUserId,
+                  canteenType: role,
+                  studentName: widget.studentUserName, // Added studentName
+                  canteenName: canteenUsername, // Added canteenName
+                  scannedAt: scannedTime,
+                  count: val,
+                );
                 context
                     .read<UserBloc>()
                     .add(ScannedDataEvent(result!, val, widget.studentUserId));
                 context
                     .read<UserBloc>()
                     .add(UpdateCanteenCountEvent(val, canteenUserId));
+                context.read<QrCodeBloc>().add(CreateQrCodeEvent(qrCode));
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -169,26 +190,47 @@ class _QrPageState extends State<QrPage> {
       (Route<dynamic> route) => false,
     );
   }
-
+  String? userRole;
+  String? canteenUserId;
+  String? canteenUsername;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state is UserRoleFetched) {
-            final decryptedData = decryptData(result?.code ?? '');
-            if (decryptedData != null) {
-              _showConfirmationDialog(state.role, widget.val, decryptedData);
-            } else {
-              _showInvalidQRDialog();
-            }
-          } else if (state is UserFailure) {
-            _showInvalidQRDialog();
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<UserBloc, UserState>(
+            listener: (context, state) {
+              if (state is UserRoleFetched) {
+                setState(() {
+                  userRole = state.role;
+                  canteenUserId = decryptData(result?.code ?? '');
+                });
+                if (userRole != null && canteenUsername != null) {
+                  _showConfirmationDialog(userRole!, widget.val, canteenUserId!, canteenUsername!);
+                }
+              } else if (state is UserFailure) {
+                _showInvalidQRDialog();
+              }
+            },
+          ),
+            BlocListener<UserBloc, UserState>(
+            listener: (context, state) {
+              if (state is CanteenUserNameFetched) {
+                setState(() {
+                  canteenUsername = state.canteenUserName;
+                });
+                if (userRole != null && canteenUsername != null) {
+                  _showConfirmationDialog(userRole!, widget.val, canteenUserId!, canteenUsername!);
+                }
+              } else if (state is UserFailure) {
+                _showInvalidQRDialog();
+              }
+            },
+          ),
+        ],
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
-            if (state is UserRoleLoading) {
+            if (state is UserRoleLoading || state is CanteenUserNameLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );

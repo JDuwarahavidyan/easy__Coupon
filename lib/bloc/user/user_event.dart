@@ -96,3 +96,12 @@ class UpdateCanteenCountEvent extends UserEvent {
   @override
   List<Object> get props => [val, canteenUserId];
 }
+
+class FetchCanteenUserNameEvent extends UserEvent {
+  final String canteenUserId;
+
+  const FetchCanteenUserNameEvent(this.canteenUserId);
+
+  @override
+  List<Object> get props => [canteenUserId];
+}
