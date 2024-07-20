@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_coupon/bloc/auth/auth_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/widgets/common/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +177,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                           fontSize: getResponsiveFontSize(18),
                                         ),
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pushReplacementNamed(
+                                            context, RouteNames.resetPW);
+                                      },
                                     ),
                                     ListTile(
                                       title: Text(
