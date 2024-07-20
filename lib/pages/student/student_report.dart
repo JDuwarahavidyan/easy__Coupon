@@ -3,9 +3,6 @@ import 'package:easy_coupon/models/qr/qr_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_coupon/bloc/qrr/qrr_bloc.dart';
-import 'package:easy_coupon/bloc/qrr/qrr_state.dart';
-import 'package:easy_coupon/bloc/qrr/qrr_event.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 
 class StudentReportPage extends StatefulWidget {
@@ -51,13 +48,13 @@ class _StudentReportPageState extends State<StudentReportPage> {
     }
   }
 
-  void _fetchData() {
+  /*void _fetchData() {
     final startDate = _startDateController.text;
     final endDate = _endDateController.text;
     context
         .read<ReportBloc>()
         .add(GetData(startDate: startDate, endDate: endDate));
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -140,22 +137,22 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                   ),
                                 ),
                                 const SizedBox(width: 20),
-                                ElevatedButton(
-                                  onPressed: _fetchData,
+                                /*ElevatedButton(
+                                  onPressed:(), //_fetchData,
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
                                     backgroundColor:
                                         const Color(0xFFFF8A00), // text color
                                   ),
                                   child: const Text('Fetch Data'),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
                           const SizedBox(
                               height:
                                   20), // Spacer between date inputs and table
-                          Expanded(
+                          /*Expanded(
                             child: BlocBuilder<ReportBloc, ReportState>(
                               builder: (context, state) {
                                 if (state is ReportLoaded) {
@@ -170,7 +167,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                         DataColumn(label: Text('Canteen Type')),
                                         DataColumn(label: Text('Student Name')),
                                         DataColumn(label: Text('Canteen Name')),
-                                        DataColumn(label: Text('Scanned At')),
+                                       // DataColumn(label: Text('Scanned At')),
                                         DataColumn(label: Text('Count')),
                                       ],
                                       rows:
@@ -181,7 +178,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                           DataCell(Text(data.canteenType)),
                                           DataCell(Text(data.studentName)),
                                           DataCell(Text(data.canteenName)),
-                                          DataCell(Text(data.scanedAt)),
+                                         // DataCell(Text(data.scanedAt)),
                                           DataCell(Text(data.count.toString())),
                                         ]);
                                       }).toList(),
@@ -198,7 +195,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                 }
                               },
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),

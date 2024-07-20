@@ -67,4 +67,3 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
   }
 
 }
-
