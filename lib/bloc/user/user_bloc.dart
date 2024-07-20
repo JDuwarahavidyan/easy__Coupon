@@ -52,6 +52,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       if (state is UserLoaded) {
         await _userRepository.updateUser(event.user);
+        final updatedUsers = (state as UserLoaded).users.map((user) {
+          return user.id == event.user.id ? event.user : user;
+        }).toList();
+        emit(UserLoaded(updatedUsers));
       }
     } catch (e) {
       emit(const UserFailure('Failed to update user'));
@@ -121,7 +125,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-
   Future<void> _onFetchCanteenUserNameEvent(
       FetchCanteenUserNameEvent event, Emitter<UserState> emit) async {
     try {
@@ -137,7 +140,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserFailure('Failed to fetch user role: $e'));
     }
   }
-
 
   @override
   Future<void> close() {

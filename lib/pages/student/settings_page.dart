@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_coupon/bloc/auth/auth_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/widgets/common/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -102,6 +103,45 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 context.read<AuthBloc>().add(LoggedOutEvent());
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showEditNameDialog(UserModel user) async {
+    final TextEditingController nameController =
+        TextEditingController(text: user.fullName);
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Full Name'),
+          content: TextField(
+            controller: nameController,
+            decoration: const InputDecoration(
+              hintText: 'Enter your full name',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Save'),
+              onPressed: () {
+                final newName = nameController.text;
+                if (newName.isNotEmpty) {
+                  final updatedUser = user.copyWith(fullName: newName);
+                  context.read<UserBloc>().add(UserUpdateEvent(updatedUser));
+                }
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -242,13 +282,27 @@ class _SettingsPageState extends State<SettingsPage> {
                               shadows: const [],
                             ),
                           ),
-                          Text(
-                            user.fullName!,
-                            style: TextStyle(
-                              fontSize: getResponsiveFontSize(16),
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              shadows: const [],
+                          InkWell(
+                            onTap: () => _showEditNameDialog(user),
+                            child: Row(
+                              children: [
+                                Text(
+                                  user.fullName!,
+                                  style: TextStyle(
+                                    fontSize: getResponsiveFontSize(16),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    shadows: const [],
+                                  ),
+                                ),
+                                const SizedBox(
+                                    width: 4.0), // Space between text and icon
+                                Icon(
+                                  Icons.edit,
+                                  size: getResponsiveFontSize(16),
+                                  color: Colors.black,
+                                ),
+                              ],
                             ),
                           ),
 
