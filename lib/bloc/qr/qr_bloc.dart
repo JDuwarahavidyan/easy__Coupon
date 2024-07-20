@@ -65,4 +65,6 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     _qrCodeStreamSubscription?.cancel();
     return super.close();
   }
+
 }
+

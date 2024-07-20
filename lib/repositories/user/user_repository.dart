@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:easy_coupon/services/user/user_service.dart';
 
@@ -40,9 +39,10 @@ class UserRepository {
   Future<void> updateCanteenCount(int val, String canteenUserId) async {
     return _userService.updateCanteenCount(val, canteenUserId);
   }
-  
 
    Future<String?> fetchCanteenUserName(String userId) async {
     return _userService.fetchCanteenUserName(userId);
   }
+  
+
 }

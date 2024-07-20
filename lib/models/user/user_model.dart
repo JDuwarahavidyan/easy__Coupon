@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel extends Equatable {
   final String id;
   final String email;
   final String userName;
+  final String? fullName;
   final bool isFirstTime;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -14,6 +14,7 @@ class UserModel extends Equatable {
   final String? profilePic;
 
   const UserModel({
+    this.fullName,
     required this.userName,
     required this.email,
     required this.id,
@@ -29,12 +30,13 @@ class UserModel extends Equatable {
   // Factory constructor for creating a User instance from JSON data
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      fullName: json['fullName'] as String?,
       id: json['id'] as String,
       userName: json['userName'] as String,
       email: json['email'] as String,
       isFirstTime: json['isFirstTime'] ?? true,
-      createdAt: (json['createdAt'] as Timestamp).toDate(),
-      updatedAt: (json['updatedAt'] as Timestamp).toDate(),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
       role: json['role'] as String,
       studentCount: json['studentCount'] ?? 30,
       canteenCount: json['canteenCount'] ?? 0,
@@ -45,12 +47,13 @@ class UserModel extends Equatable {
   // Method for converting a User instance to JSON
   Map<String, dynamic> toJson() {
     return {
+      'fullName': fullName,
       'id': id,
       'userName': userName,
       'email': email,
       'isFirstTime': isFirstTime,
-      'createdAt': Timestamp.fromDate(createdAt),
-      'updatedAt': Timestamp.fromDate(updatedAt),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
       'role': role,
       'studentCount': studentCount,
       'canteenCount': canteenCount,

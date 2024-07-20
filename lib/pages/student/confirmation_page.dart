@@ -86,7 +86,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
               onPressed: () {
                 _navigateToStudentHomeScreen(context);
               },
-              child: Text('OK'),
+              child: Text('Close Now'),
             ),
           ],
         ),
