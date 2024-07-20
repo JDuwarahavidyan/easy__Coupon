@@ -232,7 +232,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               height: imageSize /
                                   2), // Adjust this value to move the text further down
                           Text(
-                            user.userName,
+                            user.fullName!,
                             style: TextStyle(
                               fontSize: getResponsiveFontSize(16),
                               fontWeight: FontWeight.bold,
