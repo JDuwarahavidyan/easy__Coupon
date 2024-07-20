@@ -273,21 +273,13 @@ class _SettingsPageState extends State<SettingsPage> {
                           SizedBox(
                               height: imageSize /
                                   2), // Adjust this value to move the text further down
-                          Text(
-                           capitalizeFirstLetter(user.fullName),
-                            style: TextStyle(
-                              fontSize: getResponsiveFontSize(16),
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              shadows: const [],
-                            ),
-                          ),
+                         
                           InkWell(
                             onTap: () => _showEditNameDialog(user),
                             child: Row(
                               children: [
                                 Text(
-                                  user.fullName!,
+                                  user.fullName,
                                   style: TextStyle(
                                     fontSize: getResponsiveFontSize(16),
                                     fontWeight: FontWeight.bold,
