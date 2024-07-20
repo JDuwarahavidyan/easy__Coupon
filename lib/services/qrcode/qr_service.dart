@@ -51,7 +51,7 @@ class QrCodeService {
     }
   }
 
-  Future<QRModel> getPastScannedData(String uid) async {
+  Future<QRModel> getPastScannedQrData(String uid) async {
   final snapshot = await _qrCodeCollection.where("uid", isEqualTo: uid).get();
   final qrData = snapshot.docs.map((e) => QRModel.fromJson(e.data() as Map<String, dynamic>)).single;
   return qrData;
