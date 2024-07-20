@@ -1,3 +1,4 @@
+import 'package:easy_coupon/bloc/qr/qr_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
 import 'package:easy_coupon/models/qr/qr_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -152,50 +153,52 @@ class _StudentReportPageState extends State<StudentReportPage> {
                           const SizedBox(
                               height:
                                   20), // Spacer between date inputs and table
-                          /*Expanded(
-                            child: BlocBuilder<ReportBloc, ReportState>(
+                          Expanded(
+                            child: BlocBuilder<QrCodeBloc, QrCodeState>(
                               builder: (context, state) {
-                                if (state is ReportLoaded) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: DataTable(
-                                      border: TableBorder
-                                          .all(), // Add borders to the table
-                                      columns: const [
-                                        DataColumn(label: Text('Student ID')),
-                                        DataColumn(label: Text('Canteen ID')),
-                                        DataColumn(label: Text('Canteen Type')),
-                                        DataColumn(label: Text('Student Name')),
-                                        DataColumn(label: Text('Canteen Name')),
-                                       // DataColumn(label: Text('Scanned At')),
-                                        DataColumn(label: Text('Count')),
-                                      ],
-                                      rows:
-                                          state.reportData.map((QRModel data) {
-                                        return DataRow(cells: [
-                                          DataCell(Text(data.studentId)),
-                                          DataCell(Text(data.canteenId)),
-                                          DataCell(Text(data.canteenType)),
-                                          DataCell(Text(data.studentName)),
-                                          DataCell(Text(data.canteenName)),
-                                         // DataCell(Text(data.scanedAt)),
-                                          DataCell(Text(data.count.toString())),
-                                        ]);
-                                      }).toList(),
-                                    ),
-                                  );
-                                } else if (state is ReportLoading) {
+                                if (state is QrCodeLoading) {
                                   return const Center(
                                       child: CircularProgressIndicator());
-                                } else if (state is ReportError) {
+                                } else if (state is QrCodeLoaded) {
+                                  return SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: DataTable(
+                                        columns: const [
+                                          DataColumn(label: Text('Student ID')),
+                                          DataColumn(label: Text('Canteen ID')),
+                                          DataColumn(
+                                              label: Text('Canteen Type')),
+                                          DataColumn(
+                                              label: Text('Student Name')),
+                                          DataColumn(
+                                              label: Text('Canteen Name')),
+                                          DataColumn(label: Text('Count')),
+                                        ],
+                                        rows: state.qrcodes.map((QRModel item) {
+                                          return DataRow(cells: [
+                                            DataCell(Text(item.studentId)),
+                                            DataCell(Text(item.canteenId)),
+                                            DataCell(Text(item.canteenType)),
+                                            DataCell(Text(item.studentName)),
+                                            DataCell(Text(item.canteenName)),
+                                            DataCell(
+                                                Text(item.count.toString())),
+                                          ]);
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  );
+                                } else if (state is QrCodeFailure) {
                                   return Center(
-                                      child: Text('Error: ${state.error}'));
+                                      child: Text('Error: ${state.message}'));
                                 } else {
                                   return const Center(child: Text('No data'));
                                 }
                               },
                             ),
-                          ),*/
+                          ),
                         ],
                       ),
                     ),

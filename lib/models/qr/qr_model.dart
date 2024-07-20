@@ -11,7 +11,6 @@ class QRModel extends Equatable {
   final int count;
 
   const QRModel({
-
     this.id,
     required this.studentId,
     required this.canteenId,
@@ -24,9 +23,7 @@ class QRModel extends Equatable {
 
   factory QRModel.fromJson(Map<String, dynamic> json) {
     return QRModel(
-
-      id: json['id'] as String?,  
-
+      id: json['id'] as String?,
       studentId: json['studentId'] as String,
       canteenId: json['canteenId'] as String,
       canteenType: json['canteenType'] as String,
@@ -45,9 +42,7 @@ class QRModel extends Equatable {
       'canteenType': canteenType,
       'studentName': studentName,
       'canteenName': canteenName,
-
       'scannedAt': scannedAt.toIso8601String(),
-
       'count': count,
     };
   }
