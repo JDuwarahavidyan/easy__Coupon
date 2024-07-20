@@ -74,4 +74,6 @@ class UserModel extends Equatable {
         canteenCount,
         profilePic,
       ];
+
+  copyWith({required String fullName}) {}
 }

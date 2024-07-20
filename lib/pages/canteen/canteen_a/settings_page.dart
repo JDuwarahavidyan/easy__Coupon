@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_coupon/bloc/auth/auth_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/widgets/common/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserLoaded) {
             final user = state.users.firstWhere(
-              (user) => user.id == FirebaseAuth.instance.currentUser?.uid,
+              (user) => user.id == FirebaseAuth.instance.currentUser?.uid, //
             );
 
             return Stack(
@@ -177,7 +178,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                         ),
                                       ),
                                       onTap: () {
-                                        // Navigate to change password page
+                                        Navigator.pushReplacementNamed(
+                                            context, RouteNames.resetPW);
                                       },
                                     ),
                                     ListTile(
@@ -218,8 +220,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         backgroundColor: const Color.fromARGB(255, 2, 1, 0),
                         child: CircleAvatar(
                           radius: imageSize / 2.05,
-                          backgroundImage: const AssetImage(
-                             'assets/nouser.png'),
+                          backgroundImage:
+                              const AssetImage('assets/nouser.png'),
                         ),
                       ),
                       const SizedBox(
@@ -232,7 +234,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               height: imageSize /
                                   2), // Adjust this value to move the text further down
                           Text(
-                            user.userName,
+                            user.userName, //
                             style: TextStyle(
                               fontSize: getResponsiveFontSize(16),
                               fontWeight: FontWeight.bold,
@@ -241,7 +243,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           ),
                           Text(
-                            user.email,
+                            user.email, //
                             style: TextStyle(
                               fontSize: getResponsiveFontSize(14),
                               fontWeight: FontWeight.bold,
