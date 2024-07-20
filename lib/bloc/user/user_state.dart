@@ -49,6 +49,8 @@ class UserRoleFetched extends UserState {
 }
 class UserRoleLoading extends UserState {}
 
+
+
 class CanteenUserNameLoading extends UserState {}
 
 
@@ -59,4 +61,7 @@ class CanteenUserNameFetched extends UserState {
 
   @override
   List<Object> get props => [canteenUserName];
+
 }
+
+

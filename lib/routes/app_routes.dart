@@ -24,7 +24,9 @@ class AppRoutes {
       case RouteNames.qr:
         return MaterialPageRoute(
             builder: (_) => const QrPage(
-                  val: 0, studentUserId: "", studentUserName: "", 
+
+                  val: 0, studentUserId: "", studentUserName: "",
+
                 ));
 
       case RouteNames.studentReport: // Added route for StudentReport

@@ -51,6 +51,9 @@ class MyApp extends StatelessWidget {
          BlocProvider<UserBloc>(
           create: (context) => UserBloc(UserRepository(UserService()))..add(UserReadEvent(),
         )),
+             BlocProvider<QrCodeBloc>(
+          create: (context) => QrCodeBloc(QrCodeRepository(QrCodeService()))..add(QrCodeReadEvent(),
+        )),
 
         BlocProvider<QrCodeBloc>(
           create: (context) => QrCodeBloc(QrCodeRepository(QrCodeService()))..add(QrCodeReadEvent(),
