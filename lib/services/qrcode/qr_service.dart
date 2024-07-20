@@ -43,13 +43,18 @@ class QrCodeService {
     }
   }
 
-
   Future<void> deleteQrCode(String qrCodeId) async {
     try {
       await _qrCodeCollection.doc(qrCodeId).delete();
     } catch (e) {
       throw CustomException('Error deleting qrcode: $e');
     }
+  }
+
+  Future<QRModel> getPastScannedData(String uid) async {
+  final snapshot = await _qrCodeCollection.where("uid", isEqualTo: uid).get();
+  final qrData = snapshot.docs.map((e) => QRModel.fromJson(e.data() as Map<String, dynamic>)).single;
+  return qrData;
   }
 
 }
