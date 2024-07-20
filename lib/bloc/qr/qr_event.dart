@@ -44,4 +44,6 @@ final class QrCodeLoadEvent extends QrCodeEvent {
 
 final class QrCodeReadAllEvent extends QrCodeEvent {
   const QrCodeReadAllEvent();
+
 }
+

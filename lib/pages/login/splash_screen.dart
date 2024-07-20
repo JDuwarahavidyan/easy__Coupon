@@ -41,7 +41,6 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
   
-
   Future<void> _checkSession() async {
     final prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('userId');

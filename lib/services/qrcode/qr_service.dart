@@ -51,4 +51,6 @@ class QrCodeService {
       throw CustomException('Error deleting qrcode: $e');
     }
   }
+
 }
+

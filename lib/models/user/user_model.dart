@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel extends Equatable {
   final String id;
@@ -7,7 +8,6 @@ class UserModel extends Equatable {
   final bool isFirstTime;
   final DateTime createdAt;
   final DateTime updatedAt;
-  
   final String role;
   final int studentCount;
   final int canteenCount;
@@ -38,7 +38,7 @@ class UserModel extends Equatable {
       role: json['role'] as String,
       studentCount: json['studentCount'] ?? 30,
       canteenCount: json['canteenCount'] ?? 0,
-      profilePic: json['profilePic'] ?? '',
+      profilePic: json['profilePic'],
     );
   }
 

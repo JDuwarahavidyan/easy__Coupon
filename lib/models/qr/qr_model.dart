@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class QRModel extends Equatable {
@@ -11,6 +12,7 @@ class QRModel extends Equatable {
   final int count;
 
   const QRModel({
+
     this.id,
     required this.studentId,
     required this.canteenId,
@@ -23,13 +25,17 @@ class QRModel extends Equatable {
 
   factory QRModel.fromJson(Map<String, dynamic> json) {
     return QRModel(
+
       id: json['id'] as String?,
+
       studentId: json['studentId'] as String,
       canteenId: json['canteenId'] as String,
       canteenType: json['canteenType'] as String,
       studentName: json['studentName'] as String,
       canteenName: json['canteenName'] as String,
+
       scannedAt: DateTime.parse(json['scannedAt'] as String),
+
       count: json['count'] as int,
     );
   }
@@ -42,7 +48,9 @@ class QRModel extends Equatable {
       'canteenType': canteenType,
       'studentName': studentName,
       'canteenName': canteenName,
+
       'scannedAt': scannedAt.toIso8601String(),
+
       'count': count,
     };
   }

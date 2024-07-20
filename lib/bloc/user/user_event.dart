@@ -104,4 +104,7 @@ class FetchCanteenUserNameEvent extends UserEvent {
 
   @override
   List<Object> get props => [canteenUserId];
+
 }
+
+

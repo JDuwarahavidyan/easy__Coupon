@@ -55,6 +55,11 @@ class MyApp extends StatelessWidget {
           create: (context) => QrCodeBloc(QrCodeRepository(QrCodeService()))..add(QrCodeReadEvent(),
         )),
 
+        BlocProvider<QrCodeBloc>(
+          create: (context) => QrCodeBloc(QrCodeRepository(QrCodeService()))..add(QrCodeReadEvent(),
+        )),
+
+
          
       ],
       child: ChangeNotifierProvider(

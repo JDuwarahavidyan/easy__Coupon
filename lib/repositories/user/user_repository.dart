@@ -44,4 +44,8 @@ class UserRepository {
     return _userService.fetchCanteenUserName(userId);
   }
   
+
+   Future<String?> fetchCanteenUserName(String userId) async {
+    return _userService.fetchCanteenUserName(userId);
+  }
 }

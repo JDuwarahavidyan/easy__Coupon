@@ -121,6 +121,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+
   Future<void> _onFetchCanteenUserNameEvent(
       FetchCanteenUserNameEvent event, Emitter<UserState> emit) async {
     try {
@@ -136,6 +137,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserFailure('Failed to fetch user role: $e'));
     }
   }
+
 
   @override
   Future<void> close() {
