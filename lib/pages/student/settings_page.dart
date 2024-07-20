@@ -232,7 +232,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               height: imageSize /
                                   2), // Adjust this value to move the text further down
                           Text(
-                            user.fullName!,
+                           capitalizeFirstLetter(user.fullName),
                             style: TextStyle(
                               fontSize: getResponsiveFontSize(16),
                               fontWeight: FontWeight.bold,
@@ -262,4 +262,11 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+}
+
+String capitalizeFirstLetter(String text) {
+  if (text.isEmpty) {
+    return text;
+  }
+  return text[0].toUpperCase() + text.substring(1).toLowerCase();
 }

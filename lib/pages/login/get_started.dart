@@ -4,8 +4,34 @@ import 'package:slide_to_act/slide_to_act.dart';
 
 import '../../routes/route_names.dart';
 
-class GetStarted extends StatelessWidget {
+class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
+
+  @override
+  _GetStartedState createState() => _GetStartedState();
+}
+
+class _GetStartedState extends State<GetStarted> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToLogin(BuildContext context) {
+    Navigator.pushReplacementNamed(context, RouteNames.login);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +41,6 @@ class GetStarted extends StatelessWidget {
           Expanded(
             child: LoginWidget(
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(bottom: 5.0, top: 45.0),
@@ -50,12 +75,14 @@ class GetStarted extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height:35),
+                  const SizedBox(height: 35),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: SlideAction(
                       onSubmit: () {
-                        return Navigator.pushReplacementNamed(context, RouteNames.login);
+                        _navigateToLogin(context);
+                        _animationController.reset();
+                        return null;
                       },
                       text: 'Get Started',
                       textStyle: const TextStyle(

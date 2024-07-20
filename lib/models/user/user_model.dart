@@ -4,7 +4,7 @@ class UserModel extends Equatable {
   final String id;
   final String email;
   final String userName;
-  final String? fullName;
+  final String fullName;
   final bool isFirstTime;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -14,7 +14,7 @@ class UserModel extends Equatable {
   final String? profilePic;
 
   const UserModel({
-    this.fullName,
+    required this.fullName,
     required this.userName,
     required this.email,
     required this.id,
@@ -30,7 +30,7 @@ class UserModel extends Equatable {
   // Factory constructor for creating a User instance from JSON data
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      fullName: json['fullName'] as String?,
+      fullName: json['fullName'] as String,
       id: json['id'] as String,
       userName: json['userName'] as String,
       email: json['email'] as String,

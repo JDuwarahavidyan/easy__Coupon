@@ -40,7 +40,7 @@ class FirebaseAuthService {
         final userModel = UserModel(
           id: user.uid,
           userName: username,
-          fullName:"",
+          fullName:username,
           email: email,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
