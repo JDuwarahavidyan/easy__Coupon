@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel extends Equatable {
   final String id;
   final String email;
   final String userName;
+  final String? fullName;
   final bool isFirstTime;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -14,6 +14,7 @@ class UserModel extends Equatable {
   final String? profilePic;
 
   const UserModel({
+    this.fullName,
     required this.userName,
     required this.email,
     required this.id,
@@ -29,6 +30,7 @@ class UserModel extends Equatable {
   // Factory constructor for creating a User instance from JSON data
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      fullName: json['fullName'] as String?,
       id: json['id'] as String,
       userName: json['userName'] as String,
       email: json['email'] as String,
@@ -45,6 +47,7 @@ class UserModel extends Equatable {
   // Method for converting a User instance to JSON
   Map<String, dynamic> toJson() {
     return {
+      'fullName': fullName,
       'id': id,
       'userName': userName,
       'email': email,

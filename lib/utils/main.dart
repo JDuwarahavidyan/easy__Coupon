@@ -15,8 +15,7 @@ import 'firebase_options.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
- 
-void main() async {
+ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -78,6 +77,7 @@ class MyApp extends StatelessWidget {
               ),
               initialRoute: RouteNames.splash,
               onGenerateRoute: AppRoutes.generateRoute,
+              navigatorObservers: [routeObserver],
             );
           },
         ),

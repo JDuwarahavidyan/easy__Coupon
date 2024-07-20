@@ -1,9 +1,10 @@
-import 'package:easy_coupon/bloc/blocs.dart';
+import 'package:easy_coupon/utils/main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
 import 'package:easy_coupon/pages/canteen/canteen_a/qr_generation.dart';
 import 'package:easy_coupon/widgets/common/user_profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class CanteenAHomePage extends StatefulWidget {
   const CanteenAHomePage({super.key});
@@ -12,10 +13,29 @@ class CanteenAHomePage extends StatefulWidget {
   State<CanteenAHomePage> createState() => _CanteenAHomePageState();
 }
 
-class _CanteenAHomePageState extends State<CanteenAHomePage> {
+class _CanteenAHomePageState extends State<CanteenAHomePage> with RouteAware {
   @override
   void initState() {
     super.initState();
+    context.read<UserBloc>().add(UserReadEvent());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // This method is called when the current route has been popped and
+    // the previous route is shown. Refresh the user data here.
     context.read<UserBloc>().add(UserReadEvent());
   }
 
