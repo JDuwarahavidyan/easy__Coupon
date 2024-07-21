@@ -17,6 +17,19 @@ class _StudentReportPageState extends State<StudentReportPage> {
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserQrCodes();
+  }
+
+  void _fetchUserQrCodes() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      context.read<QrCodeBloc>().add(LoadQrCodesByUid(currentUser.uid));
+    }
+  }
+
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -46,16 +59,9 @@ class _StudentReportPageState extends State<StudentReportPage> {
       setState(() {
         controller.text = "${pickedDate.toLocal()}".split(' ')[0];
       });
+      _fetchUserQrCodes(); // Fetch QR codes when date is selected
     }
   }
-
-  /*void _fetchData() {
-    final startDate = _startDateController.text;
-    final endDate = _endDateController.text;
-    context
-        .read<ReportBloc>()
-        .add(GetData(startDate: startDate, endDate: endDate));
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +144,6 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                   ),
                                 ),
                                 const SizedBox(width: 20),
-                                /*ElevatedButton(
-                                  onPressed:(), //_fetchData,
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor:
-                                        const Color(0xFFFF8A00), // text color
-                                  ),
-                                  child: const Text('Fetch Data'),
-                                ),*/
                               ],
                             ),
                           ),
@@ -160,35 +157,48 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 } else if (state is QrCodeLoaded) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: DataTable(
-                                        columns: const [
-                                          DataColumn(label: Text('Student ID')),
-                                          DataColumn(label: Text('Canteen ID')),
-                                          DataColumn(
-                                              label: Text('Canteen Type')),
-                                          DataColumn(
-                                              label: Text('Student Name')),
-                                          DataColumn(
-                                              label: Text('Canteen Name')),
-                                          DataColumn(label: Text('Count')),
-                                        ],
-                                        rows: state.qrcodes.map((QRModel item) {
-                                          return DataRow(cells: [
-                                            DataCell(Text(item.studentId)),
-                                            DataCell(Text(item.canteenId)),
-                                            DataCell(Text(item.canteenType)),
-                                            DataCell(Text(item.studentName)),
-                                            DataCell(Text(item.canteenName)),
-                                            DataCell(
-                                                Text(item.count.toString())),
-                                          ]);
-                                        }).toList(),
+                                  // Sort QR codes by scannedAt date
+                                  final sortedQrcodes =
+                                      List<QRModel>.from(state.qrcodes)
+                                        ..sort((a, b) =>
+                                            a.scannedAt.compareTo(b.scannedAt));
+
+                                  return Column(
+                                    children: [
+                                      // Fixed header row
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.vertical,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: DataTable(
+                                              columns: const [
+                                                DataColumn(label: Text('Date')),
+                                                DataColumn(
+                                                    label:
+                                                        Text('Canteen Name')),
+                                                DataColumn(
+                                                    label: Text('Count')),
+                                              ],
+                                              rows: sortedQrcodes
+                                                  .map((QRModel item) {
+                                                return DataRow(cells: [
+                                                  DataCell(
+                                                    Text(
+                                                      "${item.scannedAt.day.toString().padLeft(2, '0')}/${(item.scannedAt.month).toString().padLeft(2, '0')}/${item.scannedAt.year}",
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                      Text(item.canteenName)),
+                                                  DataCell(Text(
+                                                      item.count.toString())),
+                                                ]);
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   );
                                 } else if (state is QrCodeFailure) {
                                   return Center(

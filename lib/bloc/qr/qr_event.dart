@@ -44,6 +44,15 @@ final class QrCodeLoadEvent extends QrCodeEvent {
 
 final class QrCodeReadAllEvent extends QrCodeEvent {
   const QrCodeReadAllEvent();
-
 }
+
+class LoadQrCodesByUid extends QrCodeEvent {
+  final String uid;
+
+  const LoadQrCodesByUid(this.uid);
+
+  @override
+  List<Object> get props => [uid];
+}
+
 

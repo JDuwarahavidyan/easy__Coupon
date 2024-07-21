@@ -16,6 +16,8 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     on<QrCodeReadEvent>(_onQrCodeReadEvent);
     on<QrCodeLoadEvent>(_onQrCodeLoadEvent);
     on<QrCodeDeleteEvent>(_onQrCodeDeleteEvent);
+    on<LoadQrCodesByUid>(_onLoadQrCodesByUid);
+     
   }
 
    Future<void> _onCreateQrCodeEvent(CreateQrCodeEvent event, Emitter<QrCodeState> emit) async {
@@ -59,11 +61,22 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
   }
 
 
+   FutureOr<void> _onLoadQrCodesByUid(LoadQrCodesByUid event, Emitter<QrCodeState> emit) async{
+    try {
+        final qrCodes = await _qrCodeRepository.getQRCodeByUidStream(event.uid).first;
+        emit(QrCodeLoaded(qrCodes));
+      } catch (e) {
+        emit(const QrCodeFailure('Failed to load by uid qrcodes'));
+      }
+  }
+
+
+
 
   @override
   Future<void> close() {
     _qrCodeStreamSubscription?.cancel();
     return super.close();
   }
-
+ 
 }

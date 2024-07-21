@@ -21,4 +21,8 @@ class QrCodeRepository {
   Future<void> deleteQrCode(String qrCodeId) async {
     await _qrCodeService.deleteQrCode(qrCodeId);
   }
+
+  Stream<List<QRModel>> getQRCodeByUidStream(String uid) {
+    return _qrCodeService.getQRCodeStreamByUid(uid);
+  }
 }

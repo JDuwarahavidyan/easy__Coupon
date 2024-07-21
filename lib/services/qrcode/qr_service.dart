@@ -51,10 +51,14 @@ class QrCodeService {
     }
   }
 
-  Future<QRModel> getPastScannedQrData(String uid) async {
-  final snapshot = await _qrCodeCollection.where("uid", isEqualTo: uid).get();
-  final qrData = snapshot.docs.map((e) => QRModel.fromJson(e.data() as Map<String, dynamic>)).single;
-  return qrData;
+  Stream<List<QRModel>> getQRCodeStreamByUid(String uid) {
+    return _qrCodeCollection
+        .where("studentId", isEqualTo:uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => QRModel.fromJson(doc.data() as Map<String, dynamic>))
+            .toList());
   }
 
+  
 }
