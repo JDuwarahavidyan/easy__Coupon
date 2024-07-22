@@ -62,6 +62,7 @@ class _CanteenAHomePageState extends State<CanteenAHomePage> with RouteAware {
           } else if (state is UserLoaded) {
             final user = state.users.firstWhere(
               (user) => user.id == FirebaseAuth.instance.currentUser?.uid,
+             // Replace null with an instance of UserModel
             );
             return Container(
               padding: const EdgeInsets.all(20),

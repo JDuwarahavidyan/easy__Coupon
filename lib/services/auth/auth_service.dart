@@ -40,6 +40,7 @@ class FirebaseAuthService {
         final userModel = UserModel(
           id: user.uid,
           userName: username,
+          fullName:username,
           email: email,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
@@ -47,7 +48,7 @@ class FirebaseAuthService {
           role: role,
           studentCount: 30,
           canteenCount: 0,
-          profilePic: 'assets/nouser.png',
+          profilePic: "",
         );
         await _firebaseFirestore.collection('users').doc(user.uid).set(
               userModel.toJson(),
