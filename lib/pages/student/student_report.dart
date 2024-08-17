@@ -153,41 +153,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                           const SizedBox(
                               height:
                                   20), // Spacer between date inputs and table
-                          Expanded(
-                            child: BlocBuilder<ReportBloc, ReportState>(
-                              builder: (context, state) {
-                                if (state is ReportLoaded) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: DataTable(
-                                      border: TableBorder
-                                          .all(), // Add borders to the table
-                                      columns: const [
-                                        DataColumn(label: Text('Number')),
-                                        DataColumn(label: Text('Time')),
-                                        DataColumn(label: Text('Date')),
-                                      ],
-                                      rows: state.reportData.map((data) {
-                                        return DataRow(cells: [
-                                          DataCell(Text(data.Number)),
-                                          DataCell(Text(data.Time)),
-                                          DataCell(Text(data.Date)),
-                                        ]);
-                                      }).toList(),
-                                    ),
-                                  );
-                                } else if (state is ReportLoading) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                } else if (state is ReportError) {
-                                  return Center(
-                                      child: Text('Error: ${state.error}'));
-                                } else {
-                                  return const Center(child: Text('No data'));
-                                }
-                              },
-                            ),
-                          ),
+                          
                         ],
                       ),
                     ),
