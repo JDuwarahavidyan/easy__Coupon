@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class UserModel extends Equatable {
@@ -35,8 +36,8 @@ class UserModel extends Equatable {
       userName: json['userName'] as String,
       email: json['email'] as String,
       isFirstTime: json['isFirstTime'] ?? true,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      createdAt: (json['createdAt'] as Timestamp).toDate(),
+      updatedAt: (json['updatedAt'] as Timestamp).toDate(),
       role: json['role'] as String,
       studentCount: json['studentCount'] ?? 30,
       canteenCount: json['canteenCount'] ?? 0,
@@ -52,8 +53,8 @@ class UserModel extends Equatable {
       'userName': userName,
       'email': email,
       'isFirstTime': isFirstTime,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
       'role': role,
       'studentCount': studentCount,
       'canteenCount': canteenCount,
