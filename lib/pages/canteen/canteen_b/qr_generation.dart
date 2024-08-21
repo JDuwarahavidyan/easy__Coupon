@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -9,14 +10,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 
-class CanteenBPage extends StatefulWidget {
-  const CanteenBPage({super.key});
+class QRGenerationPage extends StatefulWidget {
+  final UserModel user;
+  const QRGenerationPage({super.key, required this.user});
+
 
   @override
-  State<CanteenBPage> createState() => _CanteenBPageState();
+  State<QRGenerationPage> createState() => _QRGenerationPageState();
 }
 
-class _CanteenBPageState extends State<CanteenBPage> {
+class _QRGenerationPageState extends State<QRGenerationPage> {
   final GlobalKey globalKey = GlobalKey();
   final ScreenshotController screenshotController = ScreenshotController();
   String? qrData;
@@ -28,9 +31,9 @@ class _CanteenBPageState extends State<CanteenBPage> {
   @override
   void initState() {
     super.initState();
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId != null) {
-      context.read<UserBloc>().add(UserGenerateQREvent(userId));
+    final canteenUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (canteenUserId != null) {
+      context.read<UserBloc>().add(UserGenerateQREvent(canteenUserId));
     }
   }
 
@@ -84,7 +87,7 @@ class _CanteenBPageState extends State<CanteenBPage> {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserQRGenerated || qrData != null) {
-            final displayQRData = qrData;
+            final displayQRData = qrData ?? '';
             return Container(
               padding: const EdgeInsets.all(20),
               color: const Color(0xFFF9E6BD),
@@ -114,7 +117,7 @@ class _CanteenBPageState extends State<CanteenBPage> {
                             padding: const EdgeInsets.all(20),
                             color: Colors.white,
                             child: QrImageView(
-                              data: displayQRData!,
+                              data: displayQRData,
                               version: QrVersions.auto,
                               size: 300,
                             ),

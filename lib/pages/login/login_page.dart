@@ -1,5 +1,6 @@
 import 'package:easy_coupon/bloc/blocs.dart';
 import 'package:easy_coupon/pages/canteen/canteen_a/canteen_a_page.dart';
+import 'package:easy_coupon/pages/canteen/canteen_b/canteen_b_page.dart';
 import 'package:easy_coupon/pages/student/student_page.dart';
 import 'package:easy_coupon/routes/route_names.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
@@ -24,9 +25,9 @@ class LoginPage extends StatelessWidget {
               case RouteNames.student:
                 return const StudentHomeScreen();
               case RouteNames.canteenA:
-                return const CanteenHomeScreen();
+                return const CanteenAHomeScreen();
               case RouteNames.canteenB:
-                return const CanteenBPage();
+                return const CanteenBHomeScreen();
               default:
                 return const LoginPage();
             }

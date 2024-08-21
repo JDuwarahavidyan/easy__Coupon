@@ -9,14 +9,14 @@ import 'package:easy_coupon/services/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 
-class CanteenAHomeScreen extends StatefulWidget {
-  const CanteenAHomeScreen({super.key});
+class CanteenBHomeScreen extends StatefulWidget {
+  const CanteenBHomeScreen({super.key});
 
   @override
-  State<CanteenAHomeScreen> createState() => _CanteenAHomeScreenState();
+  State<CanteenBHomeScreen> createState() => _CanteenBHomeScreenState();
 }
 
-class _CanteenAHomeScreenState extends State<CanteenAHomeScreen> {
+class _CanteenBHomeScreenState extends State<CanteenBHomeScreen> {
   int _selectedIndex = 0;
 
   @override
