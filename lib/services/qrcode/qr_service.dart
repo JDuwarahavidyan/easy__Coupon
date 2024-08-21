@@ -43,7 +43,6 @@ class QrCodeService {
     }
   }
 
-
   Future<void> deleteQrCode(String qrCodeId) async {
     try {
       await _qrCodeCollection.doc(qrCodeId).delete();
@@ -52,5 +51,14 @@ class QrCodeService {
     }
   }
 
-}
+  Stream<List<QRModel>> getQRCodeStreamByUid(String uid) {
+    return _qrCodeCollection
+        .where("studentId", isEqualTo:uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => QRModel.fromJson(doc.data() as Map<String, dynamic>))
+            .toList());
+  }
 
+  
+}
