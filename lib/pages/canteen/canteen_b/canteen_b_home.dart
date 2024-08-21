@@ -1,20 +1,19 @@
-import 'package:easy_coupon/models/user/user_model.dart';
 import 'package:easy_coupon/utils/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
-import 'package:easy_coupon/pages/canteen/canteen_a/qr_generation.dart';
+import 'package:easy_coupon/pages/canteen/canteen_b/qr_generation.dart';
 import 'package:easy_coupon/widgets/common/user_profile.dart';
 
-class CanteenAHomePage extends StatefulWidget {
-  const CanteenAHomePage({super.key});
+class CanteenBHomePage extends StatefulWidget {
+  const CanteenBHomePage({super.key});
 
   @override
-  State<CanteenAHomePage> createState() => _CanteenAHomePageState();
+  State<CanteenBHomePage> createState() => _CanteenBHomePageState();
 }
 
-class _CanteenAHomePageState extends State<CanteenAHomePage> with RouteAware {
+class _CanteenBHomePageState extends State<CanteenBHomePage> with RouteAware {
   @override
   void initState() {
     super.initState();
@@ -45,7 +44,7 @@ class _CanteenAHomePageState extends State<CanteenAHomePage> with RouteAware {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Canteen A Page',
+          'Canteen B Page',
           textAlign: TextAlign.left,
         ),
         backgroundColor: const Color(0xFFFCD170),
@@ -61,7 +60,7 @@ class _CanteenAHomePageState extends State<CanteenAHomePage> with RouteAware {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserLoaded) {
-            final UserModel user = state.users.firstWhere(
+            final user = state.users.firstWhere(
               (user) => user.id == FirebaseAuth.instance.currentUser?.uid,
              // Replace null with an instance of UserModel
             );
