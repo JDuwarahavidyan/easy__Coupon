@@ -201,7 +201,8 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                             scrollDirection: Axis.horizontal,
                                             child: DataTable(
                                               columns: const [
-                                                DataColumn(label: Text('Date')),
+                                                DataColumn(
+                                                    label: Text('Date & Time')),
                                                 DataColumn(
                                                     label:
                                                         Text('Canteen Name')),
@@ -212,8 +213,25 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                   .map((QRModel item) {
                                                 return DataRow(cells: [
                                                   DataCell(
-                                                    Text(
-                                                      "${item.scannedAt.day.toString().padLeft(2, '0')}/${(item.scannedAt.month).toString().padLeft(2, '0')}/${item.scannedAt.year}",
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          "${item.scannedAt.day.toString().padLeft(2, '0')}/${item.scannedAt.month.toString().padLeft(2, '0')}/${item.scannedAt.year}",
+                                                        ),
+                                                        Text(
+                                                          "${item.scannedAt.hour.toString().padLeft(2, '0')}:${item.scannedAt.minute.toString().padLeft(2, '0')}",
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                   DataCell(
