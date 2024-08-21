@@ -23,10 +23,11 @@ class _StudentReportPageState extends State<StudentReportPage> {
     _fetchUserQrCodes();
   }
 
-  void _fetchUserQrCodes() {
+  void _fetchUserQrCodes({DateTime? startDate, DateTime? endDate}) {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      context.read<QrCodeBloc>().add(LoadQrCodesByUid(currentUser.uid));
+      context.read<QrCodeBloc>().add(LoadQrCodesByUid(currentUser.uid,
+          startDate: startDate, endDate: endDate));
     }
   }
 
@@ -41,13 +42,13 @@ class _StudentReportPageState extends State<StudentReportPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFFFF8A00), // header background color
-              onPrimary: Colors.white, // header text color
-              onSurface: Colors.black, // body text color
+              primary: Color(0xFFFF8A00),
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFFFF8A00), // button text color
+                foregroundColor: const Color(0xFFFF8A00),
               ),
             ),
           ),
@@ -59,7 +60,14 @@ class _StudentReportPageState extends State<StudentReportPage> {
       setState(() {
         controller.text = "${pickedDate.toLocal()}".split(' ')[0];
       });
-      _fetchUserQrCodes(); // Fetch QR codes when date is selected
+      // Fetch QR codes with selected date range
+      final startDate = _startDateController.text.isNotEmpty
+          ? DateTime.parse(_startDateController.text)
+          : null;
+      final endDate = _endDateController.text.isNotEmpty
+          ? DateTime.parse(_endDateController.text)
+          : null;
+      _fetchUserQrCodes(startDate: startDate, endDate: endDate);
     }
   }
 
@@ -103,8 +111,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                              height: 20), // Spacer to push content down
+                          const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
@@ -147,9 +154,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                              height:
-                                  20), // Spacer between date inputs and table
+                          const SizedBox(height: 20),
                           Expanded(
                             child: BlocBuilder<QrCodeBloc, QrCodeState>(
                               builder: (context, state) {
@@ -157,15 +162,38 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 } else if (state is QrCodeLoaded) {
-                                  // Sort QR codes by scannedAt date
-                                  final sortedQrcodes =
-                                      List<QRModel>.from(state.qrcodes)
-                                        ..sort((a, b) =>
-                                            a.scannedAt.compareTo(b.scannedAt));
+                                  // Filter and sort QR codes by scannedAt date
+                                  final filteredQrcodes = state.qrcodes
+                                      .where((item) {
+                                    final itemDate = item.scannedAt;
+                                    final startDate =
+                                        _startDateController.text.isNotEmpty
+                                            ? DateTime.parse(
+                                                _startDateController.text)
+                                            : null;
+                                    final endDate =
+                                        _endDateController.text.isNotEmpty
+                                            ? DateTime.parse(
+                                                _endDateController.text)
+                                            : null;
+
+                                    if (startDate != null && endDate != null) {
+                                      return itemDate.isAfter(startDate) &&
+                                          itemDate.isBefore(endDate
+                                              .add(const Duration(days: 1)));
+                                    } else if (startDate != null) {
+                                      return itemDate.isAfter(startDate);
+                                    } else if (endDate != null) {
+                                      return itemDate.isBefore(
+                                          endDate.add(const Duration(days: 1)));
+                                    }
+                                    return true;
+                                  }).toList()
+                                    ..sort((a, b) =>
+                                        a.scannedAt.compareTo(b.scannedAt));
 
                                   return Column(
                                     children: [
-                                      // Fixed header row
                                       Expanded(
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.vertical,
@@ -180,7 +208,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                 DataColumn(
                                                     label: Text('Count')),
                                               ],
-                                              rows: sortedQrcodes
+                                              rows: filteredQrcodes
                                                   .map((QRModel item) {
                                                 return DataRow(cells: [
                                                   DataCell(

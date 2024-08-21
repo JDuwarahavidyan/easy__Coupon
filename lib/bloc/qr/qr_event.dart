@@ -46,13 +46,19 @@ final class QrCodeReadAllEvent extends QrCodeEvent {
   const QrCodeReadAllEvent();
 }
 
-class LoadQrCodesByUid extends QrCodeEvent {
-  final String uid;
 
-  const LoadQrCodesByUid(this.uid);
+
+final class LoadQrCodesByUid extends QrCodeEvent {
+  final String uid;
+  final DateTime? startDate;
+  final DateTime? endDate;
+
+  const LoadQrCodesByUid(this.uid, {this.startDate, this.endDate});
 
   @override
-  List<Object> get props => [uid];
+  List<Object> get props => [uid, startDate ?? DateTime(0), endDate ?? DateTime(0), ];
 }
+
+
 
 
