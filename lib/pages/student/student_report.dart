@@ -226,10 +226,11 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                         ),
                                                         Text(
                                                           "${item.scannedAt.hour.toString().padLeft(2, '0')}:${item.scannedAt.minute.toString().padLeft(2, '0')}",
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize: 12),
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize: 12),
                                                         ),
                                                       ],
                                                     ),

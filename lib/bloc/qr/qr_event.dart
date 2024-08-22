@@ -26,11 +26,9 @@ final class QrCodeDeleteEvent extends QrCodeEvent {
 }
 
 final class QrCodeReadEvent extends QrCodeEvent {
-  
   @override
   List<Object> get props => [];
 }
-
 
 final class QrCodeLoadEvent extends QrCodeEvent {
   final List<QRModel> qrcodes;
@@ -41,12 +39,9 @@ final class QrCodeLoadEvent extends QrCodeEvent {
   List<Object> get props => [qrcodes];
 }
 
-
 final class QrCodeReadAllEvent extends QrCodeEvent {
   const QrCodeReadAllEvent();
 }
-
-
 
 final class LoadQrCodesByUid extends QrCodeEvent {
   final String uid;
@@ -56,9 +51,9 @@ final class LoadQrCodesByUid extends QrCodeEvent {
   const LoadQrCodesByUid(this.uid, {this.startDate, this.endDate});
 
   @override
-  List<Object> get props => [uid, startDate ?? DateTime(0), endDate ?? DateTime(0), ];
+  List<Object> get props => [
+        uid,
+        startDate ?? DateTime(0),
+        endDate ?? DateTime(0),
+      ];
 }
-
-
-
-
