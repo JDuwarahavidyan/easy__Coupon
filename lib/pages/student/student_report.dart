@@ -190,7 +190,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                     return true;
                                   }).toList()
                                     ..sort((a, b) =>
-                                        a.scannedAt.compareTo(b.scannedAt));
+                                        b.scannedAt.compareTo(a.scannedAt));
 
                                   return Column(
                                     children: [
