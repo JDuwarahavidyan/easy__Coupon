@@ -190,7 +190,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                     return true;
                                   }).toList()
                                     ..sort((a, b) =>
-                                        a.scannedAt.compareTo(b.scannedAt));
+                                        b.scannedAt.compareTo(a.scannedAt));
 
                                   return Column(
                                     children: [
@@ -226,10 +226,11 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                         ),
                                                         Text(
                                                           "${item.scannedAt.hour.toString().padLeft(2, '0')}:${item.scannedAt.minute.toString().padLeft(2, '0')}",
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize: 12),
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize: 12),
                                                         ),
                                                       ],
                                                     ),

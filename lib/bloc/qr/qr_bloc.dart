@@ -62,32 +62,18 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
 
 
   FutureOr<void> _onLoadQrCodesByUid(LoadQrCodesByUid event, Emitter<QrCodeState> emit) async {
-  try {
-    // Fetch the QR codes for the user
-    final qrCodes = await _qrCodeRepository.getQRCodeByUidStream(event.uid).first;
-    
-    // Filter the QR codes by date range if provided
-    final filteredQrCodes = qrCodes.where((qrCode) {
-      final scannedAt = qrCode.scannedAt;
-      final startDate = event.startDate;
-      final endDate = event.endDate;
-
-      if (startDate != null && endDate != null) {
-        return scannedAt.isAfter(startDate) && scannedAt.isBefore(endDate.add(const Duration(days: 1)));
-      } else if (startDate != null) {
-        return scannedAt.isAfter(startDate);
-      } else if (endDate != null) {
-        return scannedAt.isBefore(endDate.add(const Duration(days: 1)));
-      }
-      return true; // No date filtering
-    }).toList();
-
-    // Emit the filtered QR codes
-    emit(QrCodeLoaded(filteredQrCodes));
-  } catch (e) {
-    emit(const QrCodeFailure('Failed to load QR codes by UID'));
+    try {
+      emit(QrCodeLoading());
+      final qrCodes = await _qrCodeRepository.getQRCodeByUidWithFilter(
+        event.uid, 
+        event.startDate, 
+        event.endDate,
+      );
+      emit(QrCodeLoaded(qrCodes));
+    } catch (e) {
+      emit(const QrCodeFailure('Failed to load QR codes by UID'));
+    }
   }
-}
 
 
 

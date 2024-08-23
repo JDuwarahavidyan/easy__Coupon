@@ -60,5 +60,31 @@ class QrCodeService {
             .toList());
   }
 
+  Future<List<QRModel>> getQRCodeByUidWithFilter(String uid, DateTime? startDate, DateTime? endDate) async {
+    try {
+      final querySnapshot = await _qrCodeCollection
+          .where("studentId", isEqualTo: uid)
+          .get();
+
+      final qrCodes = querySnapshot.docs
+          .map((doc) => QRModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      return qrCodes.where((qrCode) {
+        final scannedAt = qrCode.scannedAt;
+        if (startDate != null && endDate != null) {
+          return scannedAt.isAfter(startDate) && scannedAt.isBefore(endDate.add(const Duration(days: 1)));
+        } else if (startDate != null) {
+          return scannedAt.isAfter(startDate);
+        } else if (endDate != null) {
+          return scannedAt.isBefore(endDate.add(const Duration(days: 1)));
+        }
+        return true;
+      }).toList();
+    } catch (e) {
+      throw CustomException('Error getting QR codes with filter: $e');
+    }
+  }
+
   
 }
