@@ -47,13 +47,22 @@ final class LoadQrCodesByUid extends QrCodeEvent {
   final String uid;
   final DateTime? startDate;
   final DateTime? endDate;
+  final String reportType; // Added reportType field
 
-  const LoadQrCodesByUid(this.uid, {this.startDate, this.endDate});
+  const LoadQrCodesByUid(
+    this.uid, {
+    this.startDate,
+    this.endDate,
+    required this.reportType, // Added reportType to the constructor
+  });
 
   @override
   List<Object> get props => [
         uid,
         startDate ?? DateTime(0),
         endDate ?? DateTime(0),
+        reportType, // Include reportType in props for comparison
       ];
 }
+
+

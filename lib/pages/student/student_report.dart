@@ -28,7 +28,9 @@ class _StudentReportPageState extends State<StudentReportPage> {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       context.read<QrCodeBloc>().add(LoadQrCodesByUid(currentUser.uid,
-          startDate: startDate, endDate: endDate));
+          startDate: startDate,
+          endDate: endDate,
+          reportType: 'student_report'));
     }
   }
 
