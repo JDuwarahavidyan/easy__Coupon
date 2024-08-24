@@ -208,7 +208,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                     label:
                                                         Text('Canteen Name')),
                                                 DataColumn(
-                                                    label: Text('Count')),
+                                                    label: Text('Coupon Used')),
                                               ],
                                               rows: filteredQrcodes
                                                   .map((QRModel item) {
@@ -222,11 +222,13 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Text(
-                                                          DateFormat(
-                                                                  'dd/MM/yyyy')
-                                                              .format(item
-                                                                  .scannedAt),
+                                                        Center(
+                                                          child: Text(
+                                                            DateFormat(
+                                                                    'dd/MM/yyyy')
+                                                                .format(item
+                                                                    .scannedAt),
+                                                          ),
                                                         ),
                                                         Text(
                                                           DateFormat('hh:mm a')
@@ -242,9 +244,19 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                     ),
                                                   ),
                                                   DataCell(
-                                                      Text(item.canteenName)),
-                                                  DataCell(Text(
-                                                      item.count.toString())),
+                                                    Center(
+                                                      child: Text(item
+                                                                  .canteenName
+                                                                  .toLowerCase() ==
+                                                              'canteena'
+                                                          ? 'Kalderama'
+                                                          : 'Hilton'),
+                                                    ),
+                                                  ),
+                                                  DataCell(Center(
+                                                    child: Text(
+                                                        item.count.toString()),
+                                                  )),
                                                 ]);
                                               }).toList(),
                                             ),
