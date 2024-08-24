@@ -17,10 +17,11 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     on<QrCodeLoadEvent>(_onQrCodeLoadEvent);
     on<QrCodeDeleteEvent>(_onQrCodeDeleteEvent);
     on<LoadQrCodesByUid>(_onLoadQrCodesByUid);
-     
+    
   }
 
-   Future<void> _onCreateQrCodeEvent(CreateQrCodeEvent event, Emitter<QrCodeState> emit) async {
+  Future<void> _onCreateQrCodeEvent(
+      CreateQrCodeEvent event, Emitter<QrCodeState> emit) async {
     try {
       await _qrCodeRepository.createQrCode(event.qrCode);
       emit(QrCodeCreated(event.qrCode));
@@ -29,7 +30,8 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     }
   }
 
-  Future<void> _onQrCodeReadEvent(QrCodeReadEvent event, Emitter<QrCodeState> emit) async {
+  Future<void> _onQrCodeReadEvent(
+      QrCodeReadEvent event, Emitter<QrCodeState> emit) async {
     try {
       emit(QrCodeLoading());
       final qrCodeStreamResponse = _qrCodeRepository.getQRCodeStream();
@@ -50,7 +52,8 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     }
   }
 
-  Future<void> _onQrCodeDeleteEvent(QrCodeDeleteEvent event, Emitter<QrCodeState> emit) async {
+  Future<void> _onQrCodeDeleteEvent(
+      QrCodeDeleteEvent event, Emitter<QrCodeState> emit) async {
     try {
       if (state is QrCodeLoaded) {
         await _qrCodeRepository.deleteQrCode(event.id);
@@ -60,23 +63,23 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     }
   }
 
+  FutureOr<void> _onLoadQrCodesByUid(
+    LoadQrCodesByUid event, Emitter<QrCodeState> emit) async {
+  try {
+    emit(QrCodeLoading());
 
-  FutureOr<void> _onLoadQrCodesByUid(LoadQrCodesByUid event, Emitter<QrCodeState> emit) async {
-    try {
-      emit(QrCodeLoading());
-      final qrCodes = await _qrCodeRepository.getQRCodeByUidWithFilter(
-        event.uid, 
-        event.startDate, 
-        event.endDate,
-      );
-      emit(QrCodeLoaded(qrCodes));
-    } catch (e) {
-      emit(const QrCodeFailure('Failed to load QR codes by UID'));
-    }
+    final qrCodes = await _qrCodeRepository.getQRCodeByUidWithFilter(
+      event.uid,
+      event.startDate,
+      event.endDate,
+      reportType: event.reportType, // Include reportType from the event
+    );
+
+    emit(QrCodeLoaded(qrCodes));
+  } catch (e) {
+    emit(const QrCodeFailure('Failed to load QR codes by UID'));
   }
-
-
-
+}
 
 
   @override
@@ -84,5 +87,4 @@ class QrCodeBloc extends Bloc<QrCodeEvent, QrCodeState> {
     _qrCodeStreamSubscription?.cancel();
     return super.close();
   }
- 
 }

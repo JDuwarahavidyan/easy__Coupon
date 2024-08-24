@@ -26,7 +26,11 @@ class QrCodeRepository {
     return _qrCodeService.getQRCodeStreamByUid(uid);
   }
 
-  Future<List<QRModel>> getQRCodeByUidWithFilter(String uid, DateTime? startDate, DateTime? endDate) async {
-    return await _qrCodeService.getQRCodeByUidWithFilter(uid, startDate, endDate);
+  Future<List<QRModel>> getQRCodeByUidWithFilter(
+      String uid, DateTime? startDate, DateTime? endDate,
+      {required String reportType}) async {
+    return await _qrCodeService.getQRCodeByUidWithFilter(
+        uid, startDate, endDate,
+        reportType: reportType);
   }
 }

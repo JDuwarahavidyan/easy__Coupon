@@ -52,19 +52,28 @@ class QrCodeService {
   }
 
   Stream<List<QRModel>> getQRCodeStreamByUid(String uid) {
-    return _qrCodeCollection
-        .where("studentId", isEqualTo:uid)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
+    return _qrCodeCollection.where("studentId", isEqualTo: uid).snapshots().map(
+        (snapshot) => snapshot.docs
             .map((doc) => QRModel.fromJson(doc.data() as Map<String, dynamic>))
             .toList());
   }
 
-  Future<List<QRModel>> getQRCodeByUidWithFilter(String uid, DateTime? startDate, DateTime? endDate) async {
+  Future<List<QRModel>> getQRCodeByUidWithFilter(
+      String uid, DateTime? startDate, DateTime? endDate,
+      {required String reportType}) async {
     try {
-      final querySnapshot = await _qrCodeCollection
-          .where("studentId", isEqualTo: uid)
-          .get();
+      final QuerySnapshot querySnapshot;
+
+      // Determine the field to query based on the report type
+      if (reportType == 'canteen_a_report') {
+        querySnapshot =
+            await _qrCodeCollection.where("canteenId", isEqualTo: uid).get();
+      } else if (reportType == 'student_report') {
+        querySnapshot =
+            await _qrCodeCollection.where("studentId", isEqualTo: uid).get();
+      } else {
+        throw CustomException('Invalid report type: $reportType');
+      }
 
       final qrCodes = querySnapshot.docs
           .map((doc) => QRModel.fromJson(doc.data() as Map<String, dynamic>))
@@ -73,7 +82,8 @@ class QrCodeService {
       return qrCodes.where((qrCode) {
         final scannedAt = qrCode.scannedAt;
         if (startDate != null && endDate != null) {
-          return scannedAt.isAfter(startDate) && scannedAt.isBefore(endDate.add(const Duration(days: 1)));
+          return scannedAt.isAfter(startDate) &&
+              scannedAt.isBefore(endDate.add(const Duration(days: 1)));
         } else if (startDate != null) {
           return scannedAt.isAfter(startDate);
         } else if (endDate != null) {
@@ -85,6 +95,4 @@ class QrCodeService {
       throw CustomException('Error getting QR codes with filter: $e');
     }
   }
-
-  
 }

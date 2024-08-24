@@ -1,4 +1,6 @@
+import 'package:easy_coupon/bloc/qr/qr_bloc.dart';
 import 'package:easy_coupon/bloc/user/user_bloc.dart';
+import 'package:easy_coupon/models/qr/qr_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:easy_coupon/bloc/report/report_bloc.dart';
 import 'package:easy_coupon/bloc/report/report_state.dart';
 import 'package:easy_coupon/bloc/report/report_event.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
+import 'package:intl/intl.dart';
 
 class CanteenAReportPage extends StatefulWidget {
   const CanteenAReportPage({super.key});
@@ -18,6 +21,22 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
   final TextEditingController _startDateController = TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchCanteenQrCodes();
+  }
+
+  void _fetchCanteenQrCodes({DateTime? startDate, DateTime? endDate}) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      context.read<QrCodeBloc>().add(LoadQrCodesByUid(currentUser.uid,
+          startDate: startDate,
+          endDate: endDate,
+          reportType: 'canteen_a_report'));
+    }
+  }
+
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -29,13 +48,13 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFFFF8A00), // header background color
-              onPrimary: Colors.white, // header text color
-              onSurface: Colors.black, // body text color
+              primary: Color(0xFFFF8A00),
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFFFF8A00), // button text color
+                foregroundColor: const Color(0xFFFF8A00),
               ),
             ),
           ),
@@ -47,6 +66,14 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
       setState(() {
         controller.text = "${pickedDate.toLocal()}".split(' ')[0];
       });
+      // Fetch QR codes with selected date range
+      final startDate = _startDateController.text.isNotEmpty
+          ? DateTime.parse(_startDateController.text)
+          : null;
+      final endDate = _endDateController.text.isNotEmpty
+          ? DateTime.parse(_endDateController.text)
+          : null;
+      _fetchCanteenQrCodes(startDate: startDate, endDate: endDate);
     }
   }
 
@@ -63,7 +90,7 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Student Report',
+          'Canteen Report',
           textAlign: TextAlign.left,
         ),
         backgroundColor: const Color(0xFFFCD170),
@@ -138,50 +165,118 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
                                   ),
                                 ),
                                 const SizedBox(width: 20),
-                                ElevatedButton(
-                                  onPressed: _fetchData,
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor:
-                                        const Color(0xFFFF8A00), // text color
-                                  ),
-                                  child: const Text('Fetch Data'),
-                                ),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                              height:
-                                  20), // Spacer between date inputs and table
+                          const SizedBox(width: 20),
                           Expanded(
-                            child: BlocBuilder<ReportBloc, ReportState>(
+                            child: BlocBuilder<QrCodeBloc, QrCodeState>(
                               builder: (context, state) {
-                                if (state is ReportLoaded) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: DataTable(
-                                      border: TableBorder
-                                          .all(), // Add borders to the table
-                                      columns: const [
-                                        DataColumn(label: Text('Number')),
-                                        DataColumn(label: Text('Time')),
-                                        DataColumn(label: Text('Date')),
-                                      ],
-                                      rows: state.reportData.map((data) {
-                                        return DataRow(cells: [
-                                          DataCell(Text(data.Number)),
-                                          DataCell(Text(data.Time)),
-                                          DataCell(Text(data.Date)),
-                                        ]);
-                                      }).toList(),
-                                    ),
-                                  );
-                                } else if (state is ReportLoading) {
+                                if (state is QrCodeLoading) {
                                   return const Center(
                                       child: CircularProgressIndicator());
-                                } else if (state is ReportError) {
+                                } else if (state is QrCodeLoaded) {
+                                  // Filter and sort QR codes by scannedAt date
+                                  final filteredQrcodes = state.qrcodes
+                                      .where((item) {
+                                    final itemDate = item.scannedAt;
+                                    final startDate =
+                                        _startDateController.text.isNotEmpty
+                                            ? DateTime.parse(
+                                                _startDateController.text)
+                                            : null;
+                                    final endDate =
+                                        _endDateController.text.isNotEmpty
+                                            ? DateTime.parse(
+                                                _endDateController.text)
+                                            : null;
+
+                                    if (startDate != null && endDate != null) {
+                                      return itemDate.isAfter(startDate) &&
+                                          itemDate.isBefore(endDate
+                                              .add(const Duration(days: 1)));
+                                    } else if (startDate != null) {
+                                      return itemDate.isAfter(startDate);
+                                    } else if (endDate != null) {
+                                      return itemDate.isBefore(
+                                          endDate.add(const Duration(days: 1)));
+                                    }
+                                    return true;
+                                  }).toList()
+                                    ..sort((a, b) =>
+                                        b.scannedAt.compareTo(a.scannedAt));
+
+                                  return Column(
+                                    children: [
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.vertical,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: DataTable(
+                                              columns: const [
+                                                DataColumn(
+                                                    label: Text('Date & Time')),
+                                                DataColumn(
+                                                    label:
+                                                        Text('Student Name')),
+                                                DataColumn(
+                                                    label: Text('Coupon Used')),
+                                              ],
+                                              rows: filteredQrcodes
+                                                  .map<DataRow>((QRModel item) {
+                                                return DataRow(cells: [
+                                                  DataCell(
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Center(
+                                                          child: Text(
+                                                            DateFormat(
+                                                                    'dd/MM/yyyy')
+                                                                .format(item
+                                                                    .scannedAt),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          DateFormat('hh:mm a')
+                                                              .format(item
+                                                                  .scannedAt), // Format time to 12-hour format with AM/PM
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Center(
+                                                      child: Text(
+                                                          item.studentName),
+                                                    ),
+                                                  ),
+                                                  DataCell(Center(
+                                                    child: Text(
+                                                        item.count.toString()),
+                                                  )),
+                                                ]);
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else if (state is QrCodeFailure) {
                                   return Center(
-                                      child: Text('Error: ${state.error}'));
+                                      child: Text('Error: ${state.message}'));
                                 } else {
                                   return const Center(child: Text('No data'));
                                 }
@@ -196,7 +291,7 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
               },
             );
           }
-           return const Center(child: Text('Failed to load user data'));
+          return const Center(child: Text('Failed to load user data'));
         },
       ),
     );

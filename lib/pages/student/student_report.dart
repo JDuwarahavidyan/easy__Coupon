@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_coupon/widgets/widgets.dart';
+import 'package:intl/intl.dart';
 
 class StudentReportPage extends StatefulWidget {
   const StudentReportPage({super.key});
@@ -27,7 +28,9 @@ class _StudentReportPageState extends State<StudentReportPage> {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       context.read<QrCodeBloc>().add(LoadQrCodesByUid(currentUser.uid,
-          startDate: startDate, endDate: endDate));
+          startDate: startDate,
+          endDate: endDate,
+          reportType: 'student_report'));
     }
   }
 
@@ -207,7 +210,7 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                     label:
                                                         Text('Canteen Name')),
                                                 DataColumn(
-                                                    label: Text('Count')),
+                                                    label: Text('Coupon Used')),
                                               ],
                                               rows: filteredQrcodes
                                                   .map((QRModel item) {
@@ -221,11 +224,18 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Text(
-                                                          "${item.scannedAt.day.toString().padLeft(2, '0')}/${item.scannedAt.month.toString().padLeft(2, '0')}/${item.scannedAt.year}",
+                                                        Center(
+                                                          child: Text(
+                                                            DateFormat(
+                                                                    'dd/MM/yyyy')
+                                                                .format(item
+                                                                    .scannedAt),
+                                                          ),
                                                         ),
                                                         Text(
-                                                          "${item.scannedAt.hour.toString().padLeft(2, '0')}:${item.scannedAt.minute.toString().padLeft(2, '0')}",
+                                                          DateFormat('hh:mm a')
+                                                              .format(item
+                                                                  .scannedAt), // Format time to 12-hour format with AM/PM
                                                           style:
                                                               const TextStyle(
                                                                   color: Colors
@@ -236,9 +246,19 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                                     ),
                                                   ),
                                                   DataCell(
-                                                      Text(item.canteenName)),
-                                                  DataCell(Text(
-                                                      item.count.toString())),
+                                                    Center(
+                                                      child: Text(item
+                                                                  .canteenName
+                                                                  .toLowerCase() ==
+                                                              'canteena'
+                                                          ? 'Kalderama'
+                                                          : 'Hilton'),
+                                                    ),
+                                                  ),
+                                                  DataCell(Center(
+                                                    child: Text(
+                                                        item.count.toString()),
+                                                  )),
                                                 ]);
                                               }).toList(),
                                             ),
