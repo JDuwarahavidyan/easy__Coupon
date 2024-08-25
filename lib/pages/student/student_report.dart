@@ -200,68 +200,61 @@ class _StudentReportPageState extends State<StudentReportPage> {
                                       Expanded(
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.vertical,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: DataTable(
-                                              columns: const [
-                                                DataColumn(
-                                                    label: Text('Date & Time')),
-                                                DataColumn(
-                                                    label:
-                                                        Text('Canteen Name')),
-                                                DataColumn(
-                                                    label: Text('Coupon Used')),
-                                              ],
-                                              rows: filteredQrcodes
-                                                  .map((QRModel item) {
-                                                return DataRow(cells: [
-                                                  DataCell(
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Center(
-                                                          child: Text(
-                                                            DateFormat(
-                                                                    'dd/MM/yyyy')
-                                                                .format(item
-                                                                    .scannedAt),
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          DateFormat('hh:mm a')
+                                          child: DataTable(
+                                            columns: const [
+                                              DataColumn(
+                                                  label: Text('Date &\nTime')),
+                                              DataColumn(
+                                                  label: Text('Canteen')),
+                                              DataColumn(
+                                                  label: Text('Coupon\nUsed')),
+                                            ],
+                                            rows: filteredQrcodes
+                                                .map((QRModel item) {
+                                              return DataRow(cells: [
+                                                DataCell(
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          DateFormat(
+                                                                  'dd/MM/yyyy')
                                                               .format(item
-                                                                  .scannedAt), // Format time to 12-hour format with AM/PM
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  fontSize: 12),
+                                                                  .scannedAt),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      Text(
+                                                        DateFormat('hh:mm a')
+                                                            .format(item
+                                                                .scannedAt), // Format time to 12-hour format with AM/PM
+                                                        style: const TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 12),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  DataCell(
-                                                    Center(
-                                                      child: Text(item
-                                                                  .canteenName
-                                                                  .toLowerCase() ==
-                                                              'canteena'
-                                                          ? 'Kalderama'
-                                                          : 'Hilton'),
-                                                    ),
+                                                ),
+                                                DataCell(
+                                                  Center(
+                                                    child: Text(item.canteenName
+                                                                .toLowerCase() ==
+                                                            'canteena'
+                                                        ? 'Kalderama'
+                                                        : 'Hilton'),
                                                   ),
-                                                  DataCell(Center(
-                                                    child: Text(
-                                                        item.count.toString()),
-                                                  )),
-                                                ]);
-                                              }).toList(),
-                                            ),
+                                                ),
+                                                DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()),
+                                                )),
+                                              ]);
+                                            }).toList(),
                                           ),
                                         ),
                                       ),

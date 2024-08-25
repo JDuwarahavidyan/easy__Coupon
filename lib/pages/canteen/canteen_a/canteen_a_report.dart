@@ -211,64 +211,61 @@ class _CanteenAReportPageState extends State<CanteenAReportPage> {
                                       Expanded(
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.vertical,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: DataTable(
-                                              columns: const [
-                                                DataColumn(
-                                                    label: Text('Date & Time')),
-                                                DataColumn(
-                                                    label:
-                                                        Text('Student Name')),
-                                                DataColumn(
-                                                    label: Text('Coupon Used')),
-                                              ],
-                                              rows: filteredQrcodes
-                                                  .map<DataRow>((QRModel item) {
-                                                return DataRow(cells: [
-                                                  DataCell(
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Center(
-                                                          child: Text(
-                                                            DateFormat(
-                                                                    'dd/MM/yyyy')
-                                                                .format(item
-                                                                    .scannedAt),
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          DateFormat('hh:mm a')
+                                          child: DataTable(
+                                            columns: const [
+                                              DataColumn(
+                                                  label: Text('Date &\n Time')),
+                                              DataColumn(
+                                                  label: Text('Student')),
+                                              DataColumn(
+                                                  label: Text(
+                                                'Coupon\nUsed',
+                                                textAlign: TextAlign.center,
+                                              )),
+                                            ],
+                                            rows: filteredQrcodes
+                                                .map<DataRow>((QRModel item) {
+                                              return DataRow(cells: [
+                                                DataCell(
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          DateFormat(
+                                                                  'dd/MM/yyyy')
                                                               .format(item
-                                                                  .scannedAt), // Format time to 12-hour format with AM/PM
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  fontSize: 12),
+                                                                  .scannedAt),
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      Text(
+                                                        DateFormat('hh:mm a')
+                                                            .format(item
+                                                                .scannedAt), // Format time to 12-hour format with AM/PM
+                                                        style: const TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 12),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  DataCell(
-                                                    Center(
-                                                      child: Text(
-                                                          item.studentName),
-                                                    ),
+                                                ),
+                                                DataCell(
+                                                  Center(
+                                                    child:
+                                                        Text(item.studentName),
                                                   ),
-                                                  DataCell(Center(
-                                                    child: Text(
-                                                        item.count.toString()),
-                                                  )),
-                                                ]);
-                                              }).toList(),
-                                            ),
+                                                ),
+                                                DataCell(Center(
+                                                  child: Text(
+                                                      item.count.toString()),
+                                                )),
+                                              ]);
+                                            }).toList(),
                                           ),
                                         ),
                                       ),
